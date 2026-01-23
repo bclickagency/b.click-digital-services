@@ -5,8 +5,9 @@ const Footer = () => {
   const currentYear = new Date().getFullYear();
 
   return (
-    <footer className="bg-card border-t border-border" dir="rtl">
-      <div className="container mx-auto px-4 py-12">
+    <div className="px-4 py-8" dir="rtl">
+      <footer className="bg-card border border-border rounded-3xl max-w-7xl mx-auto">
+        <div className="px-8 py-12">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
           {/* Brand */}
           <div className="space-y-4">
@@ -100,8 +101,9 @@ const Footer = () => {
             </Link>
           </div>
         </div>
-      </div>
-    </footer>
+        </div>
+      </footer>
+    </div>
   );
 };
 
