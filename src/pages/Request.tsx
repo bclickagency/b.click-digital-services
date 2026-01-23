@@ -63,19 +63,6 @@ const RequestPage = () => {
 
       if (error) throw error;
 
-      // Create WhatsApp message
-      const urgencyLabel = urgencyLevels.find(u => u.value === formData.urgency)?.label || formData.urgency;
-      const message = `مرحبًا فريق B.CLICK،
-الاسم: ${formData.fullName}
-رقم التواصل: ${formData.whatsapp}
-الخدمة المطلوبة: ${formData.serviceType}
-مستوى الاستعجال: ${urgencyLabel}
-تفاصيل الطلب: ${formData.details || 'لم يتم تحديد تفاصيل'}`;
-
-      // Open WhatsApp
-      const whatsappUrl = `https://wa.me/201558663972?text=${encodeURIComponent(message)}`;
-      window.open(whatsappUrl, '_blank');
-
       toast({
         title: 'تم إرسال طلبك بنجاح!',
         description: 'سيتم التواصل معك قريبًا',
@@ -257,10 +244,7 @@ const RequestPage = () => {
               {isSubmitting ? (
                 'جاري الإرسال...'
               ) : (
-                <>
-                  <MessageCircle className="w-5 h-5" />
-                  ابعت الطلب على واتساب
-                </>
+            'تسليم الطلب'
               )}
             </button>
           </motion.form>
