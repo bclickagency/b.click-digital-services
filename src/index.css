@@ -191,7 +191,7 @@
 
   /* Service Cards */
   .service-card {
-    @apply glass-card relative overflow-hidden transition-all duration-500 group cursor-pointer;
+    @apply glass-card relative overflow-hidden transition-all duration-500 cursor-pointer;
   }
 
   .service-card:hover {
