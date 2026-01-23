@@ -295,15 +295,17 @@
 
 @layer utilities {
   .text-gradient {
-    @apply bg-clip-text text-transparent inline-block;
+    @apply bg-clip-text text-transparent inline-block pb-1;
     background-image: var(--gradient-primary);
     -webkit-background-clip: text;
+    line-height: 1.2;
   }
 
   .text-gradient-secondary {
-    @apply bg-clip-text text-transparent inline-block;
+    @apply bg-clip-text text-transparent inline-block pb-1;
     background-image: var(--gradient-secondary);
     -webkit-background-clip: text;
+    line-height: 1.2;
   }
 
   .backdrop-blur-glass {
