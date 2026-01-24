@@ -95,7 +95,19 @@ const Footer = () => {
           <p className="text-muted-foreground text-sm">
             © {currentYear} B.CLICK - جميع الحقوق محفوظة
           </p>
-          <div className="flex items-center gap-4">
+          <div className="flex flex-wrap items-center justify-center gap-4">
+            <Link to="/blog" className="text-muted-foreground hover:text-primary transition-colors duration-300 text-sm">
+              المدونة
+            </Link>
+            <Link to="/careers" className="text-muted-foreground hover:text-primary transition-colors duration-300 text-sm">
+              التوظيف
+            </Link>
+            <Link to="/privacy" className="text-muted-foreground hover:text-primary transition-colors duration-300 text-sm">
+              سياسة الخصوصية
+            </Link>
+            <Link to="/terms" className="text-muted-foreground hover:text-primary transition-colors duration-300 text-sm">
+              الشروط والأحكام
+            </Link>
             <Link to="/admin" className="text-muted-foreground hover:text-primary transition-colors duration-300 text-sm">
               لوحة التحكم
             </Link>
