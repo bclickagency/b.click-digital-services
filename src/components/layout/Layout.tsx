@@ -6,6 +6,7 @@ import ScrollProgress from '@/components/ui/ScrollProgress';
 import BackToTop from '@/components/ui/BackToTop';
 import PageTransition from '@/components/ui/PageTransition';
 import Breadcrumbs from '@/components/ui/Breadcrumbs';
+import SalesAssistant from '@/components/ai/SalesAssistant';
 
 interface LayoutProps {
   children: ReactNode;
@@ -28,6 +29,7 @@ const Layout = ({ children, showBreadcrumbs = true }: LayoutProps) => {
       </main>
       <Footer />
       <BackToTop />
+      <SalesAssistant />
     </div>
   );
 };
