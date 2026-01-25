@@ -14,6 +14,120 @@ export type Database = {
   }
   public: {
     Tables: {
+      blog_posts: {
+        Row: {
+          author_id: string | null
+          author_name: string | null
+          category: string
+          content: string
+          cover_image: string | null
+          created_at: string
+          excerpt: string | null
+          id: string
+          published_at: string | null
+          scheduled_at: string | null
+          slug: string
+          status: string
+          tags: string[] | null
+          title: string
+          updated_at: string
+          views_count: number | null
+        }
+        Insert: {
+          author_id?: string | null
+          author_name?: string | null
+          category?: string
+          content: string
+          cover_image?: string | null
+          created_at?: string
+          excerpt?: string | null
+          id?: string
+          published_at?: string | null
+          scheduled_at?: string | null
+          slug: string
+          status?: string
+          tags?: string[] | null
+          title: string
+          updated_at?: string
+          views_count?: number | null
+        }
+        Update: {
+          author_id?: string | null
+          author_name?: string | null
+          category?: string
+          content?: string
+          cover_image?: string | null
+          created_at?: string
+          excerpt?: string | null
+          id?: string
+          published_at?: string | null
+          scheduled_at?: string | null
+          slug?: string
+          status?: string
+          tags?: string[] | null
+          title?: string
+          updated_at?: string
+          views_count?: number | null
+        }
+        Relationships: []
+      }
+      portfolio_items: {
+        Row: {
+          category: string
+          client_name: string | null
+          cover_image: string | null
+          created_at: string
+          description: string | null
+          display_order: number | null
+          featured: boolean | null
+          full_description: string | null
+          id: string
+          images: string[] | null
+          project_url: string | null
+          slug: string
+          status: string
+          technologies: string[] | null
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          category?: string
+          client_name?: string | null
+          cover_image?: string | null
+          created_at?: string
+          description?: string | null
+          display_order?: number | null
+          featured?: boolean | null
+          full_description?: string | null
+          id?: string
+          images?: string[] | null
+          project_url?: string | null
+          slug: string
+          status?: string
+          technologies?: string[] | null
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          category?: string
+          client_name?: string | null
+          cover_image?: string | null
+          created_at?: string
+          description?: string | null
+          display_order?: number | null
+          featured?: boolean | null
+          full_description?: string | null
+          id?: string
+          images?: string[] | null
+          project_url?: string | null
+          slug?: string
+          status?: string
+          technologies?: string[] | null
+          title?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       service_requests: {
         Row: {
           created_at: string
@@ -81,6 +195,7 @@ export type Database = {
         Returns: boolean
       }
       is_staff: { Args: { _user_id: string }; Returns: boolean }
+      publish_scheduled_posts: { Args: never; Returns: undefined }
     }
     Enums: {
       app_role: "admin" | "team_member"
