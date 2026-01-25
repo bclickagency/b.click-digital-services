@@ -1,56 +1,131 @@
+import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
-import { ExternalLink, ArrowLeft } from 'lucide-react';
+import { ExternalLink, ArrowLeft, Star } from 'lucide-react';
 import Layout from '@/components/layout/Layout';
+import { supabase } from '@/integrations/supabase/client';
+import { GridSkeleton } from '@/components/ui/SkeletonLoader';
 
-const projects = [
+interface PortfolioItem {
+  id: string;
+  title: string;
+  slug: string;
+  description: string | null;
+  cover_image: string | null;
+  category: string;
+  technologies: string[];
+  client_name: string | null;
+  project_url: string | null;
+  featured: boolean;
+}
+
+const categories = ['الكل', 'تصميم مواقع', 'تطبيقات موبايل', 'هوية بصرية', 'متاجر إلكترونية', 'تسويق رقمي'];
+
+// Fallback static projects
+const staticProjects: PortfolioItem[] = [
   {
+    id: '1',
     title: 'متجر إلكتروني للأزياء',
+    slug: 'fashion-store',
     category: 'متاجر إلكترونية',
     description: 'متجر إلكتروني متكامل لبيع الملابس والإكسسوارات مع نظام دفع آمن',
-    image: 'https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=600&h=400&fit=crop',
-    tags: ['تجارة إلكترونية', 'تصميم UI/UX', 'React'],
+    cover_image: 'https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=600&h=400&fit=crop',
+    technologies: ['تجارة إلكترونية', 'تصميم UI/UX', 'React'],
+    client_name: 'Fashion Co',
+    project_url: null,
+    featured: true,
   },
   {
+    id: '2',
     title: 'تطبيق توصيل طعام',
+    slug: 'food-delivery-app',
     category: 'تطبيقات موبايل',
     description: 'تطبيق متكامل لتوصيل الطعام مع تتبع الطلبات في الوقت الفعلي',
-    image: 'https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?w=600&h=400&fit=crop',
-    tags: ['تطبيقات', 'iOS', 'Android'],
+    cover_image: 'https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?w=600&h=400&fit=crop',
+    technologies: ['تطبيقات', 'iOS', 'Android'],
+    client_name: 'Food Express',
+    project_url: null,
+    featured: true,
   },
   {
+    id: '3',
     title: 'موقع شركة عقارات',
-    category: 'مواقع الويب',
+    slug: 'real-estate-website',
+    category: 'تصميم مواقع',
     description: 'موقع احترافي لعرض العقارات مع نظام بحث متقدم وخرائط تفاعلية',
-    image: 'https://images.unsplash.com/photo-1560518883-ce09059eeffa?w=600&h=400&fit=crop',
-    tags: ['عقارات', 'Next.js', 'خرائط'],
+    cover_image: 'https://images.unsplash.com/photo-1560518883-ce09059eeffa?w=600&h=400&fit=crop',
+    technologies: ['عقارات', 'Next.js', 'خرائط'],
+    client_name: 'Real Estate Pro',
+    project_url: null,
+    featured: false,
   },
   {
+    id: '4',
     title: 'هوية بصرية لمطعم',
-    category: 'تصميم الهوية',
+    slug: 'restaurant-branding',
+    category: 'هوية بصرية',
     description: 'هوية بصرية متكاملة تشمل الشعار والمطبوعات والتواجد الرقمي',
-    image: 'https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=600&h=400&fit=crop',
-    tags: ['هوية بصرية', 'شعار', 'مطبوعات'],
+    cover_image: 'https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=600&h=400&fit=crop',
+    technologies: ['هوية بصرية', 'شعار', 'مطبوعات'],
+    client_name: 'Fine Dining',
+    project_url: null,
+    featured: false,
   },
   {
+    id: '5',
     title: 'حملة تسويقية لمنتج',
-    category: 'التسويق الرقمي',
+    slug: 'product-marketing-campaign',
+    category: 'تسويق رقمي',
     description: 'حملة إعلانية متكاملة على السوشيال ميديا حققت نتائج مذهلة',
-    image: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=600&h=400&fit=crop',
-    tags: ['تسويق', 'إعلانات', 'سوشيال ميديا'],
+    cover_image: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=600&h=400&fit=crop',
+    technologies: ['تسويق', 'إعلانات', 'سوشيال ميديا'],
+    client_name: 'Tech Startup',
+    project_url: null,
+    featured: false,
   },
   {
+    id: '6',
     title: 'منصة تعليمية',
-    category: 'مواقع الويب',
+    slug: 'educational-platform',
+    category: 'تصميم مواقع',
     description: 'منصة تعليمية متكاملة مع نظام اشتراكات ومتابعة تقدم الطلاب',
-    image: 'https://images.unsplash.com/photo-1501504905252-473c47e087f8?w=600&h=400&fit=crop',
-    tags: ['تعليم', 'LMS', 'اشتراكات'],
+    cover_image: 'https://images.unsplash.com/photo-1501504905252-473c47e087f8?w=600&h=400&fit=crop',
+    technologies: ['تعليم', 'LMS', 'اشتراكات'],
+    client_name: 'EduLearn',
+    project_url: null,
+    featured: true,
   },
 ];
 
-const categories = ['الكل', 'مواقع الويب', 'تطبيقات موبايل', 'متاجر إلكترونية', 'تصميم الهوية', 'التسويق الرقمي'];
-
 const PortfolioPage = () => {
+  const [items, setItems] = useState<PortfolioItem[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [activeCategory, setActiveCategory] = useState('الكل');
+
+  useEffect(() => {
+    fetchItems();
+  }, []);
+
+  const fetchItems = async () => {
+    const { data, error } = await supabase
+      .from('portfolio_items')
+      .select('id, title, slug, description, cover_image, category, technologies, client_name, project_url, featured')
+      .eq('status', 'published')
+      .order('display_order', { ascending: true });
+
+    if (!error && data && data.length > 0) {
+      setItems(data as PortfolioItem[]);
+    } else {
+      // Use static projects as fallback
+      setItems(staticProjects);
+    }
+    setLoading(false);
+  };
+
+  const filteredItems = items.filter(item => {
+    return activeCategory === 'الكل' || item.category === activeCategory;
+  });
+
   return (
     <Layout>
       {/* Hero Section */}
@@ -96,12 +171,13 @@ const PortfolioPage = () => {
           animate={{ opacity: 1, y: 0 }}
           className="flex flex-wrap justify-center gap-3"
         >
-          {categories.map((category, index) => (
+          {categories.map((category) => (
             <button
               key={category}
+              onClick={() => setActiveCategory(category)}
               className={`px-5 py-2 rounded-xl text-sm font-medium transition-all duration-300 ${
-                index === 0
-                  ? 'bg-primary text-white'
+                activeCategory === category
+                  ? 'bg-primary text-primary-foreground'
                   : 'bg-muted/50 text-muted-foreground hover:bg-muted hover:text-foreground'
               }`}
             >
@@ -113,47 +189,75 @@ const PortfolioPage = () => {
 
       {/* Projects Grid */}
       <section className="section-container pt-8">
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {projects.map((project, index) => (
-            <motion.div
-              key={project.title}
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: index * 0.1 }}
-              className="group glass-card p-0 overflow-hidden cursor-pointer"
-            >
-              <div className="relative overflow-hidden aspect-video">
-                <img
-                  src={project.image}
-                  alt={project.title}
-                  className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-background/90 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-4">
-                  <button className="btn-primary text-sm">
-                    عرض المشروع
-                    <ExternalLink className="w-4 h-4" />
-                  </button>
+        {loading ? (
+          <GridSkeleton count={6} />
+        ) : filteredItems.length === 0 ? (
+          <div className="text-center py-12 text-muted-foreground">
+            لا توجد مشاريع في هذا التصنيف
+          </div>
+        ) : (
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {filteredItems.map((project, index) => (
+              <motion.div
+                key={project.id}
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: index * 0.1 }}
+                className="group glass-card p-0 overflow-hidden cursor-pointer"
+              >
+                <div className="relative overflow-hidden aspect-video">
+                  <img
+                    src={project.cover_image || 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=600&h=400&fit=crop'}
+                    alt={project.title}
+                    className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                  />
+                  {project.featured && (
+                    <div className="absolute top-4 left-4">
+                      <span className="flex items-center gap-1 px-2 py-1 bg-secondary/90 text-secondary-foreground text-xs font-medium rounded-lg">
+                        <Star className="w-3 h-3 fill-current" />
+                        مميز
+                      </span>
+                    </div>
+                  )}
+                  <div className="absolute inset-0 bg-gradient-to-t from-background/90 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-4">
+                    {project.project_url ? (
+                      <a 
+                        href={project.project_url} 
+                        target="_blank" 
+                        rel="noopener noreferrer"
+                        className="btn-primary text-sm"
+                      >
+                        عرض المشروع
+                        <ExternalLink className="w-4 h-4" />
+                      </a>
+                    ) : (
+                      <Link to={`/portfolio/${project.slug}`} className="btn-primary text-sm">
+                        تفاصيل المشروع
+                        <ArrowLeft className="w-4 h-4" />
+                      </Link>
+                    )}
+                  </div>
                 </div>
-              </div>
-              <div className="p-5">
-                <span className="text-xs text-primary font-medium">{project.category}</span>
-                <h3 className="text-lg font-bold text-foreground mt-1 mb-2">{project.title}</h3>
-                <p className="text-sm text-muted-foreground mb-3">{project.description}</p>
-                <div className="flex flex-wrap gap-2">
-                  {project.tags.map((tag) => (
-                    <span
-                      key={tag}
-                      className="px-2 py-1 rounded-lg bg-muted text-muted-foreground text-xs"
-                    >
-                      {tag}
-                    </span>
-                  ))}
+                <div className="p-5">
+                  <span className="text-xs text-primary font-medium">{project.category}</span>
+                  <h3 className="text-lg font-bold text-foreground mt-1 mb-2">{project.title}</h3>
+                  <p className="text-sm text-muted-foreground mb-3 line-clamp-2">{project.description}</p>
+                  <div className="flex flex-wrap gap-2">
+                    {project.technologies?.slice(0, 3).map((tag) => (
+                      <span
+                        key={tag}
+                        className="px-2 py-1 rounded-lg bg-muted text-muted-foreground text-xs"
+                      >
+                        {tag}
+                      </span>
+                    ))}
+                  </div>
                 </div>
-              </div>
-            </motion.div>
-          ))}
-        </div>
+              </motion.div>
+            ))}
+          </div>
+        )}
       </section>
 
       {/* CTA */}
