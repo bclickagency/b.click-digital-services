@@ -4,7 +4,8 @@ import { Link } from 'react-router-dom';
 import { ExternalLink, ArrowLeft, Star } from 'lucide-react';
 import Layout from '@/components/layout/Layout';
 import { supabase } from '@/integrations/supabase/client';
-import { GridSkeleton } from '@/components/ui/SkeletonLoader';
+import { GridShimmer } from '@/components/ui/ShimmerSkeleton';
+import LazyImage from '@/components/ui/LazyImage';
 
 interface PortfolioItem {
   id: string;
@@ -190,7 +191,7 @@ const PortfolioPage = () => {
       {/* Projects Grid */}
       <section className="section-container pt-8">
         {loading ? (
-          <GridSkeleton count={6} />
+          <GridShimmer count={6} />
         ) : filteredItems.length === 0 ? (
           <div className="text-center py-12 text-muted-foreground">
             لا توجد مشاريع في هذا التصنيف
@@ -204,13 +205,15 @@ const PortfolioPage = () => {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: index * 0.1 }}
+                whileHover={{ y: -8 }}
                 className="group glass-card p-0 overflow-hidden cursor-pointer"
               >
                 <div className="relative overflow-hidden aspect-video">
-                  <img
+                  <LazyImage
                     src={project.cover_image || 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=600&h=400&fit=crop'}
                     alt={project.title}
-                    className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                    wrapperClassName="absolute inset-0"
+                    className="transition-transform duration-500 group-hover:scale-110"
                   />
                   {project.featured && (
                     <div className="absolute top-4 left-4">

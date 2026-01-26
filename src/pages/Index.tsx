@@ -8,13 +8,13 @@ import {
   Smartphone, 
   Search, 
   PenTool,
-  CheckCircle2,
   MessageCircle,
-  Zap,
-  Shield,
-  Users
 } from 'lucide-react';
 import Layout from '@/components/layout/Layout';
+import Testimonials from '@/components/home/Testimonials';
+import StatsCounter from '@/components/home/StatsCounter';
+import Newsletter from '@/components/home/Newsletter';
+import FAQ from '@/components/home/FAQ';
 
 const services = [
   {
@@ -47,13 +47,6 @@ const services = [
     title: 'إدارة المحتوى',
     description: 'محتوى إبداعي يجذب جمهورك ويحقق أهدافك',
   },
-];
-
-const features = [
-  { icon: Zap, title: 'سرعة التنفيذ', description: 'نلتزم بالمواعيد ونسلم مشاريعنا في الوقت المحدد' },
-  { icon: Shield, title: 'جودة عالية', description: 'نستخدم أحدث التقنيات لضمان أفضل النتائج' },
-  { icon: Users, title: 'دعم مستمر', description: 'فريقنا متاح دائماً لمساعدتك ودعمك' },
-  { icon: CheckCircle2, title: 'أسعار منافسة', description: 'خدمات احترافية بأسعار تناسب ميزانيتك' },
 ];
 
 const Index = () => {
@@ -118,69 +111,11 @@ const Index = () => {
         </div>
       </section>
 
-      {/* About Section */}
-      <section className="section-container">
-        <div className="grid lg:grid-cols-2 gap-12 items-center">
-          <motion.div
-            initial={{ opacity: 0, x: -30 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
-          >
-            <span className="inline-block px-4 py-2 rounded-full bg-primary/10 text-primary text-sm font-medium mb-4">
-              من نحن
-            </span>
-            <h2 className="section-title mb-6">
-              فريق متخصص في
-              <br />
-              <span className="text-gradient">الحلول الرقمية</span>
-            </h2>
-            <p className="text-muted-foreground leading-relaxed mb-6">
-              نحن فريق من المبدعين والمطورين المتحمسين لتحويل رؤيتك إلى حقيقة رقمية. منذ تأسيسنا، ساعدنا العشرات من الشركات على تحقيق أهدافها الرقمية من خلال حلول مبتكرة ومخصصة.
-            </p>
-            <div className="grid grid-cols-2 gap-4">
-              {[
-                { number: '+50', label: 'مشروع منجز' },
-                { number: '+30', label: 'عميل سعيد' },
-                { number: '5+', label: 'سنوات خبرة' },
-                { number: '24/7', label: 'دعم متواصل' },
-              ].map((stat) => (
-                <div key={stat.label} className="glass-card text-center">
-                  <div className="text-3xl font-black text-gradient mb-1">{stat.number}</div>
-                  <div className="text-sm text-muted-foreground">{stat.label}</div>
-                </div>
-              ))}
-            </div>
-          </motion.div>
-
-          <motion.div
-            initial={{ opacity: 0, x: 30 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
-            className="relative"
-          >
-            <div className="glass-card p-8 glow-primary">
-              <div className="space-y-6">
-                {features.map((feature, index) => (
-                  <div key={feature.title} className="flex items-start gap-4">
-                    <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center shrink-0">
-                      <feature.icon className="w-6 h-6 text-primary" />
-                    </div>
-                    <div>
-                      <h4 className="font-bold text-foreground mb-1">{feature.title}</h4>
-                      <p className="text-sm text-muted-foreground">{feature.description}</p>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </motion.div>
-        </div>
-      </section>
+      {/* Stats Counter */}
+      <StatsCounter />
 
       {/* Services Section */}
-      <section className="section-container bg-muted/30">
+      <section className="section-container">
         <div className="text-center mb-12">
           <motion.span
             initial={{ opacity: 0, y: 20 }}
@@ -218,9 +153,10 @@ const Index = () => {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.5, delay: index * 0.1 }}
-              className="service-card"
+              whileHover={{ y: -8, scale: 1.02 }}
+              className="service-card group"
             >
-              <div className="w-14 h-14 rounded-2xl bg-primary/10 flex items-center justify-center mb-4 group-hover:bg-primary/20 transition-colors duration-300">
+              <div className="w-14 h-14 rounded-2xl bg-primary/10 flex items-center justify-center mb-4 group-hover:bg-primary/20 group-hover:scale-110 transition-all duration-300">
                 <service.icon className="w-7 h-7 text-primary" />
               </div>
               <h3 className="text-xl font-bold text-foreground mb-2">{service.title}</h3>
@@ -241,6 +177,15 @@ const Index = () => {
           </Link>
         </motion.div>
       </section>
+
+      {/* Testimonials */}
+      <Testimonials />
+
+      {/* FAQ */}
+      <FAQ />
+
+      {/* Newsletter */}
+      <Newsletter />
 
       {/* CTA Section */}
       <section className="section-container">

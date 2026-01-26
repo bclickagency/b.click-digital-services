@@ -404,3 +404,76 @@
 ::-webkit-scrollbar-thumb:hover {
   @apply bg-primary;
 }
+
+/* Shimmer Effect */
+.shimmer-effect {
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    hsl(var(--muted-foreground) / 0.1) 50%,
+    transparent 100%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+/* Marquee Animation */
+.animate-marquee {
+  animation: marquee 30s linear infinite;
+}
+
+@keyframes marquee {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+/* Prose Styling for Blog */
+.prose {
+  @apply text-foreground leading-relaxed;
+}
+
+.prose h2 {
+  @apply text-2xl font-bold text-foreground mt-8 mb-4;
+}
+
+.prose h3 {
+  @apply text-xl font-bold text-foreground mt-6 mb-3;
+}
+
+.prose p {
+  @apply mb-4 text-muted-foreground;
+}
+
+.prose ul, .prose ol {
+  @apply mb-4 pr-6 text-muted-foreground;
+}
+
+.prose li {
+  @apply mb-2;
+}
+
+.prose a {
+  @apply text-primary hover:underline;
+}
+
+.prose blockquote {
+  @apply border-r-4 border-primary pr-4 italic text-muted-foreground;
+}
+
+/* Section Padding */
+.section-padding {
+  @apply py-16 md:py-24 px-4;
+}
