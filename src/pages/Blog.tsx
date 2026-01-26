@@ -4,7 +4,9 @@ import { Link } from 'react-router-dom';
 import { Calendar, Clock, ArrowLeft, Search, Eye } from 'lucide-react';
 import Layout from '@/components/layout/Layout';
 import { supabase } from '@/integrations/supabase/client';
-import { GridSkeleton } from '@/components/ui/SkeletonLoader';
+import { GridShimmer } from '@/components/ui/ShimmerSkeleton';
+import LazyImage from '@/components/ui/LazyImage';
+import Newsletter from '@/components/home/Newsletter';
 
 interface BlogPost {
   id: string;
@@ -206,7 +208,7 @@ const BlogPage = () => {
       <section className="section-padding pt-0">
         <div className="container mx-auto">
           {loading ? (
-            <GridSkeleton count={6} />
+            <GridShimmer count={6} />
           ) : filteredPosts.length === 0 ? (
             <div className="text-center py-12 text-muted-foreground">
               لا توجد مقالات مطابقة للبحث
@@ -223,18 +225,18 @@ const BlogPage = () => {
                   className="glass-card group overflow-hidden"
                 >
                   <div className="relative h-48 overflow-hidden rounded-t-2xl -m-6 mb-4">
-                    <img
+                    <LazyImage
                       src={post.cover_image || 'https://images.unsplash.com/photo-1499750310107-5fef28a66643?w=800&h=500&fit=crop'}
                       alt={post.title}
-                      className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                      wrapperClassName="absolute inset-0"
+                      className="transition-transform duration-500 group-hover:scale-110"
                     />
-                    <div className="absolute top-4 right-4">
+                    <div className="absolute top-4 right-4 z-10">
                       <span className="px-3 py-1 bg-primary/90 text-primary-foreground text-xs font-medium rounded-lg">
                         {post.category}
                       </span>
                     </div>
                   </div>
-
                   <div className="pt-4">
                     <div className="flex items-center gap-4 text-sm text-muted-foreground mb-3">
                       <span className="flex items-center gap-1">
@@ -274,34 +276,8 @@ const BlogPage = () => {
         </div>
       </section>
 
-      {/* Newsletter CTA */}
-      <section className="section-padding">
-        <div className="container mx-auto">
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="glass-card text-center max-w-2xl mx-auto"
-          >
-            <h2 className="text-2xl md:text-3xl font-bold text-foreground mb-4">
-              اشترك في نشرتنا البريدية
-            </h2>
-            <p className="text-muted-foreground mb-6">
-              احصل على أحدث المقالات والنصائح مباشرة في بريدك الإلكتروني
-            </p>
-            <div className="flex flex-col sm:flex-row gap-3 max-w-md mx-auto">
-              <input
-                type="email"
-                placeholder="بريدك الإلكتروني"
-                className="form-input flex-1"
-              />
-              <button className="btn-primary whitespace-nowrap">
-                اشترك الآن
-              </button>
-            </div>
-          </motion.div>
-        </div>
-      </section>
+      {/* Newsletter */}
+      <Newsletter />
     </Layout>
   );
 };
