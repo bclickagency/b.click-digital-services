@@ -1,4 +1,43 @@
-@import url('https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800;900&display=swap');
+/* Expo Arabic Font Family */
+@font-face {
+  font-family: 'Expo Arabic';
+  src: url('/fonts/ExpoArabic-Light.ttf') format('truetype');
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Expo Arabic';
+  src: url('/fonts/ExpoArabic-Book.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Expo Arabic';
+  src: url('/fonts/ExpoArabic-Medium.ttf') format('truetype');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Expo Arabic';
+  src: url('/fonts/ExpoArabic-SemiBold.ttf') format('truetype');
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Expo Arabic';
+  src: url('/fonts/ExpoArabic-Bold.otf') format('opentype');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
 
 @tailwind base;
 @tailwind components;
@@ -111,7 +150,8 @@
   }
 
   body {
-    @apply bg-background text-foreground font-cairo antialiased;
+    @apply bg-background text-foreground antialiased;
+    font-family: 'Expo Arabic', sans-serif;
     font-feature-settings: "rlig" 1, "calt" 1;
   }
 
@@ -312,8 +352,8 @@
     backdrop-filter: blur(20px) saturate(180%);
   }
 
-  .font-cairo {
-    font-family: 'Cairo', sans-serif;
+  .font-expo {
+    font-family: 'Expo Arabic', sans-serif;
   }
 }
 
