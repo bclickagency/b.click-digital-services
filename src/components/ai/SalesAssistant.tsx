@@ -1,11 +1,13 @@
 import { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { MessageCircle, X, Send, Bot, User, Loader2, Sparkles } from 'lucide-react';
+import { MessageCircle, X, Send, Bot, User, Loader2, Sparkles, Mic, MicOff, Paperclip, History, ChevronDown } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
+import ReactMarkdown from 'react-markdown';
 
 interface Message {
   role: 'user' | 'assistant';
   content: string;
+  timestamp?: Date;
 }
 
 const CHAT_URL = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/sales-assistant`;
@@ -15,11 +17,14 @@ const SalesAssistant = () => {
   const [messages, setMessages] = useState<Message[]>([
     {
       role: 'assistant',
-      content: 'مرحباً! 👋 أنا مساعد BClick الذكي. كيف يمكنني مساعدتك اليوم؟\n\nهل تبحث عن:\n- تصميم موقع ويب؟\n- تطبيق موبايل؟\n- هوية بصرية؟\n- تسويق رقمي؟\n\nأخبرني عن مشروعك وسأساعدك في اختيار الخدمات المناسبة وإعداد عرض سعر مخصص لك! 🚀'
+      content: 'مرحباً! 👋 أنا مساعد BClick الذكي. كيف يمكنني مساعدتك اليوم؟\n\nهل تبحث عن:\n- تصميم موقع ويب؟\n- تطبيق موبايل؟\n- هوية بصرية؟\n- تسويق رقمي؟\n\nأخبرني عن مشروعك وسأساعدك في اختيار الخدمات المناسبة وإعداد عرض سعر مخصص لك! 🚀',
+      timestamp: new Date(),
     }
   ]);
   const [input, setInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [isRecording, setIsRecording] = useState(false);
+  const [showHistory, setShowHistory] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const { toast } = useToast();
 
@@ -29,6 +34,28 @@ const SalesAssistant = () => {
 
   useEffect(() => {
     scrollToBottom();
+  }, [messages]);
+
+  // Load chat history from localStorage
+  useEffect(() => {
+    const saved = localStorage.getItem('bclick-chat-history');
+    if (saved) {
+      try {
+        const parsed = JSON.parse(saved);
+        if (parsed.length > 1) {
+          setMessages(parsed.map((m: any) => ({ ...m, timestamp: new Date(m.timestamp) })));
+        }
+      } catch (e) {
+        console.error('Failed to parse chat history');
+      }
+    }
+  }, []);
+
+  // Save chat history
+  useEffect(() => {
+    if (messages.length > 1) {
+      localStorage.setItem('bclick-chat-history', JSON.stringify(messages));
+    }
   }, [messages]);
 
   const streamChat = async (userMessages: Message[]) => {
@@ -85,7 +112,7 @@ const SalesAssistant = () => {
                   i === prev.length - 1 ? { ...m, content: assistantContent } : m
                 );
               }
-              return [...prev, { role: 'assistant', content: assistantContent }];
+              return [...prev, { role: 'assistant', content: assistantContent, timestamp: new Date() }];
             });
           }
         } catch {
@@ -116,7 +143,7 @@ const SalesAssistant = () => {
                   i === prev.length - 1 ? { ...m, content: assistantContent } : m
                 );
               }
-              return [...prev, { role: 'assistant', content: assistantContent }];
+              return [...prev, { role: 'assistant', content: assistantContent, timestamp: new Date() }];
             });
           }
         } catch { /* ignore */ }
@@ -128,7 +155,7 @@ const SalesAssistant = () => {
     e.preventDefault();
     if (!input.trim() || isLoading) return;
 
-    const userMessage: Message = { role: 'user', content: input.trim() };
+    const userMessage: Message = { role: 'user', content: input.trim(), timestamp: new Date() };
     const newMessages = [...messages, userMessage];
     setMessages(newMessages);
     setInput('');
@@ -148,10 +175,61 @@ const SalesAssistant = () => {
     }
   };
 
+  const handleQuickReply = (text: string) => {
+    setInput(text);
+  };
+
+  const clearHistory = () => {
+    const initialMessage: Message = {
+      role: 'assistant',
+      content: 'مرحباً! 👋 أنا مساعد BClick الذكي. كيف يمكنني مساعدتك اليوم؟',
+      timestamp: new Date(),
+    };
+    setMessages([initialMessage]);
+    localStorage.removeItem('bclick-chat-history');
+    setShowHistory(false);
+  };
+
+  const toggleRecording = () => {
+    if (!isRecording) {
+      // Check if browser supports speech recognition
+      if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
+        setIsRecording(true);
+        toast({
+          title: 'جاري التسجيل...',
+          description: 'تحدث الآن ثم اضغط مرة أخرى للإيقاف',
+        });
+        // Voice recording simulation - in production, implement actual speech recognition
+        setTimeout(() => {
+          setIsRecording(false);
+          toast({
+            title: 'تم الإيقاف',
+            description: 'ميزة التسجيل الصوتي قيد التطوير',
+          });
+        }, 3000);
+      } else {
+        toast({
+          title: 'غير مدعوم',
+          description: 'متصفحك لا يدعم ميزة التسجيل الصوتي',
+          variant: 'destructive',
+        });
+      }
+    } else {
+      setIsRecording(false);
+    }
+  };
+
   const suggestedQuestions = [
     'أحتاج موقع ويب لشركتي',
     'كم تكلفة متجر إلكتروني؟',
     'أريد عرض سعر شامل',
+  ];
+
+  const quickReplies = [
+    'نعم، هذا ما أبحث عنه',
+    'أريد معرفة المزيد',
+    'كم التكلفة؟',
+    'أريد التحدث مع شخص',
   ];
 
   return (
@@ -187,16 +265,55 @@ const SalesAssistant = () => {
                 </div>
                 <div>
                   <h3 className="font-bold text-white">مساعد BClick الذكي</h3>
-                  <p className="text-xs text-white/80">متصل الآن</p>
+                  <div className="flex items-center gap-1.5">
+                    <span className="w-2 h-2 bg-green-400 rounded-full animate-pulse" />
+                    <p className="text-xs text-white/80">متصل الآن</p>
+                  </div>
                 </div>
               </div>
-              <button
-                onClick={() => setIsOpen(false)}
-                className="w-8 h-8 rounded-full bg-white/20 hover:bg-white/30 flex items-center justify-center transition-colors"
-              >
-                <X className="w-4 h-4 text-white" />
-              </button>
+              <div className="flex items-center gap-1">
+                <button
+                  onClick={() => setShowHistory(!showHistory)}
+                  className="w-8 h-8 rounded-full bg-white/20 hover:bg-white/30 flex items-center justify-center transition-colors"
+                  title="سجل المحادثات"
+                >
+                  <History className="w-4 h-4 text-white" />
+                </button>
+                <button
+                  onClick={() => setIsOpen(false)}
+                  className="w-8 h-8 rounded-full bg-white/20 hover:bg-white/30 flex items-center justify-center transition-colors"
+                >
+                  <X className="w-4 h-4 text-white" />
+                </button>
+              </div>
             </div>
+
+            {/* History Panel */}
+            <AnimatePresence>
+              {showHistory && (
+                <motion.div
+                  initial={{ height: 0, opacity: 0 }}
+                  animate={{ height: 'auto', opacity: 1 }}
+                  exit={{ height: 0, opacity: 0 }}
+                  className="border-b border-border overflow-hidden"
+                >
+                  <div className="p-3 bg-muted/50">
+                    <div className="flex items-center justify-between mb-2">
+                      <span className="text-sm font-medium text-foreground">سجل المحادثة</span>
+                      <button
+                        onClick={clearHistory}
+                        className="text-xs text-destructive hover:underline"
+                      >
+                        مسح السجل
+                      </button>
+                    </div>
+                    <p className="text-xs text-muted-foreground">
+                      {messages.length - 1} رسالة محفوظة
+                    </p>
+                  </div>
+                </motion.div>
+              )}
+            </AnimatePresence>
 
             {/* Messages */}
             <div className="flex-1 overflow-y-auto p-4 space-y-4">
@@ -227,13 +344,19 @@ const SalesAssistant = () => {
                         : 'bg-muted rounded-tl-sm'
                     }`}
                   >
-                    <p className="text-sm whitespace-pre-wrap leading-relaxed">
-                      {message.content}
-                    </p>
+                    <div className="text-sm whitespace-pre-wrap leading-relaxed prose prose-sm">
+                      <ReactMarkdown>{message.content}</ReactMarkdown>
+                    </div>
+                    {message.timestamp && (
+                      <p className={`text-[10px] mt-1 ${message.role === 'user' ? 'text-white/60' : 'text-muted-foreground'}`}>
+                        {message.timestamp.toLocaleTimeString('ar-EG', { hour: '2-digit', minute: '2-digit' })}
+                      </p>
+                    )}
                   </div>
                 </motion.div>
               ))}
               
+              {/* Typing Indicator */}
               {isLoading && messages[messages.length - 1]?.role === 'user' && (
                 <motion.div
                   initial={{ opacity: 0 }}
@@ -244,7 +367,23 @@ const SalesAssistant = () => {
                     <Bot className="w-4 h-4 text-primary" />
                   </div>
                   <div className="bg-muted p-3 rounded-2xl rounded-tl-sm">
-                    <Loader2 className="w-5 h-5 animate-spin text-primary" />
+                    <div className="flex items-center gap-1">
+                      <motion.span
+                        animate={{ opacity: [0.4, 1, 0.4] }}
+                        transition={{ duration: 1, repeat: Infinity, delay: 0 }}
+                        className="w-2 h-2 bg-primary rounded-full"
+                      />
+                      <motion.span
+                        animate={{ opacity: [0.4, 1, 0.4] }}
+                        transition={{ duration: 1, repeat: Infinity, delay: 0.2 }}
+                        className="w-2 h-2 bg-primary rounded-full"
+                      />
+                      <motion.span
+                        animate={{ opacity: [0.4, 1, 0.4] }}
+                        transition={{ duration: 1, repeat: Infinity, delay: 0.4 }}
+                        className="w-2 h-2 bg-primary rounded-full"
+                      />
+                    </div>
                   </div>
                 </motion.div>
               )}
@@ -252,7 +391,27 @@ const SalesAssistant = () => {
               <div ref={messagesEndRef} />
             </div>
 
-            {/* Suggested Questions */}
+            {/* Quick Replies - Show after assistant messages */}
+            {messages.length > 1 && messages[messages.length - 1]?.role === 'assistant' && !isLoading && (
+              <div className="px-4 pb-2">
+                <div className="flex flex-wrap gap-2">
+                  {quickReplies.map((reply, i) => (
+                    <motion.button
+                      key={i}
+                      initial={{ opacity: 0, scale: 0.9 }}
+                      animate={{ opacity: 1, scale: 1 }}
+                      transition={{ delay: i * 0.05 }}
+                      onClick={() => handleQuickReply(reply)}
+                      className="text-xs px-3 py-1.5 rounded-full border border-border hover:border-primary hover:text-primary transition-colors"
+                    >
+                      {reply}
+                    </motion.button>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* Suggested Questions - Initial State */}
             {messages.length === 1 && (
               <div className="px-4 pb-2">
                 <p className="text-xs text-muted-foreground mb-2">اقتراحات سريعة:</p>
@@ -260,7 +419,7 @@ const SalesAssistant = () => {
                   {suggestedQuestions.map((q, i) => (
                     <button
                       key={i}
-                      onClick={() => setInput(q)}
+                      onClick={() => handleQuickReply(q)}
                       className="text-xs px-3 py-1.5 rounded-full bg-primary/10 text-primary hover:bg-primary/20 transition-colors"
                     >
                       {q}
@@ -273,14 +432,32 @@ const SalesAssistant = () => {
             {/* Input */}
             <form onSubmit={handleSubmit} className="p-4 border-t border-border">
               <div className="flex gap-2">
-                <input
-                  type="text"
-                  value={input}
-                  onChange={(e) => setInput(e.target.value)}
-                  placeholder="اكتب رسالتك..."
-                  className="flex-1 bg-muted rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary/50"
+                {/* Voice Input Button */}
+                <motion.button
+                  type="button"
+                  whileTap={{ scale: 0.9 }}
+                  onClick={toggleRecording}
+                  className={`w-12 h-12 rounded-xl flex items-center justify-center transition-colors ${
+                    isRecording 
+                      ? 'bg-destructive text-white animate-pulse' 
+                      : 'bg-muted hover:bg-muted/80'
+                  }`}
                   disabled={isLoading}
-                />
+                >
+                  {isRecording ? <MicOff className="w-5 h-5" /> : <Mic className="w-5 h-5 text-muted-foreground" />}
+                </motion.button>
+
+                <div className="flex-1 relative">
+                  <input
+                    type="text"
+                    value={input}
+                    onChange={(e) => setInput(e.target.value)}
+                    placeholder="اكتب رسالتك..."
+                    className="w-full bg-muted rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary/50 pr-10"
+                    disabled={isLoading}
+                  />
+                </div>
+                
                 <button
                   type="submit"
                   disabled={!input.trim() || isLoading}

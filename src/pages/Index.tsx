@@ -15,6 +15,12 @@ import Testimonials from '@/components/home/Testimonials';
 import StatsCounter from '@/components/home/StatsCounter';
 import Newsletter from '@/components/home/Newsletter';
 import FAQ from '@/components/home/FAQ';
+import TypewriterText from '@/components/ui/TypewriterText';
+import AnimatedBlob from '@/components/ui/AnimatedBlob';
+import ScrollDownIndicator from '@/components/ui/ScrollDownIndicator';
+import TiltCard from '@/components/ui/TiltCard';
+import SectionIndicator from '@/components/ui/SectionIndicator';
+import MagneticButton from '@/components/ui/MagneticButton';
 
 const services = [
   {
@@ -49,15 +55,36 @@ const services = [
   },
 ];
 
+const sections = [
+  { id: 'hero', label: 'الرئيسية' },
+  { id: 'stats', label: 'الإحصائيات' },
+  { id: 'services', label: 'الخدمات' },
+  { id: 'testimonials', label: 'آراء العملاء' },
+  { id: 'faq', label: 'الأسئلة الشائعة' },
+  { id: 'cta', label: 'ابدأ الآن' },
+];
+
+const typewriterTexts = [
+  'مواقع إلكترونية',
+  'تطبيقات موبايل',
+  'هوية بصرية',
+  'تسويق رقمي',
+  'متاجر إلكترونية',
+];
+
 const Index = () => {
   return (
     <Layout>
+      {/* Section Indicator */}
+      <SectionIndicator sections={sections} />
+
       {/* Hero Section */}
-      <section className="relative min-h-[90vh] flex items-center overflow-hidden">
-        {/* Background Effects */}
+      <section id="hero" className="relative min-h-[90vh] flex items-center overflow-hidden">
+        {/* Animated Background Blobs */}
         <div className="absolute inset-0 overflow-hidden">
-          <div className="absolute top-1/4 right-1/4 w-96 h-96 bg-primary/20 rounded-full blur-[100px] animate-float" />
-          <div className="absolute bottom-1/4 left-1/4 w-80 h-80 bg-secondary/20 rounded-full blur-[100px] animate-float" style={{ animationDelay: '2s' }} />
+          <AnimatedBlob className="top-1/4 right-1/4" color="primary" size="xl" delay={0} />
+          <AnimatedBlob className="bottom-1/4 left-1/4" color="secondary" size="lg" delay={2} />
+          <AnimatedBlob className="top-1/2 left-1/2" color="primary" size="md" delay={4} />
         </div>
 
         <div className="container mx-auto px-4 relative z-10">
@@ -80,7 +107,9 @@ const Index = () => {
             >
               نحوّل أفكارك إلى
               <br />
-              <span className="text-gradient">واقع رقمي مذهل</span>
+              <span className="text-gradient">
+                <TypewriterText texts={typewriterTexts} />
+              </span>
             </motion.h1>
 
             <motion.p
@@ -98,24 +127,33 @@ const Index = () => {
               transition={{ duration: 0.6, delay: 0.3 }}
               className="flex flex-wrap gap-4"
             >
-              <Link to="/request" className="btn-secondary">
-                <MessageCircle className="w-5 h-5" />
-                ابدأ مشروعك الآن
-              </Link>
+              <MagneticButton className="btn-secondary">
+                <Link to="/request" className="flex items-center gap-2">
+                  <MessageCircle className="w-5 h-5" />
+                  ابدأ مشروعك الآن
+                </Link>
+              </MagneticButton>
               <Link to="/services" className="btn-ghost">
                 اكتشف خدماتنا
                 <ArrowLeft className="w-5 h-5" />
               </Link>
             </motion.div>
           </div>
+
+          {/* Scroll Down Indicator */}
+          <div className="absolute bottom-8 left-1/2 -translate-x-1/2">
+            <ScrollDownIndicator targetId="stats" />
+          </div>
         </div>
       </section>
 
       {/* Stats Counter */}
-      <StatsCounter />
+      <div id="stats">
+        <StatsCounter />
+      </div>
 
       {/* Services Section */}
-      <section className="section-container">
+      <section id="services" className="section-container">
         <div className="text-center mb-12">
           <motion.span
             initial={{ opacity: 0, y: 20 }}
@@ -153,14 +191,16 @@ const Index = () => {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.5, delay: index * 0.1 }}
-              whileHover={{ y: -8, scale: 1.02 }}
-              className="service-card group"
             >
-              <div className="w-14 h-14 rounded-2xl bg-primary/10 flex items-center justify-center mb-4 group-hover:bg-primary/20 group-hover:scale-110 transition-all duration-300">
-                <service.icon className="w-7 h-7 text-primary" />
-              </div>
-              <h3 className="text-xl font-bold text-foreground mb-2">{service.title}</h3>
-              <p className="text-muted-foreground text-sm">{service.description}</p>
+              <TiltCard className="h-full">
+                <div className="service-card group h-full">
+                  <div className="w-14 h-14 rounded-2xl bg-primary/10 flex items-center justify-center mb-4 group-hover:bg-primary/20 group-hover:scale-110 transition-all duration-300">
+                    <service.icon className="w-7 h-7 text-primary" />
+                  </div>
+                  <h3 className="text-xl font-bold text-foreground mb-2">{service.title}</h3>
+                  <p className="text-muted-foreground text-sm">{service.description}</p>
+                </div>
+              </TiltCard>
             </motion.div>
           ))}
         </div>
@@ -179,16 +219,20 @@ const Index = () => {
       </section>
 
       {/* Testimonials */}
-      <Testimonials />
+      <div id="testimonials">
+        <Testimonials />
+      </div>
 
       {/* FAQ */}
-      <FAQ />
+      <div id="faq">
+        <FAQ />
+      </div>
 
       {/* Newsletter */}
       <Newsletter />
 
       {/* CTA Section */}
-      <section className="section-container">
+      <section id="cta" className="section-container">
         <motion.div
           initial={{ opacity: 0, scale: 0.95 }}
           whileInView={{ opacity: 1, scale: 1 }}
@@ -204,10 +248,12 @@ const Index = () => {
               تواصل معنا الآن واحصل على استشارة مجانية لمشروعك
             </p>
             <div className="flex flex-wrap justify-center gap-4">
-              <Link to="/request" className="btn-secondary">
-                <MessageCircle className="w-5 h-5" />
-                ابدأ الآن
-              </Link>
+              <MagneticButton>
+                <Link to="/request" className="btn-secondary flex items-center gap-2">
+                  <MessageCircle className="w-5 h-5" />
+                  ابدأ الآن
+                </Link>
+              </MagneticButton>
               <a
                 href="https://wa.me/201558663972"
                 target="_blank"
