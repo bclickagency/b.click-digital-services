@@ -13,6 +13,8 @@ import {
   ArrowLeft
 } from 'lucide-react';
 import Layout from '@/components/layout/Layout';
+import TiltCard from '@/components/ui/TiltCard';
+import MagneticButton from '@/components/ui/MagneticButton';
 
 const services = [
   {
@@ -122,31 +124,40 @@ const ServicesPage = () => {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: index * 0.1 }}
-              className="service-card"
             >
-              <div className="flex items-start gap-5">
-                <div className={`w-16 h-16 rounded-2xl flex items-center justify-center shrink-0 ${
-                  service.color === 'primary' ? 'bg-primary/10' : 'bg-secondary/10'
-                }`}>
-                  <service.icon className={`w-8 h-8 ${
-                    service.color === 'primary' ? 'text-primary' : 'text-secondary'
-                  }`} />
-                </div>
-                <div className="flex-1">
-                  <h3 className="text-xl font-bold text-foreground mb-2">{service.title}</h3>
-                  <p className="text-muted-foreground text-sm mb-4">{service.description}</p>
-                  <div className="grid grid-cols-2 gap-2">
-                    {service.features.map((feature) => (
-                      <div key={feature} className="flex items-center gap-2 text-sm">
-                        <CheckCircle2 className={`w-4 h-4 ${
-                          service.color === 'primary' ? 'text-primary' : 'text-secondary'
-                        }`} />
-                        <span className="text-muted-foreground">{feature}</span>
+              <TiltCard className="h-full">
+                <div className="service-card h-full card-hover-glow">
+                  <div className="flex items-start gap-5">
+                    <div className={`w-16 h-16 rounded-2xl flex items-center justify-center shrink-0 transition-all duration-300 group-hover:scale-110 ${
+                      service.color === 'primary' ? 'bg-primary/10' : 'bg-secondary/10'
+                    }`}>
+                      <service.icon className={`w-8 h-8 ${
+                        service.color === 'primary' ? 'text-primary' : 'text-secondary'
+                      }`} />
+                    </div>
+                    <div className="flex-1">
+                      <h3 className="text-xl font-bold text-foreground mb-2">{service.title}</h3>
+                      <p className="text-muted-foreground text-sm mb-4">{service.description}</p>
+                      <div className="grid grid-cols-2 gap-2">
+                        {service.features.map((feature, i) => (
+                          <motion.div 
+                            key={feature} 
+                            initial={{ opacity: 0, x: -10 }}
+                            whileInView={{ opacity: 1, x: 0 }}
+                            transition={{ delay: index * 0.1 + i * 0.05 }}
+                            className="flex items-center gap-2 text-sm"
+                          >
+                            <CheckCircle2 className={`w-4 h-4 ${
+                              service.color === 'primary' ? 'text-primary' : 'text-secondary'
+                            }`} />
+                            <span className="text-muted-foreground">{feature}</span>
+                          </motion.div>
+                        ))}
                       </div>
-                    ))}
+                    </div>
                   </div>
                 </div>
-              </div>
+              </TiltCard>
             </motion.div>
           ))}
         </div>
@@ -166,10 +177,12 @@ const ServicesPage = () => {
             <p className="section-subtitle mx-auto mb-8">
               أخبرنا عن احتياجاتك وسنساعدك في اختيار الخدمة المناسبة
             </p>
-            <Link to="/request" className="btn-secondary">
-              اطلب خدمتك الآن
-              <ArrowLeft className="w-5 h-5" />
-            </Link>
+            <MagneticButton>
+              <Link to="/request" className="btn-secondary flex items-center gap-2">
+                اطلب خدمتك الآن
+                <ArrowLeft className="w-5 h-5" />
+              </Link>
+            </MagneticButton>
           </div>
         </motion.div>
       </section>

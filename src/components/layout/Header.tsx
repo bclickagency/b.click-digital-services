@@ -3,11 +3,13 @@ import { Link, useLocation } from 'react-router-dom';
 import { Menu, X, Moon, Sun } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useTheme } from '@/contexts/ThemeContext';
+import MegaMenu, { MegaMenuTrigger } from './MegaMenu';
+import SearchBar from './SearchBar';
+import MobileDrawer from './MobileDrawer';
 
 const navLinks = [
   { name: 'الرئيسية', path: '/' },
   { name: 'من نحن', path: '/about' },
-  { name: 'الخدمات', path: '/services' },
   { name: 'أعمالنا', path: '/portfolio' },
   { name: 'محتاج خدمة إيه؟', path: '/request' },
   { name: 'تواصل معنا', path: '/contact' },
@@ -15,14 +17,16 @@ const navLinks = [
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isMegaMenuOpen, setIsMegaMenuOpen] = useState(false);
   const { theme, toggleTheme } = useTheme();
   const location = useLocation();
 
   const isActive = (path: string) => location.pathname === path;
+  const isServicesActive = location.pathname === '/services';
 
   return (
     <header className="glass-header" dir="rtl">
-      <nav className="flex items-center justify-between">
+      <nav className="flex items-center justify-between relative">
         {/* Logo */}
         <Link to="/" className="flex items-center gap-2">
           <span className="text-2xl font-black text-foreground tracking-tight">
@@ -32,23 +36,77 @@ const Header = () => {
 
         {/* Desktop Navigation */}
         <div className="hidden lg:flex items-center gap-1">
-          {navLinks.map((link) => (
-            <Link
-              key={link.path}
-              to={link.path}
-              className={`px-4 py-2 rounded-xl text-sm font-medium transition-all duration-300 ${
-                isActive(link.path)
-                  ? 'text-primary bg-primary/10'
-                  : 'text-foreground hover:text-primary hover:bg-muted/50'
-              }`}
-            >
-              {link.name}
-            </Link>
-          ))}
+          <Link
+            to="/"
+            className={`px-4 py-2 rounded-xl text-sm font-medium transition-all duration-300 ${
+              isActive('/')
+                ? 'text-primary bg-primary/10'
+                : 'text-foreground hover:text-primary hover:bg-muted/50'
+            }`}
+          >
+            الرئيسية
+          </Link>
+          
+          <Link
+            to="/about"
+            className={`px-4 py-2 rounded-xl text-sm font-medium transition-all duration-300 ${
+              isActive('/about')
+                ? 'text-primary bg-primary/10'
+                : 'text-foreground hover:text-primary hover:bg-muted/50'
+            }`}
+          >
+            من نحن
+          </Link>
+
+          {/* Mega Menu Trigger */}
+          <div className="relative">
+            <MegaMenuTrigger 
+              isOpen={isMegaMenuOpen || isServicesActive} 
+              onClick={() => setIsMegaMenuOpen(!isMegaMenuOpen)} 
+            />
+          </div>
+
+          <Link
+            to="/portfolio"
+            className={`px-4 py-2 rounded-xl text-sm font-medium transition-all duration-300 ${
+              isActive('/portfolio')
+                ? 'text-primary bg-primary/10'
+                : 'text-foreground hover:text-primary hover:bg-muted/50'
+            }`}
+          >
+            أعمالنا
+          </Link>
+
+          <Link
+            to="/request"
+            className={`px-4 py-2 rounded-xl text-sm font-medium transition-all duration-300 ${
+              isActive('/request')
+                ? 'text-primary bg-primary/10'
+                : 'text-foreground hover:text-primary hover:bg-muted/50'
+            }`}
+          >
+            محتاج خدمة إيه؟
+          </Link>
+
+          <Link
+            to="/contact"
+            className={`px-4 py-2 rounded-xl text-sm font-medium transition-all duration-300 ${
+              isActive('/contact')
+                ? 'text-primary bg-primary/10'
+                : 'text-foreground hover:text-primary hover:bg-muted/50'
+            }`}
+          >
+            تواصل معنا
+          </Link>
         </div>
 
         {/* Actions */}
         <div className="flex items-center gap-3">
+          {/* Search Bar */}
+          <div className="hidden md:block">
+            <SearchBar />
+          </div>
+
           {/* Theme Toggle */}
           <button
             onClick={toggleTheme}
@@ -101,44 +159,17 @@ const Header = () => {
             )}
           </button>
         </div>
+
+        {/* Mega Menu */}
+        <MegaMenu isOpen={isMegaMenuOpen} onClose={() => setIsMegaMenuOpen(false)} />
       </nav>
 
-      {/* Mobile Menu */}
-      <AnimatePresence>
-        {isMenuOpen && (
-          <motion.div
-            initial={{ opacity: 0, height: 0 }}
-            animate={{ opacity: 1, height: 'auto' }}
-            exit={{ opacity: 0, height: 0 }}
-            transition={{ duration: 0.3 }}
-            className="lg:hidden overflow-hidden"
-          >
-            <div className="pt-4 pb-2 flex flex-col gap-1">
-              {navLinks.map((link) => (
-                <Link
-                  key={link.path}
-                  to={link.path}
-                  onClick={() => setIsMenuOpen(false)}
-                  className={`px-4 py-3 rounded-xl text-sm font-medium transition-all duration-300 ${
-                    isActive(link.path)
-                      ? 'text-primary bg-primary/10'
-                      : 'text-foreground hover:text-primary hover:bg-muted/50'
-                  }`}
-                >
-                  {link.name}
-                </Link>
-              ))}
-              <Link
-                to="/contact"
-                onClick={() => setIsMenuOpen(false)}
-                className="btn-primary text-sm mt-2 text-center"
-              >
-                تواصل معنا
-              </Link>
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+      {/* Mobile Drawer */}
+      <MobileDrawer 
+        isOpen={isMenuOpen} 
+        onClose={() => setIsMenuOpen(false)} 
+        currentPath={location.pathname}
+      />
     </header>
   );
 };
