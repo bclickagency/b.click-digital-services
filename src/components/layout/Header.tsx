@@ -35,13 +35,13 @@ const Header = () => {
         </Link>
 
         {/* Desktop Navigation */}
-        <div className="hidden lg:flex items-center gap-1">
+        <div className="hidden lg:flex items-center gap-1 bg-muted/30 backdrop-blur-xl rounded-full p-1.5 border border-border/30">
           <Link
             to="/"
-            className={`px-4 py-2 rounded-xl text-sm font-medium transition-all duration-300 ${
+            className={`px-5 py-2 rounded-full text-sm font-medium transition-all duration-300 ${
               isActive('/')
-                ? 'text-primary bg-primary/10'
-                : 'text-foreground hover:text-primary hover:bg-muted/50'
+                ? 'text-primary-foreground bg-primary shadow-[0_2px_10px_hsl(248_98%_60%/0.3)]'
+                : 'text-foreground hover:text-primary hover:bg-background/60'
             }`}
           >
             الرئيسية
@@ -49,10 +49,10 @@ const Header = () => {
           
           <Link
             to="/about"
-            className={`px-4 py-2 rounded-xl text-sm font-medium transition-all duration-300 ${
+            className={`px-5 py-2 rounded-full text-sm font-medium transition-all duration-300 ${
               isActive('/about')
-                ? 'text-primary bg-primary/10'
-                : 'text-foreground hover:text-primary hover:bg-muted/50'
+                ? 'text-primary-foreground bg-primary shadow-[0_2px_10px_hsl(248_98%_60%/0.3)]'
+                : 'text-foreground hover:text-primary hover:bg-background/60'
             }`}
           >
             من نحن
@@ -68,10 +68,10 @@ const Header = () => {
 
           <Link
             to="/portfolio"
-            className={`px-4 py-2 rounded-xl text-sm font-medium transition-all duration-300 ${
+            className={`px-5 py-2 rounded-full text-sm font-medium transition-all duration-300 ${
               isActive('/portfolio')
-                ? 'text-primary bg-primary/10'
-                : 'text-foreground hover:text-primary hover:bg-muted/50'
+                ? 'text-primary-foreground bg-primary shadow-[0_2px_10px_hsl(248_98%_60%/0.3)]'
+                : 'text-foreground hover:text-primary hover:bg-background/60'
             }`}
           >
             أعمالنا
@@ -79,10 +79,10 @@ const Header = () => {
 
           <Link
             to="/request"
-            className={`px-4 py-2 rounded-xl text-sm font-medium transition-all duration-300 ${
+            className={`px-5 py-2 rounded-full text-sm font-medium transition-all duration-300 ${
               isActive('/request')
-                ? 'text-primary bg-primary/10'
-                : 'text-foreground hover:text-primary hover:bg-muted/50'
+                ? 'text-primary-foreground bg-primary shadow-[0_2px_10px_hsl(248_98%_60%/0.3)]'
+                : 'text-foreground hover:text-primary hover:bg-background/60'
             }`}
           >
             محتاج خدمة إيه؟
@@ -90,10 +90,10 @@ const Header = () => {
 
           <Link
             to="/contact"
-            className={`px-4 py-2 rounded-xl text-sm font-medium transition-all duration-300 ${
+            className={`px-5 py-2 rounded-full text-sm font-medium transition-all duration-300 ${
               isActive('/contact')
-                ? 'text-primary bg-primary/10'
-                : 'text-foreground hover:text-primary hover:bg-muted/50'
+                ? 'text-primary-foreground bg-primary shadow-[0_2px_10px_hsl(248_98%_60%/0.3)]'
+                : 'text-foreground hover:text-primary hover:bg-background/60'
             }`}
           >
             تواصل معنا
@@ -110,7 +110,7 @@ const Header = () => {
           {/* Theme Toggle */}
           <button
             onClick={toggleTheme}
-            className="p-2 rounded-xl bg-muted/50 hover:bg-muted transition-all duration-300"
+            className="p-2.5 rounded-full bg-background/60 backdrop-blur-xl border border-border/30 hover:bg-muted/50 transition-all duration-300 shadow-[inset_0_1px_1px_hsl(0_0%_100%/0.1)]"
             aria-label="Toggle theme"
           >
             <AnimatePresence mode="wait" initial={false}>
@@ -149,7 +149,7 @@ const Header = () => {
           {/* Mobile Menu Button */}
           <button
             onClick={() => setIsMenuOpen(!isMenuOpen)}
-            className="lg:hidden p-2 rounded-xl bg-muted/50 hover:bg-muted transition-all duration-300"
+            className="lg:hidden p-2.5 rounded-full bg-background/60 backdrop-blur-xl border border-border/30 hover:bg-muted/50 transition-all duration-300 shadow-[inset_0_1px_1px_hsl(0_0%_100%/0.1)]"
             aria-label="Toggle menu"
           >
             {isMenuOpen ? (
