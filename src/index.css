@@ -48,94 +48,113 @@
     --background: 0 0% 100%;
     --foreground: 240 10% 10%;
 
-    --card: 0 0% 98%;
+    --card: 0 0% 100%;
     --card-foreground: 240 10% 10%;
 
     --popover: 0 0% 100%;
     --popover-foreground: 240 10% 10%;
 
+    /* Brand color #5337fe = HSL(248, 98%, 60%) */
     --primary: 248 98% 60%;
     --primary-foreground: 0 0% 100%;
 
-    --secondary: 0 82% 71%;
-    --secondary-foreground: 0 0% 100%;
+    --secondary: 248 40% 92%;
+    --secondary-foreground: 248 98% 40%;
 
-    --muted: 240 5% 90%;
+    --muted: 240 5% 96%;
     --muted-foreground: 240 5% 45%;
 
-    --accent: 248 98% 60%;
-    --accent-foreground: 0 0% 100%;
+    --accent: 248 98% 96%;
+    --accent-foreground: 248 98% 40%;
 
     --destructive: 0 84% 60%;
     --destructive-foreground: 0 0% 100%;
 
-    --border: 240 5% 85%;
-    --input: 240 5% 85%;
+    --border: 240 6% 90%;
+    --input: 240 6% 90%;
     --ring: 248 98% 60%;
 
-    --radius: 0.75rem;
+    --radius: 1.5rem;
 
-    /* Custom Colors */
-    --glass-bg: 0 0% 100% / 0.1;
-    --glass-border: 0 0% 100% / 0.2;
-    --gradient-primary: linear-gradient(135deg, hsl(248 98% 60%), hsl(280 90% 55%));
-    --gradient-secondary: linear-gradient(135deg, hsl(0 82% 71%), hsl(30 90% 60%));
-    --gradient-dark: linear-gradient(180deg, hsl(240 10% 8%), hsl(240 10% 4%));
-    --shadow-glow: 0 0 40px hsl(248 98% 60% / 0.3);
-    --shadow-soft: 0 8px 32px hsl(0 0% 0% / 0.1);
+    /* iOS Glassmorphism System */
+    --glass-bg: 0 0% 100% / 0.7;
+    --glass-border: 0 0% 100% / 0.5;
+    --glass-blur: 20px;
+    --glass-saturate: 180%;
+    
+    /* Shadows - Clean & Minimal */
+    --shadow-glass: 0 4px 30px hsl(0 0% 0% / 0.08);
+    --shadow-glass-hover: 0 8px 40px hsl(0 0% 0% / 0.12);
+    --shadow-inner-glow: inset 0 1px 1px hsl(0 0% 100% / 0.4);
+    --shadow-brand-glow: inset 0 0 20px hsl(248 98% 60% / 0.1);
+    
+    /* Button specific */
+    --btn-glass-bg: 0 0% 100% / 0.6;
+    --btn-glass-border: 0 0% 100% / 0.4;
 
-    --sidebar-background: 240 10% 8%;
-    --sidebar-foreground: 0 0% 95%;
+    --sidebar-background: 248 20% 98%;
+    --sidebar-foreground: 240 10% 10%;
     --sidebar-primary: 248 98% 60%;
     --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 240 10% 15%;
-    --sidebar-accent-foreground: 0 0% 95%;
-    --sidebar-border: 240 10% 20%;
+    --sidebar-accent: 248 40% 96%;
+    --sidebar-accent-foreground: 248 98% 40%;
+    --sidebar-border: 240 6% 90%;
     --sidebar-ring: 248 98% 60%;
   }
 
   .dark {
-    --background: 225 27% 12%;
-    --foreground: 0 0% 95%;
+    --background: 225 25% 8%;
+    --foreground: 0 0% 98%;
 
-    --card: 240 10% 8%;
-    --card-foreground: 0 0% 95%;
+    --card: 225 25% 10%;
+    --card-foreground: 0 0% 98%;
 
-    --popover: 240 10% 8%;
-    --popover-foreground: 0 0% 95%;
+    --popover: 225 25% 10%;
+    --popover-foreground: 0 0% 98%;
 
+    /* Brand color stays consistent */
     --primary: 248 98% 60%;
     --primary-foreground: 0 0% 100%;
 
-    --secondary: 0 82% 71%;
-    --secondary-foreground: 0 0% 100%;
+    --secondary: 248 30% 20%;
+    --secondary-foreground: 248 98% 80%;
 
-    --muted: 240 10% 15%;
-    --muted-foreground: 240 5% 65%;
+    --muted: 225 20% 15%;
+    --muted-foreground: 225 10% 60%;
 
-    --accent: 248 98% 60%;
-    --accent-foreground: 0 0% 100%;
+    --accent: 248 30% 18%;
+    --accent-foreground: 248 98% 80%;
 
     --destructive: 0 62% 50%;
     --destructive-foreground: 0 0% 100%;
 
-    --border: 240 10% 20%;
-    --input: 240 10% 20%;
+    --border: 225 20% 18%;
+    --input: 225 20% 18%;
     --ring: 248 98% 60%;
 
-    /* Custom Dark Colors */
-    --glass-bg: 240 10% 10% / 0.6;
-    --glass-border: 0 0% 100% / 0.1;
-    --shadow-glow: 0 0 60px hsl(248 98% 60% / 0.4);
-    --shadow-soft: 0 8px 32px hsl(0 0% 0% / 0.4);
+    /* iOS Dark Glassmorphism */
+    --glass-bg: 225 25% 12% / 0.8;
+    --glass-border: 0 0% 100% / 0.08;
+    --glass-blur: 24px;
+    --glass-saturate: 150%;
+    
+    /* Dark shadows */
+    --shadow-glass: 0 4px 30px hsl(0 0% 0% / 0.3);
+    --shadow-glass-hover: 0 8px 40px hsl(0 0% 0% / 0.4);
+    --shadow-inner-glow: inset 0 1px 1px hsl(0 0% 100% / 0.06);
+    --shadow-brand-glow: inset 0 0 24px hsl(248 98% 60% / 0.15);
+    
+    /* Button specific dark */
+    --btn-glass-bg: 225 25% 15% / 0.7;
+    --btn-glass-border: 0 0% 100% / 0.1;
 
-    --sidebar-background: 240 10% 6%;
-    --sidebar-foreground: 0 0% 95%;
+    --sidebar-background: 225 25% 6%;
+    --sidebar-foreground: 0 0% 98%;
     --sidebar-primary: 248 98% 60%;
     --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 240 10% 12%;
-    --sidebar-accent-foreground: 0 0% 95%;
-    --sidebar-border: 240 10% 15%;
+    --sidebar-accent: 248 30% 15%;
+    --sidebar-accent-foreground: 248 98% 80%;
+    --sidebar-border: 225 20% 15%;
     --sidebar-ring: 248 98% 60%;
   }
 }
@@ -162,94 +181,149 @@
 }
 
 @layer components {
-  /* Glass Effect */
+  /* ==========================================
+     iOS GLASSMORPHISM DESIGN SYSTEM
+     Brand Color: #5337fe (solid, no gradients)
+     ========================================== */
+
+  /* Core Glass Effect */
   .glass {
-    @apply backdrop-blur-xl border;
+    @apply border;
     background: hsla(var(--glass-bg));
     border-color: hsla(var(--glass-border));
+    backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturate));
+    -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturate));
   }
 
+  /* Glass Card - Premium Container */
   .glass-card {
-    @apply glass rounded-2xl p-6;
-    box-shadow: var(--shadow-soft);
+    @apply glass rounded-3xl p-6;
+    box-shadow: var(--shadow-glass), var(--shadow-inner-glow);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   }
 
+  .glass-card:hover {
+    box-shadow: var(--shadow-glass-hover), var(--shadow-inner-glow);
+    transform: translateY(-2px);
+  }
+
+  /* Glass Header - Floating Navigation */
   .glass-header {
-    @apply glass fixed top-4 left-4 right-4 z-50 rounded-2xl px-6 py-3;
-    box-shadow: var(--shadow-soft);
+    @apply glass fixed top-4 left-4 right-4 z-50 rounded-full px-6 py-3;
+    box-shadow: var(--shadow-glass), var(--shadow-inner-glow);
   }
 
-  /* Gradient Backgrounds */
-  .gradient-primary {
-    background: var(--gradient-primary);
-  }
+  /* ==========================================
+     BUTTON SYSTEM - Pill Shape + Frosted Glass
+     ========================================== */
 
-  .gradient-secondary {
-    background: var(--gradient-secondary);
-  }
-
-  .gradient-dark {
-    background: var(--gradient-dark);
-  }
-
-  /* Glow Effects */
-  .glow-primary {
-    box-shadow: var(--shadow-glow);
-  }
-
-  .glow-text {
-    text-shadow: 0 0 40px hsl(248 98% 60% / 0.5);
-  }
-
-  /* Button Variants */
+  /* Primary Button - Solid Brand Color */
   .btn-primary {
-    @apply inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl font-semibold text-white transition-all duration-300;
-    background: var(--gradient-primary);
-    box-shadow: 0 4px 20px hsl(248 98% 60% / 0.4);
+    @apply inline-flex items-center justify-center gap-2 px-7 py-3.5 rounded-full font-semibold text-white transition-all duration-300;
+    background: hsl(var(--primary));
+    box-shadow: 
+      0 4px 15px hsl(248 98% 60% / 0.35),
+      var(--shadow-inner-glow),
+      inset 0 -1px 1px hsl(0 0% 0% / 0.1);
   }
 
   .btn-primary:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 8px 30px hsl(248 98% 60% / 0.5);
+    transform: translateY(-2px) scale(1.02);
+    box-shadow: 
+      0 8px 25px hsl(248 98% 60% / 0.45),
+      var(--shadow-inner-glow),
+      inset 0 -1px 1px hsl(0 0% 0% / 0.1);
   }
 
+  .btn-primary:active {
+    transform: translateY(0) scale(0.98);
+  }
+
+  /* Secondary Button - Glass with Brand Accent */
   .btn-secondary {
-    @apply inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl font-semibold text-white transition-all duration-300;
-    background: var(--gradient-secondary);
-    box-shadow: 0 4px 20px hsl(0 82% 71% / 0.4);
+    @apply inline-flex items-center justify-center gap-2 px-7 py-3.5 rounded-full font-semibold transition-all duration-300;
+    background: hsla(var(--btn-glass-bg));
+    border: 1px solid hsla(var(--btn-glass-border));
+    color: hsl(var(--primary));
+    backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturate));
+    -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturate));
+    box-shadow: var(--shadow-glass), var(--shadow-inner-glow), var(--shadow-brand-glow);
   }
 
   .btn-secondary:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 8px 30px hsl(0 82% 71% / 0.5);
+    transform: translateY(-2px) scale(1.02);
+    background: hsla(var(--glass-bg));
+    box-shadow: var(--shadow-glass-hover), var(--shadow-inner-glow), inset 0 0 30px hsl(248 98% 60% / 0.15);
   }
 
+  .btn-secondary:active {
+    transform: translateY(0) scale(0.98);
+  }
+
+  /* Ghost Button - Minimal Glass */
   .btn-ghost {
-    @apply inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl font-semibold transition-all duration-300;
-    @apply text-foreground hover:text-primary hover:bg-muted/50;
+    @apply inline-flex items-center justify-center gap-2 px-7 py-3.5 rounded-full font-semibold transition-all duration-300;
+    @apply text-foreground;
+    background: transparent;
   }
 
-  /* Service Cards */
+  .btn-ghost:hover {
+    background: hsla(var(--glass-bg));
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    box-shadow: var(--shadow-inner-glow);
+  }
+
+  /* ==========================================
+     CARD & CONTAINER VARIANTS
+     ========================================== */
+
+  /* Service Card - Interactive Glass */
   .service-card {
-    @apply glass-card relative overflow-hidden transition-all duration-500 cursor-pointer;
+    @apply glass-card relative overflow-hidden cursor-pointer;
   }
 
   .service-card:hover {
-    transform: translateY(-8px);
-    box-shadow: var(--shadow-glow);
+    transform: translateY(-6px);
+    box-shadow: var(--shadow-glass-hover), var(--shadow-inner-glow), var(--shadow-brand-glow);
   }
 
   .service-card::before {
-    @apply absolute inset-0 opacity-0 transition-opacity duration-500;
+    @apply absolute inset-0 opacity-0 transition-opacity duration-500 pointer-events-none;
     content: "";
-    background: var(--gradient-primary);
+    background: hsl(var(--primary) / 0.05);
+    border-radius: inherit;
   }
 
   .service-card:hover::before {
-    @apply opacity-10;
+    @apply opacity-100;
   }
 
-  /* Section Styles */
+  /* Dashboard Card */
+  .dashboard-card {
+    @apply glass-card;
+  }
+
+  .dashboard-card:hover {
+    border-color: hsl(var(--primary) / 0.3);
+  }
+
+  /* Stat Card - Subtle Brand Glow */
+  .stat-card {
+    @apply glass-card relative overflow-hidden;
+  }
+
+  .stat-card::after {
+    @apply absolute -bottom-12 -right-12 w-32 h-32 rounded-full pointer-events-none;
+    content: "";
+    background: hsl(var(--primary) / 0.15);
+    filter: blur(40px);
+  }
+
+  /* ==========================================
+     SECTION STYLES
+     ========================================== */
+
   .section-container {
     @apply container mx-auto px-4 py-20;
   }
@@ -271,54 +345,69 @@
     @apply text-lg md:text-xl lg:text-2xl text-muted-foreground;
   }
 
-  /* Form Styles */
+  /* ==========================================
+     FORM STYLES - Glass Inputs
+     ========================================== */
+
   .form-input {
-    @apply w-full px-4 py-3 rounded-xl bg-muted/50 border border-border focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all duration-300 outline-none;
+    @apply w-full px-5 py-4 rounded-2xl transition-all duration-300 outline-none;
+    background: hsla(var(--glass-bg));
+    border: 1px solid hsla(var(--glass-border));
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    box-shadow: var(--shadow-inner-glow);
+  }
+
+  .form-input:focus {
+    border-color: hsl(var(--primary));
+    box-shadow: var(--shadow-inner-glow), 0 0 0 3px hsl(var(--primary) / 0.1);
   }
 
   .form-label {
     @apply block text-sm font-medium mb-2 text-foreground;
   }
 
-  /* Dashboard Styles */
-  .dashboard-card {
-    @apply glass-card hover:border-primary/50 transition-all duration-300;
-  }
+  /* ==========================================
+     TABLE STYLES
+     ========================================== */
 
-  .stat-card {
-    @apply glass-card relative overflow-hidden;
-  }
-
-  .stat-card::after {
-    @apply absolute -bottom-8 -right-8 w-24 h-24 rounded-full opacity-20;
-    content: "";
-    background: var(--gradient-primary);
-    filter: blur(20px);
-  }
-
-  /* Table Styles */
   .table-row {
-    @apply border-b border-border/50 hover:bg-muted/30 transition-colors duration-200;
+    @apply border-b border-border/30 transition-colors duration-200;
   }
 
-  /* Badge Styles */
+  .table-row:hover {
+    background: hsla(var(--glass-bg));
+  }
+
+  /* ==========================================
+     BADGE STYLES - Pill Shape
+     ========================================== */
+
   .status-badge {
-    @apply px-3 py-1 rounded-full text-xs font-semibold;
+    @apply px-4 py-1.5 rounded-full text-xs font-semibold;
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
   }
 
   .status-new {
-    @apply bg-primary/20 text-primary;
+    @apply text-primary;
+    background: hsl(var(--primary) / 0.15);
   }
 
   .status-contacted {
-    @apply bg-yellow-500/20 text-yellow-500;
+    background: hsl(45 100% 50% / 0.15);
+    color: hsl(45 100% 35%);
   }
 
   .status-closed {
-    @apply bg-green-500/20 text-green-500;
+    background: hsl(142 70% 45% / 0.15);
+    color: hsl(142 70% 35%);
   }
 
-  /* Animations */
+  /* ==========================================
+     ANIMATIONS
+     ========================================== */
+
   .animate-float {
     animation: float 6s ease-in-out infinite;
   }
@@ -326,34 +415,44 @@
   .animate-pulse-glow {
     animation: pulse-glow 2s ease-in-out infinite;
   }
-
-  .animate-gradient {
-    background-size: 200% 200%;
-    animation: gradient-shift 8s ease infinite;
-  }
 }
 
 @layer utilities {
+  /* Text with brand color - solid, no gradient */
   .text-gradient {
-    @apply bg-clip-text text-transparent inline-block pb-1;
-    background-image: var(--gradient-primary);
-    -webkit-background-clip: text;
+    color: hsl(var(--primary));
     line-height: 1.2;
   }
 
-  .text-gradient-secondary {
-    @apply bg-clip-text text-transparent inline-block pb-1;
-    background-image: var(--gradient-secondary);
-    -webkit-background-clip: text;
-    line-height: 1.2;
+  .text-brand {
+    color: hsl(var(--primary));
+  }
+
+  .bg-brand {
+    background: hsl(var(--primary));
   }
 
   .backdrop-blur-glass {
-    backdrop-filter: blur(20px) saturate(180%);
+    backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturate));
+    -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturate));
   }
 
   .font-expo {
     font-family: 'Expo Arabic', sans-serif;
+  }
+
+  /* Glass container utility */
+  .glass-container {
+    background: hsla(var(--glass-bg));
+    border: 1px solid hsla(var(--glass-border));
+    backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturate));
+    -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturate));
+    box-shadow: var(--shadow-glass), var(--shadow-inner-glow);
+  }
+
+  /* Pill shape utility */
+  .pill {
+    @apply rounded-full;
   }
 }
 

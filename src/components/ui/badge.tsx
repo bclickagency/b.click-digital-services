@@ -4,14 +4,15 @@ import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "@/lib/utils";
 
 const badgeVariants = cva(
-  "inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2",
+  "inline-flex items-center rounded-full border px-3.5 py-1 text-xs font-semibold transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 backdrop-blur-sm",
   {
     variants: {
       variant: {
-        default: "border-transparent bg-primary text-primary-foreground hover:bg-primary/80",
-        secondary: "border-transparent bg-secondary text-secondary-foreground hover:bg-secondary/80",
-        destructive: "border-transparent bg-destructive text-destructive-foreground hover:bg-destructive/80",
-        outline: "text-foreground",
+        default: "border-transparent bg-primary text-primary-foreground shadow-[0_2px_8px_hsl(248_98%_60%/0.3)] hover:shadow-[0_4px_12px_hsl(248_98%_60%/0.4)]",
+        secondary: "border-border/50 bg-secondary/60 text-secondary-foreground shadow-[inset_0_1px_1px_hsl(0_0%_100%/0.1)]",
+        destructive: "border-transparent bg-destructive text-destructive-foreground shadow-[0_2px_8px_hsl(0_84%_60%/0.3)]",
+        outline: "text-foreground border-border/50 bg-background/60 backdrop-blur-xl",
+        glass: "border-border/30 bg-background/50 backdrop-blur-xl text-foreground shadow-[inset_0_1px_1px_hsl(0_0%_100%/0.1)]",
       },
     },
     defaultVariants: {
