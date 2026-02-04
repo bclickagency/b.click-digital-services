@@ -138,12 +138,12 @@ const Header = () => {
             </AnimatePresence>
           </button>
 
-          {/* CTA Button - Desktop */}
+          {/* CTA Button - Desktop - Changed to Login */}
           <Link
-            to="/contact"
+            to="/admin"
             className="hidden lg:flex btn-primary text-sm"
           >
-            تواصل معنا
+            تسجيل الدخول
           </Link>
 
           {/* Mobile Menu Button */}

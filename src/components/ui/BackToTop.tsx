@@ -32,10 +32,10 @@ const BackToTop = () => {
           initial={{ opacity: 0, scale: 0.5, y: 20 }}
           animate={{ opacity: 1, scale: 1, y: 0 }}
           exit={{ opacity: 0, scale: 0.5, y: 20 }}
-          whileHover={{ scale: 1.1 }}
-          whileTap={{ scale: 0.9 }}
+          whileHover={{ scale: 1.05 }}
+          whileTap={{ scale: 0.95 }}
           onClick={scrollToTop}
-          className="fixed bottom-8 left-8 z-50 w-12 h-12 rounded-full bg-primary text-primary-foreground shadow-lg shadow-primary/25 flex items-center justify-center hover:bg-primary/90 transition-colors duration-300"
+          className="fixed bottom-32 left-6 z-40 w-11 h-11 rounded-xl bg-background/80 backdrop-blur-xl border border-border/50 text-foreground shadow-lg flex items-center justify-center hover:bg-muted/80 transition-all duration-300"
           aria-label="العودة لأعلى"
         >
           <ArrowUp className="w-5 h-5" />
