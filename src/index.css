@@ -74,7 +74,7 @@
     --input: 240 6% 90%;
     --ring: 248 98% 60%;
 
-    --radius: 1.5rem;
+    --radius: 1rem;
 
     /* iOS Glassmorphism System */
     --glass-bg: 0 0% 100% / 0.7;
@@ -197,9 +197,9 @@
 
   /* Glass Card - Premium Container */
   .glass-card {
-    @apply glass rounded-3xl p-6;
+    @apply glass rounded-2xl p-6;
     box-shadow: var(--shadow-glass), var(--shadow-inner-glow);
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
   }
 
   .glass-card:hover {
@@ -219,20 +219,14 @@
 
   /* Primary Button - Solid Brand Color */
   .btn-primary {
-    @apply inline-flex items-center justify-center gap-2 px-7 py-3.5 rounded-full font-semibold text-white transition-all duration-300;
+    @apply inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl font-semibold text-white transition-all duration-200;
     background: hsl(var(--primary));
-    box-shadow: 
-      0 4px 15px hsl(248 98% 60% / 0.35),
-      var(--shadow-inner-glow),
-      inset 0 -1px 1px hsl(0 0% 0% / 0.1);
+    box-shadow: 0 4px 12px hsl(248 98% 60% / 0.3);
   }
 
   .btn-primary:hover {
-    transform: translateY(-2px) scale(1.02);
-    box-shadow: 
-      0 8px 25px hsl(248 98% 60% / 0.45),
-      var(--shadow-inner-glow),
-      inset 0 -1px 1px hsl(0 0% 0% / 0.1);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 18px hsl(248 98% 60% / 0.4);
   }
 
   .btn-primary:active {
@@ -241,28 +235,28 @@
 
   /* Secondary Button - Glass with Brand Accent */
   .btn-secondary {
-    @apply inline-flex items-center justify-center gap-2 px-7 py-3.5 rounded-full font-semibold transition-all duration-300;
+    @apply inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl font-semibold transition-all duration-200;
     background: hsla(var(--btn-glass-bg));
     border: 1px solid hsla(var(--btn-glass-border));
     color: hsl(var(--primary));
     backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturate));
     -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturate));
-    box-shadow: var(--shadow-glass), var(--shadow-inner-glow), var(--shadow-brand-glow);
+    box-shadow: var(--shadow-glass);
   }
 
   .btn-secondary:hover {
-    transform: translateY(-2px) scale(1.02);
+    transform: translateY(-2px);
     background: hsla(var(--glass-bg));
-    box-shadow: var(--shadow-glass-hover), var(--shadow-inner-glow), inset 0 0 30px hsl(248 98% 60% / 0.15);
+    box-shadow: var(--shadow-glass-hover);
   }
 
   .btn-secondary:active {
     transform: translateY(0) scale(0.98);
   }
 
-  /* Ghost Button - Minimal Glass */
+  /* Ghost Button - Minimal */
   .btn-ghost {
-    @apply inline-flex items-center justify-center gap-2 px-7 py-3.5 rounded-full font-semibold transition-all duration-300;
+    @apply inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl font-semibold transition-all duration-200;
     @apply text-foreground;
     background: transparent;
   }
@@ -271,7 +265,6 @@
     background: hsla(var(--glass-bg));
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
-    box-shadow: var(--shadow-inner-glow);
   }
 
   /* ==========================================

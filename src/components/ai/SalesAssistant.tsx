@@ -234,28 +234,28 @@ const SalesAssistant = () => {
 
   return (
     <>
-      {/* Floating Button */}
+      {/* Floating Button - Positioned above QuickActionBar */}
       <motion.button
         initial={{ scale: 0 }}
         animate={{ scale: 1 }}
-        whileHover={{ scale: 1.1 }}
-        whileTap={{ scale: 0.9 }}
+        whileHover={{ scale: 1.05 }}
+        whileTap={{ scale: 0.95 }}
         onClick={() => setIsOpen(true)}
-        className={`fixed bottom-6 left-6 z-50 w-16 h-16 rounded-full bg-gradient-to-r from-primary to-secondary shadow-lg flex items-center justify-center ${isOpen ? 'hidden' : ''}`}
+        className={`fixed bottom-24 left-6 z-40 w-14 h-14 rounded-xl bg-primary shadow-lg shadow-primary/25 flex items-center justify-center hover:shadow-primary/40 transition-all duration-300 ${isOpen ? 'hidden' : ''}`}
       >
-        <MessageCircle className="w-7 h-7 text-white" />
-        <span className="absolute -top-1 -right-1 w-4 h-4 bg-secondary rounded-full animate-ping" />
+        <MessageCircle className="w-6 h-6 text-primary-foreground" />
+        <span className="absolute -top-1 -right-1 w-3 h-3 bg-green-500 rounded-full border-2 border-background" />
       </motion.button>
 
       {/* Chat Window */}
       <AnimatePresence>
         {isOpen && (
           <motion.div
-            initial={{ opacity: 0, y: 100, scale: 0.8 }}
+            initial={{ opacity: 0, y: 20, scale: 0.95 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={{ opacity: 0, y: 100, scale: 0.8 }}
-            transition={{ type: 'spring', damping: 25 }}
-            className="fixed bottom-6 left-6 z-50 w-[380px] h-[600px] max-h-[80vh] glass rounded-2xl shadow-2xl flex flex-col overflow-hidden border border-border"
+            exit={{ opacity: 0, y: 20, scale: 0.95 }}
+            transition={{ type: 'spring', damping: 25, stiffness: 300 }}
+            className="fixed bottom-24 left-6 z-50 w-[380px] h-[550px] max-h-[75vh] bg-background/95 backdrop-blur-2xl rounded-2xl shadow-2xl flex flex-col overflow-hidden border border-border/50"
           >
             {/* Header */}
             <div className="bg-gradient-to-r from-primary to-secondary p-4 flex items-center justify-between">

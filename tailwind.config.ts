@@ -62,12 +62,12 @@ export default {
         },
       },
       borderRadius: {
-        lg: "1.5rem",
-        md: "1rem",
-        sm: "0.75rem",
-        xl: "2rem",
-        "2xl": "2.5rem",
-        "3xl": "3rem",
+        lg: "1rem",
+        md: "0.75rem",
+        sm: "0.5rem",
+        xl: "1.25rem",
+        "2xl": "1.5rem",
+        "3xl": "2rem",
         full: "9999px",
       },
       keyframes: {

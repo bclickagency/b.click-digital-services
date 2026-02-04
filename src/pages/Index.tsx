@@ -15,6 +15,7 @@ import Testimonials from '@/components/home/Testimonials';
 import StatsCounter from '@/components/home/StatsCounter';
 import Newsletter from '@/components/home/Newsletter';
 import FAQ from '@/components/home/FAQ';
+import TrustedCompanies from '@/components/home/TrustedCompanies';
 import TypewriterText from '@/components/ui/TypewriterText';
 import AnimatedBlob from '@/components/ui/AnimatedBlob';
 import ScrollDownIndicator from '@/components/ui/ScrollDownIndicator';
@@ -57,6 +58,7 @@ const services = [
 
 const sections = [
   { id: 'hero', label: 'الرئيسية' },
+  { id: 'trusted', label: 'شركاؤنا' },
   { id: 'stats', label: 'الإحصائيات' },
   { id: 'services', label: 'الخدمات' },
   { id: 'testimonials', label: 'آراء العملاء' },
@@ -141,11 +143,16 @@ const Index = () => {
           </div>
 
           {/* Scroll Down Indicator */}
-          <div className="absolute bottom-8 left-1/2 -translate-x-1/2">
-            <ScrollDownIndicator targetId="stats" />
+          <div className="absolute bottom-12 left-1/2 -translate-x-1/2">
+            <ScrollDownIndicator targetId="trusted" />
           </div>
         </div>
       </section>
+
+      {/* Trusted Companies */}
+      <div id="trusted">
+        <TrustedCompanies />
+      </div>
 
       {/* Stats Counter */}
       <div id="stats">
@@ -159,7 +166,7 @@ const Index = () => {
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="inline-block px-4 py-2 rounded-full bg-primary/10 text-primary text-sm font-medium mb-4"
+            className="inline-block px-4 py-2 rounded-xl bg-primary/10 text-primary text-sm font-medium mb-4"
           >
             خدماتنا
           </motion.span>

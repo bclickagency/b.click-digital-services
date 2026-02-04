@@ -96,15 +96,15 @@ const AccessibilityMenu = () => {
         انتقل للمحتوى الرئيسي
       </a>
 
-      {/* Accessibility Button */}
+      {/* Accessibility Button - Positioned in top right corner to avoid conflicts */}
       <motion.button
-        whileHover={{ scale: 1.1 }}
-        whileTap={{ scale: 0.9 }}
+        whileHover={{ scale: 1.05 }}
+        whileTap={{ scale: 0.95 }}
         onClick={() => setIsOpen(true)}
-        className="fixed bottom-6 right-6 z-40 w-12 h-12 rounded-full bg-muted/80 backdrop-blur-sm flex items-center justify-center hover:bg-muted transition-colors shadow-lg"
+        className="fixed top-28 right-4 z-30 w-10 h-10 rounded-xl bg-background/80 backdrop-blur-xl border border-border/50 flex items-center justify-center hover:bg-muted/80 transition-all duration-300 shadow-lg"
         aria-label="إعدادات الوصول"
       >
-        <Accessibility className="w-6 h-6 text-foreground" />
+        <Accessibility className="w-5 h-5 text-foreground" />
       </motion.button>
 
       {/* Menu */}

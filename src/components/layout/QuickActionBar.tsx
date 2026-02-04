@@ -28,15 +28,15 @@ const actions = [
 ];
 
 const getButtonStyles = (variant: 'success' | 'whatsapp' | 'primary') => {
-  const base = "flex items-center gap-2 px-5 py-3 rounded-full font-medium text-sm whitespace-nowrap transition-all duration-300 backdrop-blur-xl border shadow-[inset_0_1px_1px_hsl(0_0%_100%/0.2)]";
+  const base = "flex items-center gap-2 px-4 py-2.5 rounded-xl font-medium text-sm whitespace-nowrap transition-all duration-300";
   
   switch (variant) {
     case 'success':
-      return `${base} bg-[hsl(142_70%_45%)] border-[hsl(142_70%_50%/0.3)] text-white hover:shadow-[0_8px_25px_hsl(142_70%_45%/0.4),inset_0_1px_1px_hsl(0_0%_100%/0.2)]`;
+      return `${base} bg-[hsl(142_70%_45%)] text-white hover:bg-[hsl(142_70%_40%)]`;
     case 'whatsapp':
-      return `${base} bg-[hsl(142_70%_40%)] border-[hsl(142_70%_45%/0.3)] text-white hover:shadow-[0_8px_25px_hsl(142_70%_40%/0.4),inset_0_1px_1px_hsl(0_0%_100%/0.2)]`;
+      return `${base} bg-[hsl(142_70%_40%)] text-white hover:bg-[hsl(142_70%_35%)]`;
     case 'primary':
-      return `${base} bg-primary border-primary/30 text-primary-foreground hover:shadow-[0_8px_25px_hsl(248_98%_60%/0.4),inset_0_1px_1px_hsl(0_0%_100%/0.2)]`;
+      return `${base} bg-primary text-primary-foreground hover:bg-primary/90`;
   }
 };
 
@@ -96,48 +96,31 @@ const QuickActionBar = () => {
           initial={{ y: 100, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
           exit={{ y: 100, opacity: 0 }}
-          className="fixed bottom-4 left-4 right-4 z-40 md:left-1/2 md:right-auto md:bottom-6 md:-translate-x-1/2"
+          transition={{ type: 'spring', damping: 25, stiffness: 300 }}
+          className="fixed bottom-4 left-4 right-4 z-50 md:left-1/2 md:right-auto md:bottom-6 md:-translate-x-1/2"
         >
-          <div className="bg-background/70 backdrop-blur-2xl rounded-full p-2 flex items-center gap-2 max-w-fit mx-auto border border-border/30 shadow-[0_8px_40px_hsl(0_0%_0%/0.15),inset_0_1px_1px_hsl(0_0%_100%/0.1)]">
-            {/* Toggle Button - Mobile */}
-            {isMobile && (
-              <motion.button
-                whileTap={{ scale: 0.95 }}
-                onClick={() => setIsExpanded(!isExpanded)}
-                className="w-11 h-11 rounded-full bg-primary/10 flex items-center justify-center border border-primary/20"
-              >
-                <motion.div
-                  animate={{ rotate: isExpanded ? 180 : 0 }}
-                  transition={{ duration: 0.2 }}
-                >
-                  {isExpanded ? (
-                    <X className="w-5 h-5 text-primary" />
-                  ) : (
-                    <ChevronUp className="w-5 h-5 text-primary" />
-                  )}
-                </motion.div>
-              </motion.button>
+          <div className="bg-background/80 backdrop-blur-2xl rounded-2xl p-2 flex items-center gap-2 max-w-fit mx-auto border border-border/30 shadow-[0_8px_40px_hsl(0_0%_0%/0.12)]">
+            {/* Actions - Always visible on Desktop, expandable on Mobile */}
+            {(!isMobile || isExpanded) && (
+              <div className="flex items-center gap-2">
+                {actions.map((action, index) => (
+                  <motion.div
+                    key={action.label}
+                    initial={{ opacity: 0, scale: 0.8 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    transition={{ delay: index * 0.05 }}
+                    whileHover={{ y: -2 }}
+                    whileTap={{ scale: 0.97 }}
+                  >
+                    {renderActionButton(action)}
+                  </motion.div>
+                ))}
+              </div>
             )}
-
-            {/* Actions */}
-            <div className={`flex items-center gap-2 ${isMobile && !isExpanded ? 'hidden' : ''}`}>
-              {actions.map((action, index) => (
-                <motion.div
-                  key={action.label}
-                  initial={{ opacity: 0, scale: 0.8 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  transition={{ delay: index * 0.05 }}
-                  whileHover={{ scale: 1.03, y: -2 }}
-                  whileTap={{ scale: 0.97 }}
-                >
-                  {renderActionButton(action)}
-                </motion.div>
-              ))}
-            </div>
 
             {/* Collapsed mobile icons */}
             {isMobile && !isExpanded && (
-              <div className="flex items-center gap-1.5">
+              <div className="flex items-center gap-2">
                 {actions.map((action) => (
                   <motion.div
                     key={action.label}
@@ -148,18 +131,18 @@ const QuickActionBar = () => {
                         href={action.href}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className={`w-11 h-11 rounded-full flex items-center justify-center ${
+                        className={`w-10 h-10 rounded-xl flex items-center justify-center transition-all duration-300 ${
                           action.variant === 'primary' 
                             ? 'bg-primary text-primary-foreground' 
                             : 'bg-[hsl(142_70%_45%)] text-white'
-                        } shadow-[inset_0_1px_1px_hsl(0_0%_100%/0.2)]`}
+                        }`}
                       >
                         <action.icon className="w-5 h-5" />
                       </a>
                     ) : (
                       <Link
                         to={action.href}
-                        className="w-11 h-11 rounded-full flex items-center justify-center bg-primary text-primary-foreground shadow-[inset_0_1px_1px_hsl(0_0%_100%/0.2)]"
+                        className="w-10 h-10 rounded-xl flex items-center justify-center bg-primary text-primary-foreground transition-all duration-300"
                       >
                         <action.icon className="w-5 h-5" />
                       </Link>
@@ -167,6 +150,26 @@ const QuickActionBar = () => {
                   </motion.div>
                 ))}
               </div>
+            )}
+
+            {/* Toggle Button - Mobile */}
+            {isMobile && (
+              <motion.button
+                whileTap={{ scale: 0.95 }}
+                onClick={() => setIsExpanded(!isExpanded)}
+                className="w-10 h-10 rounded-xl bg-muted/50 flex items-center justify-center border border-border/30"
+              >
+                <motion.div
+                  animate={{ rotate: isExpanded ? 180 : 0 }}
+                  transition={{ duration: 0.2 }}
+                >
+                  {isExpanded ? (
+                    <X className="w-4 h-4 text-foreground" />
+                  ) : (
+                    <ChevronUp className="w-4 h-4 text-foreground" />
+                  )}
+                </motion.div>
+              </motion.button>
             )}
           </div>
         </motion.div>
