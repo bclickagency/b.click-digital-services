@@ -7,6 +7,7 @@ import { supabase } from '@/integrations/supabase/client';
 import { FloatingInput, FloatingTextarea } from '@/components/ui/FloatingInput';
 import ProgressSteps from '@/components/ui/ProgressSteps';
 import Confetti from '@/components/ui/Confetti';
+ import SEO from '@/components/SEO';
 
 const serviceTypes = [
   'تصميم موقع ويب',
@@ -202,6 +203,11 @@ const RequestPage = () => {
 
   return (
     <Layout>
+       <SEO 
+         title="اطلب خدمة"
+         description="أخبرنا عن احتياجاتك وسنتواصل معك خلال 24 ساعة. املأ النموذج واحصل على استشارة مجانية لمشروعك الرقمي."
+         keywords="طلب خدمة, استشارة مجانية, مشروع رقمي, B.CLICK"
+       />
       <Confetti isActive={showConfetti} />
 
       {/* Hero Section */}

@@ -17,7 +17,8 @@ import Layout from '@/components/layout/Layout';
 import { supabase } from '@/integrations/supabase/client';
 import { ShimmerSkeleton, TextShimmer } from '@/components/ui/ShimmerSkeleton';
 import LazyImage from '@/components/ui/LazyImage';
-import { toast } from '@/hooks/use-toast';
+ import { toast } from '@/hooks/use-toast';
+ import DOMPurify from 'dompurify';
 
 interface BlogPost {
   id: string;
@@ -270,8 +271,8 @@ const BlogPostPage = () => {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.2 }}
-            className="prose prose-lg prose-invert max-w-none"
-            dangerouslySetInnerHTML={{ __html: post.content }}
+             className="prose prose-lg prose-invert max-w-none"
+             dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(post.content) }}
           />
 
           {/* Tags */}

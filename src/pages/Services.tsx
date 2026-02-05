@@ -15,6 +15,7 @@ import {
 import Layout from '@/components/layout/Layout';
 import TiltCard from '@/components/ui/TiltCard';
 import MagneticButton from '@/components/ui/MagneticButton';
+ import SEO from '@/components/SEO';
 
 const services = [
   {
@@ -78,6 +79,11 @@ const services = [
 const ServicesPage = () => {
   return (
     <Layout>
+       <SEO 
+         title="خدماتنا"
+         description="نقدم مجموعة متكاملة من الخدمات الرقمية: تطوير المواقع، تطوير التطبيقات، تصميم الهوية البصرية، التسويق الرقمي، وتحسين محركات البحث."
+         keywords="خدمات رقمية, تصميم مواقع, تطوير تطبيقات, تسويق رقمي, SEO, هوية بصرية"
+       />
       {/* Hero Section */}
       <section className="relative min-h-[50vh] flex items-center overflow-hidden">
         <div className="absolute inset-0 overflow-hidden">

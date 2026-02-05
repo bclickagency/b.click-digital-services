@@ -13,7 +13,8 @@ import {
 import Layout from '@/components/layout/Layout';
 import { supabase } from '@/integrations/supabase/client';
 import { ShimmerSkeleton, TextShimmer } from '@/components/ui/ShimmerSkeleton';
-import LazyImage from '@/components/ui/LazyImage';
+ import LazyImage from '@/components/ui/LazyImage';
+ import DOMPurify from 'dompurify';
 
 interface PortfolioItem {
   id: string;
@@ -306,8 +307,8 @@ const PortfolioItemPage = () => {
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ delay: 0.3 }}
-                className="prose prose-lg prose-invert max-w-none glass-card"
-                dangerouslySetInnerHTML={{ __html: project.full_description }}
+                 className="prose prose-lg prose-invert max-w-none glass-card"
+                 dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(project.full_description) }}
               />
             )}
           </div>

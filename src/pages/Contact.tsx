@@ -1,10 +1,16 @@
 import { motion } from 'framer-motion';
 import { Phone, MessageCircle, MapPin, Clock, Mail } from 'lucide-react';
 import Layout from '@/components/layout/Layout';
+ import SEO from '@/components/SEO';
 
 const ContactPage = () => {
   return (
     <Layout>
+       <SEO 
+         title="تواصل معنا"
+         description="تواصل مع فريق B.CLICK عبر الهاتف، الواتساب، أو قم بزيارتنا. نحن هنا لمساعدتك في تحقيق أهدافك الرقمية."
+         keywords="تواصل, اتصل بنا, واتساب, B.CLICK, خدمات رقمية"
+       />
       {/* Hero Section */}
       <section className="relative min-h-[50vh] flex items-center overflow-hidden">
         <div className="absolute inset-0 overflow-hidden">
