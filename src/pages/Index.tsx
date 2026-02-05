@@ -22,6 +22,7 @@ import ScrollDownIndicator from '@/components/ui/ScrollDownIndicator';
 import TiltCard from '@/components/ui/TiltCard';
 import SectionIndicator from '@/components/ui/SectionIndicator';
 import MagneticButton from '@/components/ui/MagneticButton';
+ import SEO from '@/components/SEO';
 
 const services = [
   {
@@ -77,6 +78,10 @@ const typewriterTexts = [
 const Index = () => {
   return (
     <Layout>
+       <SEO 
+         title="الرئيسية" 
+         description="نقدم حلولًا رقمية متكاملة تشمل تصميم المواقع، تطوير التطبيقات، التسويق الرقمي، والهوية البصرية. شريكك الرقمي للنجاح."
+       />
       {/* Section Indicator */}
       <SectionIndicator sections={sections} />
 

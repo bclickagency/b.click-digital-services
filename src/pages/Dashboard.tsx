@@ -3,8 +3,8 @@ import { useNavigate } from 'react-router-dom';
 import { supabase } from '@/integrations/supabase/client';
 import { User } from '@supabase/supabase-js';
 import { 
-  LogOut, LayoutDashboard, FileText, Phone, Clock, Trash2, MessageCircle,
-  BookOpen, Briefcase, Users, Settings
+   LogOut, LayoutDashboard, FileText, Phone, Clock, Trash2, MessageCircle,
+   BookOpen, Briefcase, Users, Menu, X
 } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import BlogManager from '@/components/admin/BlogManager';
@@ -33,6 +33,7 @@ const Dashboard = () => {
   const [loading, setLoading] = useState(true);
   const [userRole, setUserRole] = useState<string | null>(null);
   const [activeTab, setActiveTab] = useState<TabType>('requests');
+   const [sidebarOpen, setSidebarOpen] = useState(false);
 
   useEffect(() => {
     const checkAuth = async () => {
@@ -129,28 +130,39 @@ const Dashboard = () => {
             <span className="text-xl font-bold">لوحة التحكم</span>
           </div>
           <div className="flex items-center gap-4">
-            <span className="text-sm text-muted-foreground">{user?.email}</span>
-            <span className={`text-xs px-2 py-1 rounded-full ${
+             <span className="text-sm text-muted-foreground hidden md:block">{user?.email}</span>
+             <span className={`text-xs px-2 py-1 rounded-full hidden sm:block ${
               userRole === 'admin' ? 'bg-primary/20 text-primary' : 'bg-secondary/20 text-secondary'
             }`}>
               {userRole === 'admin' ? 'مدير' : 'عضو فريق'}
             </span>
-            <button onClick={handleLogout} className="btn-ghost text-sm py-2 px-3">
+             <button onClick={handleLogout} className="btn-ghost text-sm py-2 px-3 hidden sm:flex">
               <LogOut className="w-4 h-4" />
               خروج
             </button>
+             <button 
+               onClick={() => setSidebarOpen(!sidebarOpen)} 
+               className="lg:hidden p-2 rounded-xl bg-muted/50 hover:bg-muted transition-colors"
+             >
+               {sidebarOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+             </button>
           </div>
         </div>
       </header>
 
       <div className="pt-24 flex">
         {/* Sidebar */}
-        <aside className="w-64 fixed right-0 top-24 bottom-0 border-l border-border bg-background/50 backdrop-blur-sm p-4">
+         <aside className={`w-64 fixed right-0 top-24 bottom-0 border-l border-border bg-background/95 backdrop-blur-sm p-4 z-40 transition-transform duration-300 lg:translate-x-0 ${
+           sidebarOpen ? 'translate-x-0' : 'translate-x-full'
+         }`}>
           <nav className="space-y-2">
             {tabs.map((tab) => (
               <button
                 key={tab.id}
-                onClick={() => setActiveTab(tab.id)}
+                 onClick={() => {
+                   setActiveTab(tab.id);
+                   setSidebarOpen(false);
+                 }}
                 className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all ${
                   activeTab === tab.id
                     ? 'bg-primary text-white'
@@ -162,10 +174,25 @@ const Dashboard = () => {
               </button>
             ))}
           </nav>
+           {/* Mobile logout button */}
+           <div className="lg:hidden mt-8 pt-4 border-t border-border">
+             <button onClick={handleLogout} className="w-full btn-ghost text-sm py-3 justify-start">
+               <LogOut className="w-4 h-4" />
+               تسجيل الخروج
+             </button>
+           </div>
         </aside>
 
+         {/* Overlay for mobile */}
+         {sidebarOpen && (
+           <div 
+             className="fixed inset-0 bg-black/50 z-30 lg:hidden" 
+             onClick={() => setSidebarOpen(false)}
+           />
+         )}
+
         {/* Main Content */}
-        <main className="flex-1 mr-64 px-6 pb-8">
+         <main className="flex-1 lg:mr-64 px-4 lg:px-6 pb-8">
           {activeTab === 'requests' && (
             <>
               {/* Stats */}
