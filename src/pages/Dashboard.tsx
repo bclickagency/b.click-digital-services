@@ -4,16 +4,17 @@ import { supabase } from '@/integrations/supabase/client';
 import { User } from '@supabase/supabase-js';
 import { 
    LogOut, LayoutDashboard, FileText, Phone, Clock, Trash2, MessageCircle,
-   BookOpen, Briefcase, Users, Menu, X
+   BookOpen, Briefcase, Users, Menu, X, MessagesSquare
 } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import BlogManager from '@/components/admin/BlogManager';
 import PortfolioManager from '@/components/admin/PortfolioManager';
 import UserManager from '@/components/admin/UserManager';
+import ChatManager from '@/components/admin/ChatManager';
+import { useUnreadCount } from '@/hooks/useChat';
 
 type RequestStatus = 'new' | 'contacted' | 'closed';
-type TabType = 'requests' | 'blog' | 'portfolio' | 'users';
-
+type TabType = 'requests' | 'blog' | 'portfolio' | 'users' | 'chat';
 interface ServiceRequest {
   id: string;
   full_name: string;
@@ -33,7 +34,8 @@ const Dashboard = () => {
   const [loading, setLoading] = useState(true);
   const [userRole, setUserRole] = useState<string | null>(null);
   const [activeTab, setActiveTab] = useState<TabType>('requests');
-   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+  const unreadChatCount = useUnreadCount();
 
   useEffect(() => {
     const checkAuth = async () => {
@@ -107,6 +109,7 @@ const Dashboard = () => {
 
   const tabs = [
     { id: 'requests' as TabType, label: 'الطلبات', icon: FileText },
+    { id: 'chat' as TabType, label: 'المحادثات', icon: MessagesSquare, badge: unreadChatCount },
     { id: 'blog' as TabType, label: 'المدونة', icon: BookOpen },
     { id: 'portfolio' as TabType, label: 'الأعمال', icon: Briefcase },
     ...(userRole === 'admin' ? [{ id: 'users' as TabType, label: 'المستخدمين', icon: Users }] : []),
@@ -159,10 +162,10 @@ const Dashboard = () => {
             {tabs.map((tab) => (
               <button
                 key={tab.id}
-                 onClick={() => {
-                   setActiveTab(tab.id);
-                   setSidebarOpen(false);
-                 }}
+                onClick={() => {
+                  setActiveTab(tab.id);
+                  setSidebarOpen(false);
+                }}
                 className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all ${
                   activeTab === tab.id
                     ? 'bg-primary text-white'
@@ -171,6 +174,11 @@ const Dashboard = () => {
               >
                 <tab.icon className="w-5 h-5" />
                 {tab.label}
+                {'badge' in tab && tab.badge && tab.badge > 0 && (
+                  <span className="mr-auto bg-destructive text-white text-xs px-2 py-0.5 rounded-full">
+                    {tab.badge}
+                  </span>
+                )}
               </button>
             ))}
           </nav>
@@ -282,6 +290,7 @@ const Dashboard = () => {
             </>
           )}
 
+          {activeTab === 'chat' && <ChatManager />}
           {activeTab === 'blog' && userRole && <BlogManager userRole={userRole} />}
           {activeTab === 'portfolio' && userRole && <PortfolioManager userRole={userRole} />}
           {activeTab === 'users' && userRole === 'admin' && user && <UserManager currentUserId={user.id} />}

@@ -7,6 +7,7 @@ import { ThemeProvider } from "@/contexts/ThemeContext";
 import { AnimatePresence } from "framer-motion";
 import Preloader from "@/components/ui/Preloader";
 import ScrollToTop from "@/components/layout/ScrollToTop";
+import ChatWidget from "@/components/chat/ChatWidget";
 import Index from "./pages/Index";
 import About from "./pages/About";
 import Services from "./pages/Services";
@@ -63,6 +64,7 @@ const App = () => (
         <Sonner />
         <BrowserRouter>
           <AnimatedRoutes />
+          <ChatWidget />
         </BrowserRouter>
       </TooltipProvider>
     </ThemeProvider>
