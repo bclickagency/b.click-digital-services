@@ -9,6 +9,7 @@ import {
   Search, 
   PenTool,
   MessageCircle,
+  Sparkles,
 } from 'lucide-react';
 import Layout from '@/components/layout/Layout';
 import Testimonials from '@/components/home/Testimonials';
@@ -16,13 +17,16 @@ import StatsCounter from '@/components/home/StatsCounter';
 import Newsletter from '@/components/home/Newsletter';
 import FAQ from '@/components/home/FAQ';
 import TrustedCompanies from '@/components/home/TrustedCompanies';
+import HowWeWork from '@/components/home/HowWeWork';
+import FeaturedProject from '@/components/home/FeaturedProject';
+import TrustIndicators from '@/components/home/TrustIndicators';
 import TypewriterText from '@/components/ui/TypewriterText';
 import AnimatedBlob from '@/components/ui/AnimatedBlob';
 import ScrollDownIndicator from '@/components/ui/ScrollDownIndicator';
 import TiltCard from '@/components/ui/TiltCard';
 import SectionIndicator from '@/components/ui/SectionIndicator';
 import MagneticButton from '@/components/ui/MagneticButton';
- import SEO from '@/components/SEO';
+import SEO from '@/components/SEO';
 
 const services = [
   {
@@ -61,7 +65,9 @@ const sections = [
   { id: 'hero', label: 'الرئيسية' },
   { id: 'trusted', label: 'شركاؤنا' },
   { id: 'stats', label: 'الإحصائيات' },
+  { id: 'how-we-work', label: 'كيف نعمل' },
   { id: 'services', label: 'الخدمات' },
+  { id: 'featured', label: 'مشروع مميز' },
   { id: 'testimonials', label: 'آراء العملاء' },
   { id: 'faq', label: 'الأسئلة الشائعة' },
   { id: 'cta', label: 'ابدأ الآن' },
@@ -78,10 +84,10 @@ const typewriterTexts = [
 const Index = () => {
   return (
     <Layout>
-       <SEO 
-         title="الرئيسية" 
-         description="نقدم حلولًا رقمية متكاملة تشمل تصميم المواقع، تطوير التطبيقات، التسويق الرقمي، والهوية البصرية. شريكك الرقمي للنجاح."
-       />
+      <SEO 
+        title="الرئيسية" 
+        description="نساعد الشركات على زيادة مبيعاتها بنسبة تصل إلى 150% من خلال حلول رقمية متكاملة تشمل تصميم المواقع، تطوير التطبيقات، التسويق الرقمي، والهوية البصرية."
+      />
       {/* Section Indicator */}
       <SectionIndicator sections={sections} />
 
@@ -119,13 +125,24 @@ const Index = () => {
               </span>
             </motion.h1>
 
+            {/* Enhanced Value Proposition */}
             <motion.p
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.2 }}
-              className="hero-subtitle mb-8 max-w-2xl"
+              className="hero-subtitle mb-4 max-w-2xl"
             >
-              نقدم حلولًا رقمية متكاملة تساعد أعمالك على النمو والتميز في السوق الرقمي. من التصميم إلى التطوير والتسويق، نحن هنا لنجاحك.
+              نساعد الشركات على زيادة مبيعاتها بنسبة تصل إلى{' '}
+              <span className="text-secondary font-bold">150%</span> خلال 3 أشهر
+            </motion.p>
+
+            <motion.p
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.25 }}
+              className="text-muted-foreground text-lg mb-8 max-w-2xl"
+            >
+              حلول رقمية متكاملة من التصميم إلى التطوير والتسويق - كل ما تحتاجه تحت سقف واحد
             </motion.p>
 
             <motion.div
@@ -136,15 +153,18 @@ const Index = () => {
             >
               <MagneticButton className="btn-secondary">
                 <Link to="/request" className="flex items-center gap-2">
-                  <MessageCircle className="w-5 h-5" />
-                  ابدأ مشروعك الآن
+                  <Sparkles className="w-5 h-5" />
+                  احصل على استشارة مجانية
                 </Link>
               </MagneticButton>
-              <Link to="/services" className="btn-ghost">
-                اكتشف خدماتنا
+              <Link to="/portfolio" className="btn-ghost">
+                شاهد أعمالنا
                 <ArrowLeft className="w-5 h-5" />
               </Link>
             </motion.div>
+
+            {/* Trust Indicators */}
+            <TrustIndicators />
           </div>
 
           {/* Scroll Down Indicator */}
@@ -162,6 +182,11 @@ const Index = () => {
       {/* Stats Counter */}
       <div id="stats">
         <StatsCounter />
+      </div>
+
+      {/* How We Work - NEW */}
+      <div id="how-we-work">
+        <HowWeWork />
       </div>
 
       {/* Services Section */}
@@ -182,7 +207,7 @@ const Index = () => {
             transition={{ delay: 0.1 }}
             className="section-title"
           >
-            حلول رقمية <span className="text-gradient">شاملة</span>
+            كل ما تحتاجه <span className="text-gradient">تحت سقف واحد</span>
           </motion.h2>
           <motion.p
             initial={{ opacity: 0, y: 20 }}
@@ -210,7 +235,14 @@ const Index = () => {
                     <service.icon className="w-7 h-7 text-primary" />
                   </div>
                   <h3 className="text-xl font-bold text-foreground mb-2">{service.title}</h3>
-                  <p className="text-muted-foreground text-sm">{service.description}</p>
+                  <p className="text-muted-foreground text-sm mb-4">{service.description}</p>
+                  <Link 
+                    to={`/services`} 
+                    className="inline-flex items-center gap-2 text-primary text-sm font-medium hover:gap-3 transition-all"
+                  >
+                    اعرف المزيد
+                    <ArrowLeft className="w-4 h-4" />
+                  </Link>
                 </div>
               </TiltCard>
             </motion.div>
@@ -224,11 +256,16 @@ const Index = () => {
           className="text-center mt-10"
         >
           <Link to="/services" className="btn-primary">
-            اكتشف المزيد
+            اكتشف جميع خدماتنا
             <ArrowLeft className="w-5 h-5" />
           </Link>
         </motion.div>
       </section>
+
+      {/* Featured Project - NEW */}
+      <div id="featured">
+        <FeaturedProject />
+      </div>
 
       {/* Testimonials */}
       <div id="testimonials">
@@ -254,7 +291,7 @@ const Index = () => {
           <div className="absolute inset-0 bg-gradient-to-br from-primary/10 to-secondary/10" />
           <div className="relative z-10">
             <h2 className="section-title mb-4">
-              جاهز تبدأ مشروعك؟
+              جاهز تضاعف مبيعاتك؟
             </h2>
             <p className="section-subtitle mx-auto mb-8">
               تواصل معنا الآن واحصل على استشارة مجانية لمشروعك
@@ -262,8 +299,8 @@ const Index = () => {
             <div className="flex flex-wrap justify-center gap-4">
               <MagneticButton>
                 <Link to="/request" className="btn-secondary flex items-center gap-2">
-                  <MessageCircle className="w-5 h-5" />
-                  ابدأ الآن
+                  <Sparkles className="w-5 h-5" />
+                  ابدأ الآن مجانًا
                 </Link>
               </MagneticButton>
               <a
@@ -272,6 +309,7 @@ const Index = () => {
                 rel="noopener noreferrer"
                 className="btn-primary"
               >
+                <MessageCircle className="w-5 h-5" />
                 تواصل عبر واتساب
               </a>
             </div>

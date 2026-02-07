@@ -8,6 +8,7 @@ import { AnimatePresence } from "framer-motion";
 import Preloader from "@/components/ui/Preloader";
 import ScrollToTop from "@/components/layout/ScrollToTop";
 import ChatWidget from "@/components/chat/ChatWidget";
+import ExitIntentPopup from "@/components/marketing/ExitIntentPopup";
 import Index from "./pages/Index";
 import About from "./pages/About";
 import Services from "./pages/Services";
@@ -65,6 +66,7 @@ const App = () => (
         <BrowserRouter>
           <AnimatedRoutes />
           <ChatWidget />
+          <ExitIntentPopup />
         </BrowserRouter>
       </TooltipProvider>
     </ThemeProvider>
