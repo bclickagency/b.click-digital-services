@@ -9,9 +9,11 @@ import Preloader from "@/components/ui/Preloader";
 import ScrollToTop from "@/components/layout/ScrollToTop";
 import ChatWidget from "@/components/chat/ChatWidget";
 import ExitIntentPopup from "@/components/marketing/ExitIntentPopup";
+import Analytics from "@/components/analytics/Analytics";
 import Index from "./pages/Index";
 import About from "./pages/About";
 import Services from "./pages/Services";
+import ServiceDetail from "./pages/ServiceDetail";
 import Portfolio from "./pages/Portfolio";
 import PortfolioItem from "./pages/PortfolioItem";
 import Request from "./pages/Request";
@@ -33,11 +35,13 @@ const AnimatedRoutes = () => {
   return (
     <>
       <ScrollToTop />
+      <Analytics />
       <AnimatePresence mode="wait">
         <Routes location={location} key={location.pathname}>
           <Route path="/" element={<Index />} />
           <Route path="/about" element={<About />} />
           <Route path="/services" element={<Services />} />
+          <Route path="/services/:serviceSlug" element={<ServiceDetail />} />
           <Route path="/portfolio" element={<Portfolio />} />
           <Route path="/portfolio/:slug" element={<PortfolioItem />} />
           <Route path="/request" element={<Request />} />
