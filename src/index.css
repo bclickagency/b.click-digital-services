@@ -783,3 +783,205 @@
   0% { transform: translateX(-100%); }
   100% { transform: translateX(100%); }
 }
+
+/* ==========================================
+   MOBILE-FIRST RESPONSIVE IMPROVEMENTS
+   ========================================== */
+
+/* Mobile Touch Targets - Minimum 44px */
+@media (max-width: 768px) {
+  .btn-primary,
+  .btn-secondary,
+  .btn-ghost {
+    @apply min-h-[44px] px-5;
+  }
+
+  /* Improve spacing on mobile */
+  .section-container {
+    @apply py-12 px-4;
+  }
+
+  .section-title {
+    @apply text-2xl;
+  }
+
+  .section-subtitle {
+    @apply text-base;
+  }
+
+  .hero-title {
+    @apply text-3xl leading-tight;
+  }
+
+  .hero-subtitle {
+    @apply text-base;
+  }
+
+  /* Glass card mobile adjustments */
+  .glass-card {
+    @apply p-4 rounded-xl;
+  }
+
+  /* Service card mobile */
+  .service-card {
+    @apply p-4;
+  }
+
+  /* Better touch scrolling */
+  .overflow-x-auto {
+    -webkit-overflow-scrolling: touch;
+    scroll-snap-type: x mandatory;
+  }
+
+  .overflow-x-auto > * {
+    scroll-snap-align: start;
+  }
+
+  /* Mobile navigation improvements */
+  .mobile-nav-link {
+    @apply min-h-[48px] flex items-center;
+  }
+
+  /* Form inputs mobile */
+  .form-input {
+    @apply text-base py-3;
+    /* Prevents zoom on iOS */
+    font-size: 16px !important;
+  }
+
+  /* Mobile sticky CTA */
+  .mobile-sticky-cta {
+    @apply fixed bottom-0 left-0 right-0 p-4 z-40;
+    background: hsla(var(--glass-bg));
+    backdrop-filter: blur(var(--glass-blur));
+    -webkit-backdrop-filter: blur(var(--glass-blur));
+    border-top: 1px solid hsla(var(--glass-border));
+  }
+}
+
+/* Tablet specific */
+@media (min-width: 768px) and (max-width: 1024px) {
+  .section-container {
+    @apply py-16 px-6;
+  }
+}
+
+/* Safe area for notched devices */
+@supports (padding-bottom: env(safe-area-inset-bottom)) {
+  .mobile-sticky-cta {
+    padding-bottom: calc(1rem + env(safe-area-inset-bottom));
+  }
+
+  .mobile-bottom-nav {
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+}
+
+/* Improved tap highlight */
+@media (hover: none) {
+  * {
+    -webkit-tap-highlight-color: hsl(var(--primary) / 0.1);
+  }
+
+  .btn-primary:active,
+  .btn-secondary:active,
+  .btn-ghost:active {
+    transform: scale(0.98);
+  }
+}
+
+/* Mobile animation performance */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* Hide scrollbar on touch devices but keep functionality */
+@media (hover: none) {
+  .hide-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+
+  .hide-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+/* Mobile Cards Grid */
+@media (max-width: 640px) {
+  .mobile-card-stack {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .mobile-card-stack > * {
+    width: 100%;
+  }
+}
+
+/* Quick Action Bar Safe Area */
+.quick-action-safe {
+  bottom: calc(1rem + env(safe-area-inset-bottom, 0px));
+}
+
+/* Mobile Filter Pills Scroll */
+.filter-pills-scroll {
+  display: flex;
+  gap: 0.5rem;
+  overflow-x: auto;
+  padding-bottom: 0.5rem;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.filter-pills-scroll::-webkit-scrollbar {
+  display: none;
+}
+
+/* Mobile Menu Animation */
+@keyframes slideUp {
+  from {
+    transform: translateY(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.mobile-menu-animate {
+  animation: slideUp 0.3s ease-out;
+}
+
+/* Mobile Image Optimization */
+@media (max-width: 768px) {
+  img {
+    max-width: 100%;
+    height: auto;
+  }
+
+  .lazy-image-mobile {
+    aspect-ratio: 16/9;
+    object-fit: cover;
+  }
+}
+
+/* Bottom Sheet Style for Mobile Modals */
+@media (max-width: 768px) {
+  .mobile-bottom-sheet {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    max-height: 90vh;
+    border-radius: 1.5rem 1.5rem 0 0;
+    animation: slideUp 0.3s ease-out;
+  }
+}
