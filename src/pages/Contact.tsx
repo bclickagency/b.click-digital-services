@@ -1,8 +1,9 @@
 import { motion } from 'framer-motion';
-import { Phone, MessageCircle, MapPin, Clock, Mail, Send, Facebook, Instagram, Linkedin } from 'lucide-react';
+import { Phone, MessageCircle, MapPin, Clock, Mail, Facebook, Instagram, Linkedin } from 'lucide-react';
 import Layout from '@/components/layout/Layout';
 import SEO from '@/components/SEO';
 import ContactForm from '@/components/forms/ContactForm';
+import PageHero from '@/components/layout/PageHero';
 
 const contactInfo = [
   {
@@ -65,41 +66,13 @@ const ContactPage = () => {
         keywords="تواصل, اتصل بنا, واتساب, B.CLICK, خدمات رقمية"
       />
       
-      {/* Hero Section */}
-      <section className="relative min-h-[40vh] flex items-center overflow-hidden">
-        <div className="absolute inset-0 overflow-hidden">
-          <div className="absolute top-1/3 right-1/4 w-80 h-80 bg-primary/20 rounded-full blur-[100px]" />
-          <div className="absolute bottom-1/4 left-1/3 w-60 h-60 bg-secondary/20 rounded-full blur-[100px]" />
-        </div>
-
-        <div className="container mx-auto px-4 relative z-10">
-          <div className="max-w-3xl">
-            <motion.span
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              className="inline-block px-4 py-2 rounded-full bg-primary/10 text-primary text-sm font-medium mb-6"
-            >
-              تواصل معنا
-            </motion.span>
-            <motion.h1
-              initial={{ opacity: 0, y: 30 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.1 }}
-              className="hero-title mb-6"
-            >
-              نحن هنا <span className="text-gradient">لمساعدتك</span>
-            </motion.h1>
-            <motion.p
-              initial={{ opacity: 0, y: 30 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.2 }}
-              className="hero-subtitle"
-            >
-              تواصل معنا في أي وقت وسنرد عليك خلال ساعات قليلة
-            </motion.p>
-          </div>
-        </div>
-      </section>
+      <PageHero
+        badge="تواصل معنا"
+        title="نحن هنا"
+        highlight="لمساعدتك"
+        subtitle="تواصل معنا في أي وقت وسنرد عليك خلال ساعات قليلة"
+        minHeight="min-h-[40vh]"
+      />
 
       {/* Contact Info Cards */}
       <section className="section-container pt-8">

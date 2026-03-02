@@ -6,10 +6,9 @@ import {
   Sparkles
 } from 'lucide-react';
 import Layout from '@/components/layout/Layout';
-import TiltCard from '@/components/ui/TiltCard';
-import MagneticButton from '@/components/ui/MagneticButton';
 import SEO from '@/components/SEO';
 import ServiceQuiz from '@/components/marketing/ServiceQuiz';
+import PageHero from '@/components/layout/PageHero';
 import { servicesData } from '@/data/services';
 
 const ServicesPage = () => {
@@ -21,41 +20,12 @@ const ServicesPage = () => {
         keywords="خدمات رقمية, تصميم مواقع, تطوير تطبيقات, تسويق رقمي, SEO, هوية بصرية"
       />
       
-      {/* Hero Section */}
-      <section className="relative min-h-[50vh] flex items-center overflow-hidden">
-        <div className="absolute inset-0 overflow-hidden">
-          <div className="absolute top-1/3 right-1/4 w-80 h-80 bg-primary/20 rounded-full blur-[100px]" />
-          <div className="absolute bottom-1/4 left-1/3 w-60 h-60 bg-secondary/20 rounded-full blur-[100px]" />
-        </div>
-
-        <div className="container mx-auto px-4 relative z-10">
-          <div className="max-w-3xl">
-            <motion.span
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              className="inline-block px-4 py-2 rounded-full bg-primary/10 text-primary text-sm font-medium mb-6"
-            >
-              خدماتنا
-            </motion.span>
-            <motion.h1
-              initial={{ opacity: 0, y: 30 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.1 }}
-              className="hero-title mb-6"
-            >
-              كل ما تحتاجه <span className="text-gradient">تحت سقف واحد</span>
-            </motion.h1>
-            <motion.p
-              initial={{ opacity: 0, y: 30 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.2 }}
-              className="hero-subtitle"
-            >
-              نقدم مجموعة متكاملة من الخدمات الرقمية لتلبية جميع احتياجات أعمالك
-            </motion.p>
-          </div>
-        </div>
-      </section>
+      <PageHero
+        badge="خدماتنا"
+        title="كل ما تحتاجه"
+        highlight="تحت سقف واحد"
+        subtitle="نقدم مجموعة متكاملة من الخدمات الرقمية لتلبية جميع احتياجات أعمالك"
+      />
 
       {/* Services Grid */}
       <section className="section-container">
@@ -68,9 +38,8 @@ const ServicesPage = () => {
               viewport={{ once: true }}
               transition={{ delay: index * 0.1 }}
             >
-              <TiltCard className="h-full">
-                <Link to={`/services/${service.slug}`} className="block">
-                  <div className="service-card h-full card-hover-glow">
+              <Link to={`/services/${service.slug}`} className="block h-full">
+                  <div className="service-card h-full card-hover-glow group">
                     <div className="flex items-start gap-5">
                       <div className={`w-16 h-16 rounded-2xl flex items-center justify-center shrink-0 transition-all duration-300 group-hover:scale-110 ${
                         index % 2 === 0 ? 'bg-primary/10' : 'bg-secondary/10'
@@ -118,8 +87,7 @@ const ServicesPage = () => {
                       </div>
                     </div>
                   </div>
-                </Link>
-              </TiltCard>
+              </Link>
             </motion.div>
           ))}
         </div>
@@ -264,12 +232,10 @@ const ServicesPage = () => {
             <p className="section-subtitle mx-auto mb-8">
               أخبرنا عن احتياجاتك وسنساعدك في اختيار الحل الأمثل
             </p>
-            <MagneticButton>
-              <Link to="/request" className="btn-secondary flex items-center gap-2">
+             <Link to="/request" className="btn-secondary flex items-center gap-2">
                 <Sparkles className="w-5 h-5" />
                 احصل على استشارة مجانية
               </Link>
-            </MagneticButton>
           </div>
         </motion.div>
       </section>

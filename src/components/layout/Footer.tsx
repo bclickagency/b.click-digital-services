@@ -90,7 +90,7 @@ const Footer = () => {
           </div>
         </div>
 
-        {/* Bottom Bar */}
+        {/* Bottom Bar - removed /admin link */}
         <div className="mt-12 pt-8 border-t border-border flex flex-col md:flex-row items-center justify-between gap-4">
           <p className="text-muted-foreground text-sm">
             © {currentYear} B.CLICK - جميع الحقوق محفوظة
@@ -107,9 +107,6 @@ const Footer = () => {
             </Link>
             <Link to="/terms" className="text-muted-foreground hover:text-primary transition-colors duration-300 text-sm">
               الشروط والأحكام
-            </Link>
-            <Link to="/admin" className="text-muted-foreground hover:text-primary transition-colors duration-300 text-sm">
-              لوحة التحكم
             </Link>
           </div>
         </div>

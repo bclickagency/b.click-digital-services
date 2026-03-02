@@ -1,10 +1,10 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { supabase } from '@/integrations/supabase/client';
 import { User } from '@supabase/supabase-js';
 import { 
    LogOut, LayoutDashboard, FileText, Phone, Clock, Trash2, MessageCircle,
-   BookOpen, Briefcase, Users, Menu, X, MessagesSquare
+   BookOpen, Briefcase, Users, Menu, X, MessagesSquare, Search, Download, Filter, Mail
 } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import BlogManager from '@/components/admin/BlogManager';
@@ -12,9 +12,11 @@ import PortfolioManager from '@/components/admin/PortfolioManager';
 import UserManager from '@/components/admin/UserManager';
 import ChatManager from '@/components/admin/ChatManager';
 import { useUnreadCount } from '@/hooks/useChat';
+import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, PieChart, Pie, Cell } from 'recharts';
 
 type RequestStatus = 'new' | 'contacted' | 'closed';
-type TabType = 'requests' | 'blog' | 'portfolio' | 'users' | 'chat';
+type TabType = 'requests' | 'blog' | 'portfolio' | 'users' | 'chat' | 'contacts';
+
 interface ServiceRequest {
   id: string;
   full_name: string;
@@ -26,66 +28,81 @@ interface ServiceRequest {
   created_at: string;
 }
 
+interface ContactMessage {
+  id: string;
+  name: string;
+  email: string;
+  phone: string | null;
+  subject: string;
+  message: string;
+  status: string;
+  lead_source: string | null;
+  created_at: string;
+}
+
+const COLORS = ['hsl(var(--primary))', 'hsl(var(--secondary))', 'hsl(var(--muted-foreground))'];
+
 const Dashboard = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
   const [user, setUser] = useState<User | null>(null);
   const [requests, setRequests] = useState<ServiceRequest[]>([]);
+  const [contacts, setContacts] = useState<ContactMessage[]>([]);
   const [loading, setLoading] = useState(true);
   const [userRole, setUserRole] = useState<string | null>(null);
   const [activeTab, setActiveTab] = useState<TabType>('requests');
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [statusFilter, setStatusFilter] = useState<string>('all');
   const unreadChatCount = useUnreadCount();
 
   useEffect(() => {
     const checkAuth = async () => {
       const { data: { session } } = await supabase.auth.getSession();
-      if (!session) {
-        navigate('/admin');
-        return;
-      }
+      if (!session) { navigate('/admin'); return; }
       setUser(session.user);
-
-      const { data: roles } = await supabase
-        .from('user_roles')
-        .select('role')
-        .eq('user_id', session.user.id);
-
-      if (!roles || roles.length === 0) {
-        await supabase.auth.signOut();
-        navigate('/admin');
-        return;
-      }
-
+      const { data: roles } = await supabase.from('user_roles').select('role').eq('user_id', session.user.id);
+      if (!roles || roles.length === 0) { await supabase.auth.signOut(); navigate('/admin'); return; }
       setUserRole(roles[0].role);
       fetchRequests();
+      fetchContacts();
     };
-
     checkAuth();
-
     const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
       if (!session) navigate('/admin');
     });
-
     return () => subscription.unsubscribe();
   }, [navigate]);
 
-  const fetchRequests = async () => {
-    const { data, error } = await supabase
-      .from('service_requests')
-      .select('*')
-      .order('created_at', { ascending: false });
+  // Realtime for new requests
+  useEffect(() => {
+    const channel = supabase
+      .channel('new-requests')
+      .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'service_requests' }, (payload) => {
+        setRequests(prev => [payload.new as ServiceRequest, ...prev]);
+        toast({ title: '🔔 طلب جديد!', description: `${(payload.new as ServiceRequest).full_name} - ${(payload.new as ServiceRequest).service_type}` });
+      })
+      .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'contact_messages' }, (payload) => {
+        setContacts(prev => [payload.new as ContactMessage, ...prev]);
+        toast({ title: '📩 رسالة جديدة!', description: `${(payload.new as ContactMessage).name} - ${(payload.new as ContactMessage).subject}` });
+      })
+      .subscribe();
+    return () => { supabase.removeChannel(channel); };
+  }, [toast]);
 
+  const fetchRequests = async () => {
+    const { data, error } = await supabase.from('service_requests').select('*').order('created_at', { ascending: false });
     if (!error && data) setRequests(data as ServiceRequest[]);
     setLoading(false);
   };
 
-  const updateStatus = async (id: string, status: RequestStatus) => {
-    const { error } = await supabase
-      .from('service_requests')
-      .update({ status })
-      .eq('id', id);
+  const fetchContacts = async () => {
+    const { data, error } = await supabase.from('contact_messages').select('*').order('created_at', { ascending: false });
+    if (!error && data) setContacts(data as ContactMessage[]);
+  };
 
+  const updateStatus = async (id: string, status: RequestStatus) => {
+    const { error } = await supabase.from('service_requests').update({ status }).eq('id', id);
     if (!error) {
       setRequests(requests.map(r => r.id === id ? { ...r, status } : r));
       toast({ title: 'تم التحديث', description: 'تم تحديث حالة الطلب' });
@@ -94,7 +111,6 @@ const Dashboard = () => {
 
   const deleteRequest = async (id: string) => {
     if (!confirm('هل أنت متأكد من حذف هذا الطلب؟')) return;
-    
     const { error } = await supabase.from('service_requests').delete().eq('id', id);
     if (!error) {
       setRequests(requests.filter(r => r.id !== id));
@@ -102,13 +118,45 @@ const Dashboard = () => {
     }
   };
 
-  const handleLogout = async () => {
-    await supabase.auth.signOut();
-    navigate('/admin');
+  const handleLogout = async () => { await supabase.auth.signOut(); navigate('/admin'); };
+
+  const exportCSV = () => {
+    const headers = ['الاسم', 'واتساب', 'الخدمة', 'الاستعجال', 'الحالة', 'التاريخ', 'التفاصيل'];
+    const rows = filteredRequests.map(r => [r.full_name, r.whatsapp, r.service_type, r.urgency, r.status, new Date(r.created_at).toLocaleDateString('ar-EG'), r.details || '']);
+    const csv = '\uFEFF' + [headers.join(','), ...rows.map(r => r.map(c => `"${c}"`).join(','))].join('\n');
+    const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url; a.download = `requests-${new Date().toISOString().split('T')[0]}.csv`;
+    a.click(); URL.revokeObjectURL(url);
   };
+
+  const filteredRequests = useMemo(() => {
+    return requests.filter(r => {
+      const matchesSearch = r.full_name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        r.service_type.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        r.whatsapp.includes(searchQuery);
+      const matchesStatus = statusFilter === 'all' || r.status === statusFilter;
+      return matchesSearch && matchesStatus;
+    });
+  }, [requests, searchQuery, statusFilter]);
+
+  // Chart data
+  const statusChartData = useMemo(() => [
+    { name: 'جديد', value: requests.filter(r => r.status === 'new').length },
+    { name: 'تم التواصل', value: requests.filter(r => r.status === 'contacted').length },
+    { name: 'مغلق', value: requests.filter(r => r.status === 'closed').length },
+  ], [requests]);
+
+  const serviceChartData = useMemo(() => {
+    const counts: Record<string, number> = {};
+    requests.forEach(r => { counts[r.service_type] = (counts[r.service_type] || 0) + 1; });
+    return Object.entries(counts).map(([name, value]) => ({ name: name.length > 15 ? name.slice(0, 15) + '...' : name, value }));
+  }, [requests]);
 
   const tabs = [
     { id: 'requests' as TabType, label: 'الطلبات', icon: FileText },
+    { id: 'contacts' as TabType, label: 'الرسائل', icon: Mail, badge: contacts.filter(c => c.status === 'new').length },
     { id: 'chat' as TabType, label: 'المحادثات', icon: MessagesSquare, badge: unreadChatCount },
     { id: 'blog' as TabType, label: 'المدونة', icon: BookOpen },
     { id: 'portfolio' as TabType, label: 'الأعمال', icon: Briefcase },
@@ -133,78 +181,46 @@ const Dashboard = () => {
             <span className="text-xl font-bold">لوحة التحكم</span>
           </div>
           <div className="flex items-center gap-4">
-             <span className="text-sm text-muted-foreground hidden md:block">{user?.email}</span>
-             <span className={`text-xs px-2 py-1 rounded-full hidden sm:block ${
-              userRole === 'admin' ? 'bg-primary/20 text-primary' : 'bg-secondary/20 text-secondary'
-            }`}>
+            <span className="text-sm text-muted-foreground hidden md:block">{user?.email}</span>
+            <span className={`text-xs px-2 py-1 rounded-full hidden sm:block ${userRole === 'admin' ? 'bg-primary/20 text-primary' : 'bg-secondary/20 text-secondary'}`}>
               {userRole === 'admin' ? 'مدير' : 'عضو فريق'}
             </span>
-             <button onClick={handleLogout} className="btn-ghost text-sm py-2 px-3 hidden sm:flex">
-              <LogOut className="w-4 h-4" />
-              خروج
+            <button onClick={handleLogout} className="btn-ghost text-sm py-2 px-3 hidden sm:flex"><LogOut className="w-4 h-4" />خروج</button>
+            <button onClick={() => setSidebarOpen(!sidebarOpen)} className="lg:hidden p-2 rounded-xl bg-muted/50 hover:bg-muted transition-colors">
+              {sidebarOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
             </button>
-             <button 
-               onClick={() => setSidebarOpen(!sidebarOpen)} 
-               className="lg:hidden p-2 rounded-xl bg-muted/50 hover:bg-muted transition-colors"
-             >
-               {sidebarOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
-             </button>
           </div>
         </div>
       </header>
 
       <div className="pt-24 flex">
         {/* Sidebar */}
-         <aside className={`w-64 fixed right-0 top-24 bottom-0 border-l border-border bg-background/95 backdrop-blur-sm p-4 z-40 transition-transform duration-300 lg:translate-x-0 ${
-           sidebarOpen ? 'translate-x-0' : 'translate-x-full'
-         }`}>
+        <aside className={`w-64 fixed right-0 top-24 bottom-0 border-l border-border bg-background/95 backdrop-blur-sm p-4 z-40 transition-transform duration-300 lg:translate-x-0 ${sidebarOpen ? 'translate-x-0' : 'translate-x-full'}`}>
           <nav className="space-y-2">
             {tabs.map((tab) => (
-              <button
-                key={tab.id}
-                onClick={() => {
-                  setActiveTab(tab.id);
-                  setSidebarOpen(false);
-                }}
-                className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all ${
-                  activeTab === tab.id
-                    ? 'bg-primary text-white'
-                    : 'hover:bg-muted text-muted-foreground hover:text-foreground'
-                }`}
-              >
+              <button key={tab.id} onClick={() => { setActiveTab(tab.id); setSidebarOpen(false); }}
+                className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all ${activeTab === tab.id ? 'bg-primary text-white' : 'hover:bg-muted text-muted-foreground hover:text-foreground'}`}>
                 <tab.icon className="w-5 h-5" />
                 {tab.label}
                 {'badge' in tab && tab.badge && tab.badge > 0 && (
-                  <span className="mr-auto bg-destructive text-white text-xs px-2 py-0.5 rounded-full">
-                    {tab.badge}
-                  </span>
+                  <span className="mr-auto bg-destructive text-white text-xs px-2 py-0.5 rounded-full">{tab.badge}</span>
                 )}
               </button>
             ))}
           </nav>
-           {/* Mobile logout button */}
-           <div className="lg:hidden mt-8 pt-4 border-t border-border">
-             <button onClick={handleLogout} className="w-full btn-ghost text-sm py-3 justify-start">
-               <LogOut className="w-4 h-4" />
-               تسجيل الخروج
-             </button>
-           </div>
+          <div className="lg:hidden mt-8 pt-4 border-t border-border">
+            <button onClick={handleLogout} className="w-full btn-ghost text-sm py-3 justify-start"><LogOut className="w-4 h-4" />تسجيل الخروج</button>
+          </div>
         </aside>
 
-         {/* Overlay for mobile */}
-         {sidebarOpen && (
-           <div 
-             className="fixed inset-0 bg-black/50 z-30 lg:hidden" 
-             onClick={() => setSidebarOpen(false)}
-           />
-         )}
+        {sidebarOpen && <div className="fixed inset-0 bg-black/50 z-30 lg:hidden" onClick={() => setSidebarOpen(false)} />}
 
         {/* Main Content */}
-         <main className="flex-1 lg:mr-64 px-4 lg:px-6 pb-8">
+        <main className="flex-1 lg:mr-64 px-4 lg:px-6 pb-8">
           {activeTab === 'requests' && (
             <>
-              {/* Stats */}
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+              {/* Stats + Charts */}
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
                 {[
                   { label: 'إجمالي الطلبات', value: requests.length, icon: FileText, color: 'primary' },
                   { label: 'طلبات جديدة', value: requests.filter(r => r.status === 'new').length, icon: Clock, color: 'secondary' },
@@ -212,9 +228,7 @@ const Dashboard = () => {
                 ].map((stat) => (
                   <div key={stat.label} className="stat-card">
                     <div className="flex items-center gap-4">
-                      <div className={`w-12 h-12 rounded-xl flex items-center justify-center ${
-                        stat.color === 'primary' ? 'bg-primary/10' : 'bg-secondary/10'
-                      }`}>
+                      <div className={`w-12 h-12 rounded-xl flex items-center justify-center ${stat.color === 'primary' ? 'bg-primary/10' : 'bg-secondary/10'}`}>
                         <stat.icon className={`w-6 h-6 ${stat.color === 'primary' ? 'text-primary' : 'text-secondary'}`} />
                       </div>
                       <div>
@@ -226,10 +240,58 @@ const Dashboard = () => {
                 ))}
               </div>
 
+              {/* Charts Row */}
+              {requests.length > 0 && (
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+                  <div className="glass-card">
+                    <h3 className="text-sm font-bold text-foreground mb-4">حالة الطلبات</h3>
+                    <ResponsiveContainer width="100%" height={200}>
+                      <PieChart>
+                        <Pie data={statusChartData} cx="50%" cy="50%" innerRadius={50} outerRadius={80} dataKey="value" label={({ name, value }) => `${name}: ${value}`}>
+                          {statusChartData.map((_, i) => <Cell key={i} fill={COLORS[i % COLORS.length]} />)}
+                        </Pie>
+                        <Tooltip />
+                      </PieChart>
+                    </ResponsiveContainer>
+                  </div>
+                  <div className="glass-card">
+                    <h3 className="text-sm font-bold text-foreground mb-4">الطلبات حسب الخدمة</h3>
+                    <ResponsiveContainer width="100%" height={200}>
+                      <BarChart data={serviceChartData}>
+                        <XAxis dataKey="name" tick={{ fontSize: 10 }} />
+                        <YAxis />
+                        <Tooltip />
+                        <Bar dataKey="value" fill="hsl(var(--primary))" radius={[4, 4, 0, 0]} />
+                      </BarChart>
+                    </ResponsiveContainer>
+                  </div>
+                </div>
+              )}
+
+              {/* Search + Filter + Export */}
+              <div className="flex flex-wrap items-center gap-3 mb-4">
+                <div className="relative flex-1 min-w-[200px]">
+                  <Search className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+                  <input type="text" value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} placeholder="بحث بالاسم أو الخدمة أو الرقم..."
+                    className="w-full pr-10 pl-4 py-2 rounded-xl bg-muted/50 border border-border/50 text-sm focus:outline-none focus:ring-2 focus:ring-primary/50" />
+                </div>
+                <select value={statusFilter} onChange={(e) => setStatusFilter(e.target.value)}
+                  className="px-3 py-2 rounded-xl bg-muted/50 border border-border/50 text-sm">
+                  <option value="all">كل الحالات</option>
+                  <option value="new">جديد</option>
+                  <option value="contacted">تم التواصل</option>
+                  <option value="closed">مغلق</option>
+                </select>
+                <button onClick={exportCSV} className="btn-ghost text-sm py-2 px-3">
+                  <Download className="w-4 h-4" /> تصدير CSV
+                </button>
+              </div>
+
               {/* Requests Table */}
               <div className="glass-card p-0 overflow-hidden">
-                <div className="p-4 border-b border-border">
+                <div className="p-4 border-b border-border flex items-center justify-between">
                   <h2 className="text-lg font-bold">الطلبات الواردة</h2>
+                  <span className="text-sm text-muted-foreground">{filteredRequests.length} طلب</span>
                 </div>
                 <div className="overflow-x-auto">
                   <table className="w-full">
@@ -245,49 +307,73 @@ const Dashboard = () => {
                       </tr>
                     </thead>
                     <tbody>
-                      {requests.map((request) => (
+                      {filteredRequests.map((request) => (
                         <tr key={request.id} className="table-row">
                           <td className="p-4 font-medium">{request.full_name}</td>
                           <td className="p-4">
-                            <a href={`https://wa.me/2${request.whatsapp}`} target="_blank" rel="noopener noreferrer" 
-                               className="text-secondary hover:underline flex items-center gap-1">
-                              <MessageCircle className="w-4 h-4" />
-                              {request.whatsapp}
+                            <a href={`https://wa.me/20${request.whatsapp}`} target="_blank" rel="noopener noreferrer" className="text-secondary hover:underline flex items-center gap-1">
+                              <MessageCircle className="w-4 h-4" />{request.whatsapp}
                             </a>
                           </td>
                           <td className="p-4 text-sm">{request.service_type}</td>
                           <td className="p-4 text-sm">{request.urgency}</td>
                           <td className="p-4">
-                            <select
-                              value={request.status}
-                              onChange={(e) => updateStatus(request.id, e.target.value as RequestStatus)}
-                              className="bg-transparent border border-border rounded-lg px-2 py-1 text-sm"
-                            >
+                            <select value={request.status} onChange={(e) => updateStatus(request.id, e.target.value as RequestStatus)}
+                              className="bg-transparent border border-border rounded-lg px-2 py-1 text-sm">
                               <option value="new">جديد</option>
                               <option value="contacted">تم التواصل</option>
                               <option value="closed">مغلق</option>
                             </select>
                           </td>
-                          <td className="p-4 text-sm text-muted-foreground">
-                            {new Date(request.created_at).toLocaleDateString('ar-EG')}
-                          </td>
+                          <td className="p-4 text-sm text-muted-foreground">{new Date(request.created_at).toLocaleDateString('ar-EG')}</td>
                           <td className="p-4">
                             {userRole === 'admin' && (
-                              <button onClick={() => deleteRequest(request.id)} className="text-destructive hover:text-destructive/80">
-                                <Trash2 className="w-4 h-4" />
-                              </button>
+                              <button onClick={() => deleteRequest(request.id)} className="text-destructive hover:text-destructive/80"><Trash2 className="w-4 h-4" /></button>
                             )}
                           </td>
                         </tr>
                       ))}
                     </tbody>
                   </table>
-                  {requests.length === 0 && (
-                    <div className="text-center py-12 text-muted-foreground">لا توجد طلبات حتى الآن</div>
+                  {filteredRequests.length === 0 && (
+                    <div className="text-center py-12 text-muted-foreground">لا توجد طلبات مطابقة</div>
                   )}
                 </div>
               </div>
             </>
+          )}
+
+          {activeTab === 'contacts' && (
+            <div className="glass-card p-0 overflow-hidden">
+              <div className="p-4 border-b border-border">
+                <h2 className="text-lg font-bold">رسائل التواصل</h2>
+              </div>
+              <div className="overflow-x-auto">
+                <table className="w-full">
+                  <thead className="bg-muted/30">
+                    <tr>
+                      <th className="text-right p-4 text-sm font-medium">الاسم</th>
+                      <th className="text-right p-4 text-sm font-medium">البريد</th>
+                      <th className="text-right p-4 text-sm font-medium">الموضوع</th>
+                      <th className="text-right p-4 text-sm font-medium">المصدر</th>
+                      <th className="text-right p-4 text-sm font-medium">التاريخ</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {contacts.map((msg) => (
+                      <tr key={msg.id} className="table-row">
+                        <td className="p-4 font-medium">{msg.name}</td>
+                        <td className="p-4 text-sm" dir="ltr">{msg.email}</td>
+                        <td className="p-4 text-sm">{msg.subject}</td>
+                        <td className="p-4 text-sm text-muted-foreground">{msg.lead_source || 'direct'}</td>
+                        <td className="p-4 text-sm text-muted-foreground">{new Date(msg.created_at).toLocaleDateString('ar-EG')}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+                {contacts.length === 0 && <div className="text-center py-12 text-muted-foreground">لا توجد رسائل</div>}
+              </div>
+            </div>
           )}
 
           {activeTab === 'chat' && <ChatManager />}
