@@ -15,7 +15,7 @@ import { supabase } from '@/integrations/supabase/client';
 import { GridShimmer } from '@/components/ui/ShimmerSkeleton';
 import LazyImage from '@/components/ui/LazyImage';
 import SEO from '@/components/SEO';
-import MagneticButton from '@/components/ui/MagneticButton';
+import PageHero from '@/components/layout/PageHero';
 
 interface PortfolioItem {
   id: string;
@@ -185,50 +185,17 @@ const PortfolioPage = () => {
         keywords="أعمالنا, portfolio, مشاريع, تصميم مواقع, تطبيقات"
       />
 
-      {/* Hero Section */}
-      <section className="relative min-h-[50vh] flex items-center overflow-hidden">
-        <div className="absolute inset-0 overflow-hidden">
-          <div className="absolute top-1/3 right-1/4 w-80 h-80 bg-primary/20 rounded-full blur-[100px]" />
-          <div className="absolute bottom-1/4 left-1/3 w-60 h-60 bg-secondary/20 rounded-full blur-[100px]" />
-        </div>
-
-        <div className="container mx-auto px-4 relative z-10">
-          <div className="max-w-3xl">
-            <motion.span
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              className="inline-block px-4 py-2 rounded-full bg-primary/10 text-primary text-sm font-medium mb-6"
-            >
-              أعمالنا
-            </motion.span>
-            <motion.h1
-              initial={{ opacity: 0, y: 30 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.1 }}
-              className="hero-title mb-6"
-            >
-              مشاريع <span className="text-gradient">نفتخر بها</span>
-            </motion.h1>
-            <motion.p
-              initial={{ opacity: 0, y: 30 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.2 }}
-              className="hero-subtitle mb-4"
-            >
-              نماذج من أعمالنا السابقة التي نفذناها لعملائنا الكرام
-            </motion.p>
-            <motion.p
-              initial={{ opacity: 0, y: 30 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.3 }}
-              className="text-muted-foreground"
-            >
-              <TrendingUp className="w-5 h-5 inline-block ml-2 text-primary" />
-              كل مشروع يعرض نتائج حقيقية وقابلة للقياس
-            </motion.p>
-          </div>
-        </div>
-      </section>
+      <PageHero
+        badge="أعمالنا"
+        title="مشاريع"
+        highlight="نفتخر بها"
+        subtitle="نماذج من أعمالنا السابقة التي نفذناها لعملائنا الكرام"
+      >
+        <p className="text-muted-foreground mt-4">
+          <TrendingUp className="w-5 h-5 inline-block ml-2 text-primary" />
+          كل مشروع يعرض نتائج حقيقية وقابلة للقياس
+        </p>
+      </PageHero>
 
       {/* Filters */}
       <section className="container mx-auto px-4 py-8">
@@ -466,12 +433,10 @@ const PortfolioPage = () => {
               دعنا نحولها إلى حقيقة رقمية مذهلة مع نتائج قابلة للقياس
             </p>
             <div className="flex flex-wrap justify-center gap-4">
-              <MagneticButton>
-                <Link to="/request" className="btn-secondary">
+              <Link to="/request" className="btn-secondary">
                   ابدأ مشروعك الآن
                   <ArrowLeft className="w-5 h-5" />
                 </Link>
-              </MagneticButton>
               <a
                 href="https://wa.me/201558663972"
                 target="_blank"

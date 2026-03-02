@@ -21,56 +21,16 @@ import HowWeWork from '@/components/home/HowWeWork';
 import FeaturedProject from '@/components/home/FeaturedProject';
 import TrustIndicators from '@/components/home/TrustIndicators';
 import TypewriterText from '@/components/ui/TypewriterText';
-import AnimatedBlob from '@/components/ui/AnimatedBlob';
 import ScrollDownIndicator from '@/components/ui/ScrollDownIndicator';
-import TiltCard from '@/components/ui/TiltCard';
-import SectionIndicator from '@/components/ui/SectionIndicator';
-import MagneticButton from '@/components/ui/MagneticButton';
 import SEO from '@/components/SEO';
 
 const services = [
-  {
-    icon: Code2,
-    title: 'تطوير المواقع',
-    description: 'مواقع احترافية سريعة ومتجاوبة مع جميع الأجهزة',
-  },
-  {
-    icon: Smartphone,
-    title: 'تطوير التطبيقات',
-    description: 'تطبيقات موبايل متكاملة لأندرويد و iOS',
-  },
-  {
-    icon: Palette,
-    title: 'تصميم الهوية البصرية',
-    description: 'شعارات وهويات بصرية تعكس قوة علامتك التجارية',
-  },
-  {
-    icon: Megaphone,
-    title: 'التسويق الرقمي',
-    description: 'حملات إعلانية فعّالة على جميع المنصات',
-  },
-  {
-    icon: Search,
-    title: 'تحسين محركات البحث',
-    description: 'نجعل موقعك يتصدر نتائج البحث',
-  },
-  {
-    icon: PenTool,
-    title: 'إدارة المحتوى',
-    description: 'محتوى إبداعي يجذب جمهورك ويحقق أهدافك',
-  },
-];
-
-const sections = [
-  { id: 'hero', label: 'الرئيسية' },
-  { id: 'trusted', label: 'شركاؤنا' },
-  { id: 'stats', label: 'الإحصائيات' },
-  { id: 'how-we-work', label: 'كيف نعمل' },
-  { id: 'services', label: 'الخدمات' },
-  { id: 'featured', label: 'مشروع مميز' },
-  { id: 'testimonials', label: 'آراء العملاء' },
-  { id: 'faq', label: 'الأسئلة الشائعة' },
-  { id: 'cta', label: 'ابدأ الآن' },
+  { icon: Code2, title: 'تطوير المواقع', description: 'مواقع احترافية سريعة ومتجاوبة مع جميع الأجهزة', slug: 'web-development' },
+  { icon: Smartphone, title: 'تطوير التطبيقات', description: 'تطبيقات موبايل متكاملة لأندرويد و iOS', slug: 'mobile-apps' },
+  { icon: Palette, title: 'تصميم الهوية البصرية', description: 'شعارات وهويات بصرية تعكس قوة علامتك التجارية', slug: 'branding' },
+  { icon: Megaphone, title: 'التسويق الرقمي', description: 'حملات إعلانية فعّالة على جميع المنصات', slug: 'digital-marketing' },
+  { icon: Search, title: 'تحسين محركات البحث', description: 'نجعل موقعك يتصدر نتائج البحث', slug: 'seo' },
+  { icon: PenTool, title: 'إدارة المحتوى', description: 'محتوى إبداعي يجذب جمهورك ويحقق أهدافك', slug: 'content-management' },
 ];
 
 const typewriterTexts = [
@@ -88,16 +48,14 @@ const Index = () => {
         title="الرئيسية" 
         description="نساعد الشركات على زيادة مبيعاتها بنسبة تصل إلى 150% من خلال حلول رقمية متكاملة تشمل تصميم المواقع، تطوير التطبيقات، التسويق الرقمي، والهوية البصرية."
       />
-      {/* Section Indicator */}
-      <SectionIndicator sections={sections} />
 
       {/* Hero Section */}
       <section id="hero" className="relative min-h-[90vh] flex items-center overflow-hidden">
-        {/* Animated Background Blobs */}
-        <div className="absolute inset-0 overflow-hidden">
-          <AnimatedBlob className="top-1/4 right-1/4" color="primary" size="xl" delay={0} />
-          <AnimatedBlob className="bottom-1/4 left-1/4" color="secondary" size="lg" delay={2} />
-          <AnimatedBlob className="top-1/2 left-1/2" color="primary" size="md" delay={4} />
+        {/* Static background blobs instead of AnimatedBlob */}
+        <div className="absolute inset-0 overflow-hidden pointer-events-none">
+          <div className="absolute top-1/4 right-1/4 w-96 h-96 bg-primary/20 rounded-full blur-[100px]" />
+          <div className="absolute bottom-1/4 left-1/4 w-80 h-80 bg-secondary/20 rounded-full blur-[100px]" />
+          <div className="absolute top-1/2 left-1/2 w-64 h-64 bg-primary/10 rounded-full blur-[100px]" />
         </div>
 
         <div className="container mx-auto px-4 relative z-10">
@@ -125,7 +83,6 @@ const Index = () => {
               </span>
             </motion.h1>
 
-            {/* Enhanced Value Proposition */}
             <motion.p
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
@@ -151,23 +108,19 @@ const Index = () => {
               transition={{ duration: 0.6, delay: 0.3 }}
               className="flex flex-wrap gap-4"
             >
-              <MagneticButton className="btn-secondary">
-                <Link to="/request" className="flex items-center gap-2">
-                  <Sparkles className="w-5 h-5" />
-                  احصل على استشارة مجانية
-                </Link>
-              </MagneticButton>
+              <Link to="/request" className="btn-secondary flex items-center gap-2">
+                <Sparkles className="w-5 h-5" />
+                احصل على استشارة مجانية
+              </Link>
               <Link to="/portfolio" className="btn-ghost">
                 شاهد أعمالنا
                 <ArrowLeft className="w-5 h-5" />
               </Link>
             </motion.div>
 
-            {/* Trust Indicators */}
             <TrustIndicators />
           </div>
 
-          {/* Scroll Down Indicator */}
           <div className="absolute bottom-12 left-1/2 -translate-x-1/2">
             <ScrollDownIndicator targetId="trusted" />
           </div>
@@ -184,7 +137,7 @@ const Index = () => {
         <StatsCounter />
       </div>
 
-      {/* How We Work - NEW */}
+      {/* How We Work */}
       <div id="how-we-work">
         <HowWeWork />
       </div>
@@ -229,22 +182,19 @@ const Index = () => {
               viewport={{ once: true }}
               transition={{ duration: 0.5, delay: index * 0.1 }}
             >
-              <TiltCard className="h-full">
+              <Link to={`/services/${service.slug}`} className="block h-full">
                 <div className="service-card group h-full">
                   <div className="w-14 h-14 rounded-2xl bg-primary/10 flex items-center justify-center mb-4 group-hover:bg-primary/20 group-hover:scale-110 transition-all duration-300">
                     <service.icon className="w-7 h-7 text-primary" />
                   </div>
                   <h3 className="text-xl font-bold text-foreground mb-2">{service.title}</h3>
                   <p className="text-muted-foreground text-sm mb-4">{service.description}</p>
-                  <Link 
-                    to={`/services`} 
-                    className="inline-flex items-center gap-2 text-primary text-sm font-medium hover:gap-3 transition-all"
-                  >
+                  <span className="inline-flex items-center gap-2 text-primary text-sm font-medium group-hover:gap-3 transition-all">
                     اعرف المزيد
                     <ArrowLeft className="w-4 h-4" />
-                  </Link>
+                  </span>
                 </div>
-              </TiltCard>
+              </Link>
             </motion.div>
           ))}
         </div>
@@ -262,7 +212,7 @@ const Index = () => {
         </motion.div>
       </section>
 
-      {/* Featured Project - NEW */}
+      {/* Featured Project */}
       <div id="featured">
         <FeaturedProject />
       </div>
@@ -297,12 +247,10 @@ const Index = () => {
               تواصل معنا الآن واحصل على استشارة مجانية لمشروعك
             </p>
             <div className="flex flex-wrap justify-center gap-4">
-              <MagneticButton>
-                <Link to="/request" className="btn-secondary flex items-center gap-2">
-                  <Sparkles className="w-5 h-5" />
-                  ابدأ الآن مجانًا
-                </Link>
-              </MagneticButton>
+              <Link to="/request" className="btn-secondary flex items-center gap-2">
+                <Sparkles className="w-5 h-5" />
+                ابدأ الآن مجانًا
+              </Link>
               <a
                 href="https://wa.me/201558663972"
                 target="_blank"

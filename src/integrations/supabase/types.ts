@@ -71,6 +71,57 @@ export type Database = {
         }
         Relationships: []
       }
+      contact_messages: {
+        Row: {
+          created_at: string
+          email: string
+          honeypot: string | null
+          id: string
+          lead_source: string | null
+          message: string
+          name: string
+          phone: string | null
+          referrer: string | null
+          status: string
+          subject: string
+          utm_campaign: string | null
+          utm_medium: string | null
+          utm_source: string | null
+        }
+        Insert: {
+          created_at?: string
+          email: string
+          honeypot?: string | null
+          id?: string
+          lead_source?: string | null
+          message: string
+          name: string
+          phone?: string | null
+          referrer?: string | null
+          status?: string
+          subject: string
+          utm_campaign?: string | null
+          utm_medium?: string | null
+          utm_source?: string | null
+        }
+        Update: {
+          created_at?: string
+          email?: string
+          honeypot?: string | null
+          id?: string
+          lead_source?: string | null
+          message?: string
+          name?: string
+          phone?: string | null
+          referrer?: string | null
+          status?: string
+          subject?: string
+          utm_campaign?: string | null
+          utm_medium?: string | null
+          utm_source?: string | null
+        }
+        Relationships: []
+      }
       conversations: {
         Row: {
           assigned_to: string | null
@@ -166,6 +217,30 @@ export type Database = {
           },
         ]
       }
+      newsletter_subscribers: {
+        Row: {
+          created_at: string
+          email: string
+          id: string
+          is_active: boolean
+          source: string | null
+        }
+        Insert: {
+          created_at?: string
+          email: string
+          id?: string
+          is_active?: boolean
+          source?: string | null
+        }
+        Update: {
+          created_at?: string
+          email?: string
+          id?: string
+          is_active?: boolean
+          source?: string | null
+        }
+        Relationships: []
+      }
       portfolio_items: {
         Row: {
           category: string
@@ -227,31 +302,49 @@ export type Database = {
         Row: {
           created_at: string
           details: string | null
+          email: string | null
           full_name: string
           id: string
+          lead_source: string | null
+          referrer: string | null
           service_type: string
           status: Database["public"]["Enums"]["request_status"]
           urgency: string
+          utm_campaign: string | null
+          utm_medium: string | null
+          utm_source: string | null
           whatsapp: string
         }
         Insert: {
           created_at?: string
           details?: string | null
+          email?: string | null
           full_name: string
           id?: string
+          lead_source?: string | null
+          referrer?: string | null
           service_type: string
           status?: Database["public"]["Enums"]["request_status"]
           urgency: string
+          utm_campaign?: string | null
+          utm_medium?: string | null
+          utm_source?: string | null
           whatsapp: string
         }
         Update: {
           created_at?: string
           details?: string | null
+          email?: string | null
           full_name?: string
           id?: string
+          lead_source?: string | null
+          referrer?: string | null
           service_type?: string
           status?: Database["public"]["Enums"]["request_status"]
           urgency?: string
+          utm_campaign?: string | null
+          utm_medium?: string | null
+          utm_source?: string | null
           whatsapp?: string
         }
         Relationships: []
