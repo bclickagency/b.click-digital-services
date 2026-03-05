@@ -19,9 +19,6 @@ import FAQ from '@/components/home/FAQ';
 import TrustedCompanies from '@/components/home/TrustedCompanies';
 import HowWeWork from '@/components/home/HowWeWork';
 import FeaturedProject from '@/components/home/FeaturedProject';
-import TrustIndicators from '@/components/home/TrustIndicators';
-import TypewriterText from '@/components/ui/TypewriterText';
-import ScrollDownIndicator from '@/components/ui/ScrollDownIndicator';
 import SEO from '@/components/SEO';
 
 const services = [
@@ -33,14 +30,6 @@ const services = [
   { icon: PenTool, title: 'إدارة المحتوى', description: 'محتوى إبداعي يجذب جمهورك ويحقق أهدافك', slug: 'content-management' },
 ];
 
-const typewriterTexts = [
-  'مواقع إلكترونية',
-  'تطبيقات موبايل',
-  'هوية بصرية',
-  'تسويق رقمي',
-  'متاجر إلكترونية',
-];
-
 const Index = () => {
   return (
     <Layout>
@@ -49,80 +38,81 @@ const Index = () => {
         description="نساعد الشركات على زيادة مبيعاتها بنسبة تصل إلى 150% من خلال حلول رقمية متكاملة تشمل تصميم المواقع، تطوير التطبيقات، التسويق الرقمي، والهوية البصرية."
       />
 
-      {/* Hero Section */}
-      <section id="hero" className="relative min-h-[90vh] flex items-center overflow-hidden">
-        {/* Static background blobs instead of AnimatedBlob */}
+      {/* Hero Section - Clean & Modern */}
+      <section id="hero" className="relative min-h-[85vh] flex items-center overflow-hidden">
+        {/* Subtle background accent */}
         <div className="absolute inset-0 overflow-hidden pointer-events-none">
-          <div className="absolute top-1/4 right-1/4 w-96 h-96 bg-primary/20 rounded-full blur-[100px]" />
-          <div className="absolute bottom-1/4 left-1/4 w-80 h-80 bg-secondary/20 rounded-full blur-[100px]" />
-          <div className="absolute top-1/2 left-1/2 w-64 h-64 bg-primary/10 rounded-full blur-[100px]" />
+          <div className="absolute top-1/3 right-1/4 w-[500px] h-[500px] bg-primary/8 rounded-full blur-[120px] will-change-transform" />
+          <div className="absolute bottom-1/4 left-1/3 w-[400px] h-[400px] bg-primary/5 rounded-full blur-[120px] will-change-transform" />
         </div>
 
         <div className="container mx-auto px-4 relative z-10">
-          <div className="max-w-4xl">
-            <motion.div
-              initial={{ opacity: 0, y: 30 }}
+          <div className="max-w-3xl mx-auto text-center">
+            <motion.span
+              initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6 }}
+              transition={{ duration: 0.5 }}
+              className="inline-block px-5 py-2 rounded-full bg-primary/10 text-primary text-sm font-semibold mb-8"
             >
-              <span className="inline-block px-4 py-2 rounded-full bg-primary/10 text-primary text-sm font-medium mb-6">
-                🚀 شريكك الرقمي للنجاح
-              </span>
-            </motion.div>
+              شريكك الرقمي للنجاح 🚀
+            </motion.span>
 
             <motion.h1
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.1 }}
-              className="hero-title mb-6"
+              transition={{ duration: 0.5, delay: 0.1 }}
+              className="text-4xl md:text-5xl lg:text-6xl font-black leading-tight mb-6"
             >
-              نحوّل أفكارك إلى
+              نبني لك حضورًا رقميًا
               <br />
-              <span className="text-gradient">
-                <TypewriterText texts={typewriterTexts} />
-              </span>
+              <span className="text-primary">يحقق نتائج حقيقية</span>
             </motion.h1>
 
             <motion.p
-              initial={{ opacity: 0, y: 30 }}
+              initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.2 }}
-              className="hero-subtitle mb-4 max-w-2xl"
+              transition={{ duration: 0.5, delay: 0.2 }}
+              className="text-lg md:text-xl text-muted-foreground mb-10 max-w-xl mx-auto leading-relaxed"
             >
-              نساعد الشركات على زيادة مبيعاتها بنسبة تصل إلى{' '}
-              <span className="text-secondary font-bold">150%</span> خلال 3 أشهر
-            </motion.p>
-
-            <motion.p
-              initial={{ opacity: 0, y: 30 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.25 }}
-              className="text-muted-foreground text-lg mb-8 max-w-2xl"
-            >
-              حلول رقمية متكاملة من التصميم إلى التطوير والتسويق - كل ما تحتاجه تحت سقف واحد
+              حلول رقمية متكاملة من التصميم إلى التطوير والتسويق.
+              <br />
+              نساعد الشركات على زيادة مبيعاتها بنسبة تصل إلى <span className="text-primary font-bold">150%</span>
             </motion.p>
 
             <motion.div
-              initial={{ opacity: 0, y: 30 }}
+              initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.3 }}
-              className="flex flex-wrap gap-4"
+              transition={{ duration: 0.5, delay: 0.3 }}
+              className="flex flex-wrap justify-center gap-4"
             >
-              <Link to="/request" className="btn-secondary flex items-center gap-2">
+              <Link to="/request" className="btn-primary flex items-center gap-2 text-lg px-8 py-4">
                 <Sparkles className="w-5 h-5" />
-                احصل على استشارة مجانية
+                ابدأ مشروعك الآن
               </Link>
-              <Link to="/portfolio" className="btn-ghost">
+              <Link to="/portfolio" className="btn-ghost text-lg px-8 py-4">
                 شاهد أعمالنا
                 <ArrowLeft className="w-5 h-5" />
               </Link>
             </motion.div>
 
-            <TrustIndicators />
-          </div>
-
-          <div className="absolute bottom-12 left-1/2 -translate-x-1/2">
-            <ScrollDownIndicator targetId="trusted" />
+            {/* Trust metrics - inline */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.4 }}
+              className="flex flex-wrap justify-center gap-8 mt-14 text-center"
+            >
+              {[
+                { value: '+150', label: 'مشروع منجز' },
+                { value: '+50', label: 'عميل سعيد' },
+                { value: '+5', label: 'سنوات خبرة' },
+              ].map((stat) => (
+                <div key={stat.label}>
+                  <p className="text-3xl font-black text-primary">{stat.value}</p>
+                  <p className="text-sm text-muted-foreground mt-1">{stat.label}</p>
+                </div>
+              ))}
+            </motion.div>
           </div>
         </div>
       </section>
@@ -160,7 +150,7 @@ const Index = () => {
             transition={{ delay: 0.1 }}
             className="section-title"
           >
-            كل ما تحتاجه <span className="text-gradient">تحت سقف واحد</span>
+            كل ما تحتاجه <span className="text-primary">تحت سقف واحد</span>
           </motion.h2>
           <motion.p
             initial={{ opacity: 0, y: 20 }}

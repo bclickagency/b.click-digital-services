@@ -411,10 +411,18 @@
 }
 
 @layer utilities {
-  /* Text with brand color - solid, no gradient */
+  /* Text with brand color - solid accent */
   .text-gradient {
     color: hsl(var(--primary));
     line-height: 1.2;
+  }
+
+  /* Success color token */
+  .bg-success {
+    background: hsl(142 70% 45%);
+  }
+  .text-success {
+    color: hsl(142 70% 45%);
   }
 
   .text-brand {
@@ -672,16 +680,7 @@
   40% { transform: scale(1); }
 }
 
-/* Parallax Container */
-.parallax-container {
-  perspective: 1000px;
-  overflow: hidden;
-}
-
-.parallax-layer {
-  transform-style: preserve-3d;
-  will-change: transform;
-}
+/* Parallax - removed unused */
 
 /* Reveal Animation on Scroll */
 .reveal-on-scroll {
@@ -695,58 +694,9 @@
   transform: translateY(0);
 }
 
-/* Staggered Children Animation */
-.stagger-children > * {
-  opacity: 0;
-  transform: translateY(20px);
-}
+/* Stagger - removed unused */
 
-.stagger-children.animate > * {
-  animation: stagger-fade-in 0.5s ease forwards;
-}
-
-.stagger-children.animate > *:nth-child(1) { animation-delay: 0.1s; }
-.stagger-children.animate > *:nth-child(2) { animation-delay: 0.2s; }
-.stagger-children.animate > *:nth-child(3) { animation-delay: 0.3s; }
-.stagger-children.animate > *:nth-child(4) { animation-delay: 0.4s; }
-.stagger-children.animate > *:nth-child(5) { animation-delay: 0.5s; }
-.stagger-children.animate > *:nth-child(6) { animation-delay: 0.6s; }
-
-@keyframes stagger-fade-in {
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-/* Card Flip */
-.flip-card {
-  perspective: 1000px;
-}
-
-.flip-card-inner {
-  position: relative;
-  width: 100%;
-  height: 100%;
-  transition: transform 0.6s;
-  transform-style: preserve-3d;
-}
-
-.flip-card:hover .flip-card-inner {
-  transform: rotateY(180deg);
-}
-
-.flip-card-front,
-.flip-card-back {
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  backface-visibility: hidden;
-}
-
-.flip-card-back {
-  transform: rotateY(180deg);
-}
+/* Card Flip - removed unused */
 
 /* Haptic Feedback Visual */
 @keyframes haptic-pulse {

@@ -37,17 +37,6 @@ const testimonials = [
   },
 ];
 
-const clientLogos = [
-  { name: 'TechStart', logo: '🚀' },
-  { name: 'Fashion Hub', logo: '👗' },
-  { name: 'PropertyFinder', logo: '🏠' },
-  { name: 'FoodExpress', logo: '🍕' },
-  { name: 'EduLearn', logo: '📚' },
-  { name: 'HealthCare+', logo: '⚕️' },
-  { name: 'AutoDrive', logo: '🚗' },
-  { name: 'GreenEnergy', logo: '🌱' },
-];
-
 const Testimonials = () => {
   const [current, setCurrent] = useState(0);
   const [isAutoPlaying, setIsAutoPlaying] = useState(true);
@@ -88,7 +77,7 @@ const Testimonials = () => {
           transition={{ delay: 0.1 }}
           className="section-title"
         >
-          ماذا يقول <span className="text-gradient">عملاؤنا</span>
+          ماذا يقول <span className="text-primary">عملاؤنا</span>
         </motion.h2>
         <motion.p
           initial={{ opacity: 0, y: 20 }}
@@ -119,6 +108,7 @@ const Testimonials = () => {
                 src={testimonials[current].avatar}
                 alt={testimonials[current].name}
                 className="w-20 h-20 rounded-full mx-auto mb-6 border-4 border-primary/20 object-cover"
+                loading="lazy"
               />
               
               <div className="flex justify-center gap-1 mb-4">
@@ -173,31 +163,6 @@ const Testimonials = () => {
           ))}
         </div>
       </div>
-
-      {/* Client Logos Marquee */}
-      <motion.div
-        initial={{ opacity: 0, y: 30 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true }}
-        className="mt-16"
-      >
-        <p className="text-center text-sm text-muted-foreground mb-8">
-          شركات تثق بنا
-        </p>
-        <div className="relative overflow-hidden">
-          <div className="flex animate-marquee gap-12">
-            {[...clientLogos, ...clientLogos].map((client, index) => (
-              <div
-                key={index}
-                className="flex items-center gap-3 px-6 py-3 bg-muted/30 rounded-xl shrink-0"
-              >
-                <span className="text-2xl">{client.logo}</span>
-                <span className="text-foreground font-medium whitespace-nowrap">{client.name}</span>
-              </div>
-            ))}
-          </div>
-        </div>
-      </motion.div>
     </section>
   );
 };

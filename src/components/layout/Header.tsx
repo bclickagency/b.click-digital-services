@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Menu, X, Moon, Sun } from 'lucide-react';
+import { Menu, X, Moon, Sun, LogIn } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useTheme } from '@/contexts/ThemeContext';
 import MegaMenu, { MegaMenuTrigger } from './MegaMenu';
@@ -24,6 +24,13 @@ const Header = () => {
   const isActive = (path: string) => location.pathname === path;
   const isServicesActive = location.pathname === '/services';
 
+  const navLinkClass = (path: string) =>
+    `px-5 py-2 rounded-full text-sm font-medium transition-all duration-300 ${
+      isActive(path)
+        ? 'text-primary-foreground bg-primary shadow-[0_2px_10px_hsl(248_98%_60%/0.3)]'
+        : 'text-foreground hover:text-primary hover:bg-background/60'
+    }`;
+
   return (
     <header className="glass-header" dir="rtl">
       <nav className="flex items-center justify-between relative">
@@ -36,27 +43,11 @@ const Header = () => {
 
         {/* Desktop Navigation */}
         <div className="hidden lg:flex items-center gap-1 bg-muted/30 backdrop-blur-xl rounded-full p-1.5 border border-border/30">
-          <Link
-            to="/"
-            className={`px-5 py-2 rounded-full text-sm font-medium transition-all duration-300 ${
-              isActive('/')
-                ? 'text-primary-foreground bg-primary shadow-[0_2px_10px_hsl(248_98%_60%/0.3)]'
-                : 'text-foreground hover:text-primary hover:bg-background/60'
-            }`}
-          >
-            الرئيسية
-          </Link>
-          
-          <Link
-            to="/about"
-            className={`px-5 py-2 rounded-full text-sm font-medium transition-all duration-300 ${
-              isActive('/about')
-                ? 'text-primary-foreground bg-primary shadow-[0_2px_10px_hsl(248_98%_60%/0.3)]'
-                : 'text-foreground hover:text-primary hover:bg-background/60'
-            }`}
-          >
-            من نحن
-          </Link>
+          {navLinks.slice(0, 2).map((link) => (
+            <Link key={link.path} to={link.path} className={navLinkClass(link.path)}>
+              {link.name}
+            </Link>
+          ))}
 
           {/* Mega Menu Trigger */}
           <div className="relative">
@@ -66,38 +57,11 @@ const Header = () => {
             />
           </div>
 
-          <Link
-            to="/portfolio"
-            className={`px-5 py-2 rounded-full text-sm font-medium transition-all duration-300 ${
-              isActive('/portfolio')
-                ? 'text-primary-foreground bg-primary shadow-[0_2px_10px_hsl(248_98%_60%/0.3)]'
-                : 'text-foreground hover:text-primary hover:bg-background/60'
-            }`}
-          >
-            أعمالنا
-          </Link>
-
-          <Link
-            to="/request"
-            className={`px-5 py-2 rounded-full text-sm font-medium transition-all duration-300 ${
-              isActive('/request')
-                ? 'text-primary-foreground bg-primary shadow-[0_2px_10px_hsl(248_98%_60%/0.3)]'
-                : 'text-foreground hover:text-primary hover:bg-background/60'
-            }`}
-          >
-            محتاج خدمة إيه؟
-          </Link>
-
-          <Link
-            to="/contact"
-            className={`px-5 py-2 rounded-full text-sm font-medium transition-all duration-300 ${
-              isActive('/contact')
-                ? 'text-primary-foreground bg-primary shadow-[0_2px_10px_hsl(248_98%_60%/0.3)]'
-                : 'text-foreground hover:text-primary hover:bg-background/60'
-            }`}
-          >
-            تواصل معنا
-          </Link>
+          {navLinks.slice(2).map((link) => (
+            <Link key={link.path} to={link.path} className={navLinkClass(link.path)}>
+              {link.name}
+            </Link>
+          ))}
         </div>
 
         {/* Actions */}
@@ -138,12 +102,13 @@ const Header = () => {
             </AnimatePresence>
           </button>
 
-          {/* Quick Request CTA - Desktop */}
+          {/* Login CTA - Desktop */}
           <Link
-            to="/request"
-            className="hidden lg:flex btn-secondary text-sm"
+            to="/admin"
+            className="hidden lg:flex items-center gap-2 btn-secondary text-sm"
           >
-            طلب سريع
+            <LogIn className="w-4 h-4" />
+            تسجيل الدخول
           </Link>
 
           {/* Mobile Menu Button */}

@@ -97,12 +97,12 @@ const QuickActionBar = () => {
           animate={{ y: 0, opacity: 1 }}
           exit={{ y: 100, opacity: 0 }}
           transition={{ type: 'spring', damping: 25, stiffness: 300 }}
-          className="fixed bottom-4 left-4 right-4 z-50 md:left-1/2 md:right-auto md:bottom-6 md:-translate-x-1/2"
+          className="fixed bottom-6 left-6 z-50"
         >
-          <div className="bg-background/80 backdrop-blur-2xl rounded-2xl p-2 flex items-center gap-2 max-w-fit mx-auto border border-border/30 shadow-[0_8px_40px_hsl(0_0%_0%/0.12)]">
-            {/* Actions - Always visible on Desktop, expandable on Mobile */}
+          <div className="bg-background/80 backdrop-blur-2xl rounded-2xl p-2 flex flex-col md:flex-row items-center gap-2 border border-border/30 shadow-[0_8px_40px_hsl(0_0%_0%/0.12)]">
+            {/* Actions */}
             {(!isMobile || isExpanded) && (
-              <div className="flex items-center gap-2">
+              <div className="flex flex-col md:flex-row items-center gap-2">
                 {actions.map((action, index) => (
                   <motion.div
                     key={action.label}
