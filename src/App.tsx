@@ -10,6 +10,7 @@ import ScrollToTop from "@/components/layout/ScrollToTop";
 import ChatWidget from "@/components/chat/ChatWidget";
 import ExitIntentPopup from "@/components/marketing/ExitIntentPopup";
 import Analytics from "@/components/analytics/Analytics";
+import ErrorBoundary from "@/components/ui/ErrorBoundary";
 import Index from "./pages/Index";
 import About from "./pages/About";
 import Services from "./pages/Services";
@@ -61,20 +62,22 @@ const AnimatedRoutes = () => {
 };
 
 const App = () => (
-  <QueryClientProvider client={queryClient}>
-    <ThemeProvider>
-      <TooltipProvider>
-        <Preloader />
-        <Toaster />
-        <Sonner />
-        <BrowserRouter>
-          <AnimatedRoutes />
-          <ChatWidget />
-          <ExitIntentPopup />
-        </BrowserRouter>
-      </TooltipProvider>
-    </ThemeProvider>
-  </QueryClientProvider>
+  <ErrorBoundary>
+    <QueryClientProvider client={queryClient}>
+      <ThemeProvider>
+        <TooltipProvider>
+          <Preloader />
+          <Toaster />
+          <Sonner />
+          <BrowserRouter>
+            <AnimatedRoutes />
+            <ChatWidget />
+            <ExitIntentPopup />
+          </BrowserRouter>
+        </TooltipProvider>
+      </ThemeProvider>
+    </QueryClientProvider>
+  </ErrorBoundary>
 );
 
 export default App;

@@ -1,27 +1,20 @@
-import { useState, useRef, useEffect } from 'react';
 import { motion } from 'framer-motion';
 
-// Placeholder company logos - you can replace these with real logos
 const companies = [
-  { name: 'شركة الإبداع', logo: '/placeholder.svg' },
-  { name: 'مؤسسة النجاح', logo: '/placeholder.svg' },
-  { name: 'شركة التقنية', logo: '/placeholder.svg' },
-  { name: 'مجموعة الريادة', logo: '/placeholder.svg' },
-  { name: 'شركة المستقبل', logo: '/placeholder.svg' },
-  { name: 'مؤسسة الابتكار', logo: '/placeholder.svg' },
+  { name: 'Google', logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/2/2f/Google_2015_logo.svg/200px-Google_2015_logo.svg.png' },
+  { name: 'Microsoft', logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/9/96/Microsoft_logo_%282012%29.svg/200px-Microsoft_logo_%282012%29.svg.png' },
+  { name: 'Amazon', logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/a/a9/Amazon_logo.svg/200px-Amazon_logo.svg.png' },
+  { name: 'Meta', logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/7/7b/Meta_Platforms_Inc._logo.svg/200px-Meta_Platforms_Inc._logo.svg.png' },
+  { name: 'Apple', logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/f/fa/Apple_logo_black.svg/100px-Apple_logo_black.svg.png' },
+  { name: 'Samsung', logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/2/24/Samsung_Logo.svg/200px-Samsung_Logo.svg.png' },
 ];
 
 const TrustedCompanies = () => {
-  const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
-  const [isPaused, setIsPaused] = useState(false);
-  const containerRef = useRef<HTMLDivElement>(null);
-
-  // Duplicate companies for seamless loop
   const allCompanies = [...companies, ...companies];
 
   return (
     <section className="py-16 overflow-hidden">
-      <div className="container mx-auto px-4 mb-8">
+      <div className="container mx-auto px-4 mb-10">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -37,85 +30,28 @@ const TrustedCompanies = () => {
         </motion.div>
       </div>
 
-      {/* Scrolling Logo Container */}
-      <div 
-        ref={containerRef}
-        className="relative"
-        onMouseEnter={() => setIsPaused(true)}
-        onMouseLeave={() => {
-          setIsPaused(false);
-          setHoveredIndex(null);
-        }}
-      >
+      {/* Marquee container */}
+      <div className="relative">
         {/* Gradient overlays */}
-        <div className="absolute left-0 top-0 bottom-0 w-20 bg-gradient-to-r from-background to-transparent z-10 pointer-events-none" />
-        <div className="absolute right-0 top-0 bottom-0 w-20 bg-gradient-to-l from-background to-transparent z-10 pointer-events-none" />
+        <div className="absolute left-0 top-0 bottom-0 w-24 bg-gradient-to-r from-background to-transparent z-10 pointer-events-none" />
+        <div className="absolute right-0 top-0 bottom-0 w-24 bg-gradient-to-l from-background to-transparent z-10 pointer-events-none" />
 
-        {/* Scrolling content */}
-        <motion.div
-          className="flex items-center gap-12 py-8"
-          animate={{
-            x: isPaused ? 0 : [0, -50 * companies.length],
-          }}
-          transition={{
-            x: {
-              duration: isPaused ? 0 : 20,
-              repeat: Infinity,
-              ease: 'linear',
-            },
-          }}
-          style={{ width: 'max-content' }}
-        >
-          {allCompanies.map((company, index) => {
-            const isHovered = hoveredIndex === index;
-            const hasHover = hoveredIndex !== null;
-
-            return (
-              <motion.div
-                key={`${company.name}-${index}`}
-                className="flex flex-col items-center gap-3 cursor-pointer"
-                onMouseEnter={() => setHoveredIndex(index)}
-                onMouseLeave={() => setHoveredIndex(null)}
-                animate={{
-                  scale: isHovered ? 1.1 : 1,
-                }}
-                transition={{ duration: 0.2 }}
-              >
-                <div
-                  className={`w-24 h-24 rounded-2xl bg-background/80 backdrop-blur-xl border border-border/50 flex items-center justify-center p-4 transition-all duration-300 ${
-                    isHovered 
-                      ? 'border-primary/50 shadow-[0_8px_32px_hsl(248_98%_60%/0.15)]' 
-                      : hasHover 
-                        ? 'opacity-50' 
-                        : ''
-                  }`}
-                >
-                  <img
-                    src={company.logo}
-                    alt={company.name}
-                    className={`w-full h-full object-contain transition-all duration-300 ${
-                      isHovered 
-                        ? '' 
-                        : hasHover 
-                          ? 'grayscale opacity-60' 
-                          : 'grayscale opacity-70 hover:grayscale-0 hover:opacity-100'
-                    }`}
-                  />
-                </div>
-                <motion.span
-                  className="text-sm font-medium text-foreground whitespace-nowrap"
-                  animate={{
-                    opacity: isHovered ? 1 : 0,
-                    y: isHovered ? 0 : 10,
-                  }}
-                  transition={{ duration: 0.2 }}
-                >
-                  {company.name}
-                </motion.span>
-              </motion.div>
-            );
-          })}
-        </motion.div>
+        {/* CSS marquee - no JS animation overhead */}
+        <div className="flex animate-marquee gap-16 py-8" style={{ width: 'max-content' }}>
+          {allCompanies.map((company, index) => (
+            <div
+              key={`${company.name}-${index}`}
+              className="flex items-center justify-center w-32 h-16 px-4 grayscale opacity-50 hover:grayscale-0 hover:opacity-100 transition-all duration-500"
+            >
+              <img
+                src={company.logo}
+                alt={company.name}
+                className="max-w-full max-h-full object-contain dark:invert"
+                loading="lazy"
+              />
+            </div>
+          ))}
+        </div>
       </div>
     </section>
   );

@@ -8,7 +8,6 @@ const ExitIntentPopup = () => {
   const [hasShown, setHasShown] = useState(false);
 
   useEffect(() => {
-    // Check if already shown in this session
     const shown = sessionStorage.getItem('exitPopupShown');
     if (shown) {
       setHasShown(true);
@@ -16,7 +15,6 @@ const ExitIntentPopup = () => {
     }
 
     const handleMouseLeave = (e: MouseEvent) => {
-      // Only trigger when mouse leaves from top of page
       if (e.clientY < 10 && !hasShown) {
         setIsVisible(true);
         setHasShown(true);
@@ -24,7 +22,6 @@ const ExitIntentPopup = () => {
       }
     };
 
-    // Add delay before enabling exit intent
     const timer = setTimeout(() => {
       document.addEventListener('mouseleave', handleMouseLeave);
     }, 5000);
@@ -52,18 +49,18 @@ const ExitIntentPopup = () => {
             className="fixed inset-0 bg-background/80 backdrop-blur-sm z-[100]"
           />
 
-          {/* Popup */}
+          {/* Popup - centered with fixed positioning */}
           <motion.div
             initial={{ opacity: 0, scale: 0.9, y: 20 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.9, y: 20 }}
-            className="fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-[101] w-full max-w-md mx-4"
+            className="fixed inset-0 z-[101] flex items-center justify-center p-4"
           >
-            <div className="glass-card p-8 relative overflow-hidden">
+            <div className="glass-card p-8 relative overflow-hidden w-full max-w-md">
               {/* Close Button */}
               <button
                 onClick={handleClose}
-                className="absolute top-4 left-4 p-2 rounded-lg hover:bg-muted/50 transition-colors"
+                className="absolute top-4 left-4 p-2 rounded-lg hover:bg-muted/50 transition-colors z-20"
                 aria-label="إغلاق"
               >
                 <X className="w-5 h-5 text-muted-foreground" />

@@ -5,9 +5,10 @@ import { useToast } from '@/hooks/use-toast';
 import Layout from '@/components/layout/Layout';
 import { supabase } from '@/integrations/supabase/client';
 import { FloatingInput, FloatingTextarea } from '@/components/ui/FloatingInput';
-import ProgressSteps from '@/components/ui/ProgressSteps';
 import Confetti from '@/components/ui/Confetti';
- import SEO from '@/components/SEO';
+import SEO from '@/components/SEO';
+import PageHero from '@/components/layout/PageHero';
+import { useLeadTracking } from '@/hooks/useLeadTracking';
 
 const serviceTypes = [
   'تصميم موقع ويب',
@@ -26,22 +27,18 @@ const urgencyLevels = [
   { value: 'flexible', label: 'بدون وقت محدد', description: 'مرن في التوقيت' },
 ];
 
-const steps = [
-  { label: 'البيانات الشخصية' },
-  { label: 'تفاصيل الخدمة' },
-  { label: 'التأكيد' },
-];
-
 const RequestPage = () => {
   const { toast } = useToast();
-  const [currentStep, setCurrentStep] = useState(0);
+  const leadTracking = useLeadTracking();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [showConfetti, setShowConfetti] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
+  const [honeypot, setHoneypot] = useState('');
   const [formData, setFormData] = useState({
     fullName: '',
     whatsapp: '',
+    email: '',
     serviceType: '',
     urgency: '',
     details: '',
@@ -68,71 +65,80 @@ const RequestPage = () => {
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
     setFormData(prev => ({ ...prev, [name]: value }));
-    // Clear error on change
     if (errors[name]) {
       setErrors(prev => ({ ...prev, [name]: '' }));
     }
   };
 
-  const validateStep = (step: number): boolean => {
+  const cleanWhatsApp = (num: string): string => {
+    // Remove all non-digits
+    const digits = num.replace(/\D/g, '');
+    // If starts with country code 20, strip it
+    if (digits.startsWith('20') && digits.length > 10) {
+      return digits.slice(2);
+    }
+    // If starts with 0, keep as is (local format)
+    return digits.startsWith('0') ? digits : digits;
+  };
+
+  const validateForm = (): boolean => {
     const newErrors: Record<string, string> = {};
 
-    if (step === 0) {
-      if (!formData.fullName.trim()) {
-        newErrors.fullName = 'يرجى إدخال الاسم الكامل';
-      }
-      if (!formData.whatsapp.trim()) {
-        newErrors.whatsapp = 'يرجى إدخال رقم الواتساب';
-      } else if (!/^01[0-9]{9}$/.test(formData.whatsapp)) {
+    if (!formData.fullName.trim()) {
+      newErrors.fullName = 'يرجى إدخال الاسم الكامل';
+    }
+    if (!formData.whatsapp.trim()) {
+      newErrors.whatsapp = 'يرجى إدخال رقم الواتساب';
+    } else {
+      const cleaned = cleanWhatsApp(formData.whatsapp);
+      if (!/^01[0-9]{9}$/.test(cleaned)) {
         newErrors.whatsapp = 'يرجى إدخال رقم صحيح (01xxxxxxxxx)';
       }
     }
-
-    if (step === 1) {
-      if (!formData.serviceType) {
-        newErrors.serviceType = 'يرجى اختيار نوع الخدمة';
-      }
-      if (!formData.urgency) {
-        newErrors.urgency = 'يرجى اختيار مستوى الاستعجال';
-      }
+    if (formData.email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
+      newErrors.email = 'يرجى إدخال بريد إلكتروني صحيح';
+    }
+    if (!formData.serviceType) {
+      newErrors.serviceType = 'يرجى اختيار نوع الخدمة';
+    }
+    if (!formData.urgency) {
+      newErrors.urgency = 'يرجى اختيار مستوى الاستعجال';
     }
 
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
 
-  const nextStep = () => {
-    if (validateStep(currentStep)) {
-      setCurrentStep(prev => Math.min(prev + 1, steps.length - 1));
-    }
-  };
-
-  const prevStep = () => {
-    setCurrentStep(prev => Math.max(prev - 1, 0));
-  };
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
-    if (!validateStep(currentStep)) return;
+    // Honeypot check
+    if (honeypot) return;
+    
+    if (!validateForm()) return;
 
     setIsSubmitting(true);
 
     try {
+      const cleanedWhatsapp = cleanWhatsApp(formData.whatsapp);
+
       const { error } = await supabase.from('service_requests').insert({
         full_name: formData.fullName,
-        whatsapp: formData.whatsapp,
+        whatsapp: cleanedWhatsapp,
+        email: formData.email || null,
         service_type: formData.serviceType,
         urgency: formData.urgency,
-        details: formData.details,
+        details: formData.details || null,
+        lead_source: leadTracking.lead_source,
+        utm_source: leadTracking.utm_source,
+        utm_medium: leadTracking.utm_medium,
+        utm_campaign: leadTracking.utm_campaign,
+        referrer: leadTracking.referrer,
       });
 
       if (error) throw error;
 
-      // Clear draft
       localStorage.removeItem('request-draft');
-
-      // Show confetti
       setShowConfetti(true);
       setIsSubmitted(true);
 
@@ -141,11 +147,7 @@ const RequestPage = () => {
         description: 'سيتم التواصل معك خلال 24 ساعة',
       });
 
-      // Reset after animation
-      setTimeout(() => {
-        setShowConfetti(false);
-      }, 3000);
-
+      setTimeout(() => setShowConfetti(false), 3000);
     } catch (error: any) {
       toast({
         title: 'حدث خطأ',
@@ -182,14 +184,7 @@ const RequestPage = () => {
             <button
               onClick={() => {
                 setIsSubmitted(false);
-                setCurrentStep(0);
-                setFormData({
-                  fullName: '',
-                  whatsapp: '',
-                  serviceType: '',
-                  urgency: '',
-                  details: '',
-                });
+                setFormData({ fullName: '', whatsapp: '', email: '', serviceType: '', urgency: '', details: '' });
               }}
               className="btn-primary"
             >
@@ -203,243 +198,155 @@ const RequestPage = () => {
 
   return (
     <Layout>
-       <SEO 
-         title="اطلب خدمة"
-         description="أخبرنا عن احتياجاتك وسنتواصل معك خلال 24 ساعة. املأ النموذج واحصل على استشارة مجانية لمشروعك الرقمي."
-         keywords="طلب خدمة, استشارة مجانية, مشروع رقمي, B.CLICK"
-       />
+      <SEO 
+        title="اطلب خدمة"
+        description="أخبرنا عن احتياجاتك وسنتواصل معك خلال 24 ساعة. املأ النموذج واحصل على استشارة مجانية لمشروعك الرقمي."
+        keywords="طلب خدمة, استشارة مجانية, مشروع رقمي, B.CLICK"
+      />
       <Confetti isActive={showConfetti} />
 
-      {/* Hero Section */}
-      <section className="relative min-h-[40vh] flex items-center overflow-hidden">
-        <div className="absolute inset-0 overflow-hidden pointer-events-none">
-          <div className="absolute top-1/3 right-1/4 w-80 h-80 bg-primary/20 rounded-full blur-[100px]" />
-          <div className="absolute bottom-1/4 left-1/3 w-60 h-60 bg-secondary/20 rounded-full blur-[100px]" />
-        </div>
-        <div className="container mx-auto px-4 relative z-10">
-          <div className="max-w-3xl">
-            <motion.span initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="inline-block px-4 py-2 rounded-full bg-secondary/10 text-secondary text-sm font-medium mb-6">
-              محتاج خدمة إيه؟
-            </motion.span>
-            <motion.h1 initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }} className="hero-title mb-6">
-              أخبرنا عن <span className="text-gradient">احتياجاتك</span>
-            </motion.h1>
-            <motion.p initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }} className="hero-subtitle">
-              املأ النموذج وسنتواصل معك خلال 24 ساعة
-            </motion.p>
-          </div>
-        </div>
-      </section>
+      <PageHero
+        badge="محتاج خدمة إيه؟"
+        title="أخبرنا عن"
+        highlight="احتياجاتك"
+        subtitle="املأ النموذج وسنتواصل معك خلال 24 ساعة"
+        badgeColor="secondary"
+        minHeight="min-h-[35vh]"
+      />
 
-      {/* Form Section */}
+      {/* Single-page form - no steps */}
       <section className="section-container pt-8">
         <div className="max-w-2xl mx-auto">
-          {/* Progress Steps */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="mb-8"
-          >
-            <ProgressSteps steps={steps} currentStep={currentStep} />
-          </motion.div>
-
           <motion.form
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.3 }}
+            transition={{ delay: 0.2 }}
             onSubmit={handleSubmit}
-            className="glass-card"
+            className="glass-card space-y-6"
           >
-            <AnimatePresence mode="wait">
-              {/* Step 1: Personal Info */}
-              {currentStep === 0 && (
-                <motion.div
-                  key="step1"
-                  initial={{ opacity: 0, x: 20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  exit={{ opacity: 0, x: -20 }}
-                  className="space-y-6"
-                >
-                  <FloatingInput
-                    label="الاسم الكامل *"
-                    name="fullName"
-                    value={formData.fullName}
-                    onChange={handleChange}
-                    error={errors.fullName}
-                    success={formData.fullName.length > 2 && !errors.fullName}
-                  />
+            {/* Honeypot */}
+            <input
+              type="text"
+              value={honeypot}
+              onChange={(e) => setHoneypot(e.target.value)}
+              tabIndex={-1}
+              autoComplete="off"
+              className="absolute opacity-0 h-0 w-0 pointer-events-none"
+              aria-hidden="true"
+            />
 
-                  <FloatingInput
-                    label="رقم واتساب *"
-                    name="whatsapp"
-                    type="tel"
-                    value={formData.whatsapp}
-                    onChange={handleChange}
-                    error={errors.whatsapp}
-                    success={/^01[0-9]{9}$/.test(formData.whatsapp)}
-                    helperText="مثال: 01xxxxxxxxx"
-                    dir="ltr"
-                  />
-                </motion.div>
-              )}
+            <FloatingInput
+              label="الاسم الكامل *"
+              name="fullName"
+              value={formData.fullName}
+              onChange={handleChange}
+              error={errors.fullName}
+              success={formData.fullName.length > 2 && !errors.fullName}
+            />
 
-              {/* Step 2: Service Details */}
-              {currentStep === 1 && (
-                <motion.div
-                  key="step2"
-                  initial={{ opacity: 0, x: 20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  exit={{ opacity: 0, x: -20 }}
-                  className="space-y-6"
-                >
-                  <div>
-                    <label className="form-label">
-                      نوع الخدمة <span className="text-secondary">*</span>
-                    </label>
-                    <select
-                      name="serviceType"
-                      value={formData.serviceType}
-                      onChange={handleChange}
-                      className={`form-input ${errors.serviceType ? 'border-destructive' : ''}`}
-                    >
-                      <option value="">اختر الخدمة المطلوبة</option>
-                      {serviceTypes.map((type) => (
-                        <option key={type} value={type}>{type}</option>
-                      ))}
-                    </select>
-                    {errors.serviceType && (
-                      <p className="text-xs text-destructive mt-1">{errors.serviceType}</p>
-                    )}
-                  </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <FloatingInput
+                label="رقم واتساب *"
+                name="whatsapp"
+                type="tel"
+                value={formData.whatsapp}
+                onChange={handleChange}
+                error={errors.whatsapp}
+                success={/^01[0-9]{9}$/.test(cleanWhatsApp(formData.whatsapp))}
+                helperText="مثال: 01xxxxxxxxx"
+                dir="ltr"
+              />
 
-                  <div>
-                    <label className="form-label">
-                      مستوى الاستعجال <span className="text-secondary">*</span>
-                    </label>
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
-                      {urgencyLevels.map((level) => (
-                        <label
-                          key={level.value}
-                          className={`glass p-4 rounded-xl cursor-pointer transition-all duration-300 ${
-                            formData.urgency === level.value
-                              ? 'border-2 border-primary bg-primary/10'
-                              : 'border-2 border-transparent hover:border-muted-foreground'
-                          }`}
-                        >
-                          <input
-                            type="radio"
-                            name="urgency"
-                            value={level.value}
-                            checked={formData.urgency === level.value}
-                            onChange={handleChange}
-                            className="hidden"
-                          />
-                          <div className="flex items-center gap-2 mb-1">
-                            {formData.urgency === level.value && (
-                              <CheckCircle2 className="w-4 h-4 text-primary" />
-                            )}
-                            <span className="font-semibold text-foreground">{level.label}</span>
-                          </div>
-                          <p className="text-xs text-muted-foreground">{level.description}</p>
-                        </label>
-                      ))}
-                    </div>
-                    {errors.urgency && (
-                      <p className="text-xs text-destructive mt-1">{errors.urgency}</p>
-                    )}
-                  </div>
+              <FloatingInput
+                label="البريد الإلكتروني (اختياري)"
+                name="email"
+                type="email"
+                value={formData.email}
+                onChange={handleChange}
+                error={errors.email}
+                dir="ltr"
+              />
+            </div>
 
-                  <FloatingTextarea
-                    label="تفاصيل إضافية"
-                    name="details"
-                    value={formData.details}
-                    onChange={handleChange}
-                    helperText="اكتب أي تفاصيل إضافية تريد مشاركتها معنا"
-                  />
-                </motion.div>
-              )}
-
-              {/* Step 3: Confirmation */}
-              {currentStep === 2 && (
-                <motion.div
-                  key="step3"
-                  initial={{ opacity: 0, x: 20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  exit={{ opacity: 0, x: -20 }}
-                  className="space-y-6"
-                >
-                  <div className="bg-muted/50 rounded-xl p-6">
-                    <h3 className="font-bold text-lg text-foreground mb-4">مراجعة البيانات</h3>
-                    <div className="space-y-3">
-                      <div className="flex justify-between">
-                        <span className="text-muted-foreground">الاسم:</span>
-                        <span className="font-medium text-foreground">{formData.fullName}</span>
-                      </div>
-                      <div className="flex justify-between">
-                        <span className="text-muted-foreground">الواتساب:</span>
-                        <span className="font-medium text-foreground" dir="ltr">{formData.whatsapp}</span>
-                      </div>
-                      <div className="flex justify-between">
-                        <span className="text-muted-foreground">الخدمة:</span>
-                        <span className="font-medium text-foreground">{formData.serviceType}</span>
-                      </div>
-                      <div className="flex justify-between">
-                        <span className="text-muted-foreground">الاستعجال:</span>
-                        <span className="font-medium text-foreground">
-                          {urgencyLevels.find(l => l.value === formData.urgency)?.label}
-                        </span>
-                      </div>
-                      {formData.details && (
-                        <div>
-                          <span className="text-muted-foreground">التفاصيل:</span>
-                          <p className="text-foreground mt-1">{formData.details}</p>
-                        </div>
-                      )}
-                    </div>
-                  </div>
-                </motion.div>
-              )}
-            </AnimatePresence>
-
-            {/* Navigation Buttons */}
-            <div className="flex items-center justify-between mt-8 pt-6 border-t border-border">
-              {currentStep > 0 ? (
-                <button
-                  type="button"
-                  onClick={prevStep}
-                  className="btn-ghost"
-                >
-                  السابق
-                </button>
-              ) : (
-                <div />
-              )}
-
-              {currentStep < steps.length - 1 ? (
-                <button
-                  type="button"
-                  onClick={nextStep}
-                  className="btn-primary"
-                >
-                  التالي
-                </button>
-              ) : (
-                <button
-                  type="submit"
-                  disabled={isSubmitting}
-                  className="btn-secondary min-w-[150px] haptic-feedback"
-                >
-                  {isSubmitting ? (
-                    <span className="flex items-center gap-2">
-                      <Loader2 className="w-5 h-5 animate-spin" />
-                      جاري الإرسال...
-                    </span>
-                  ) : (
-                    'تسليم الطلب'
-                  )}
-                </button>
+            <div>
+              <label className="form-label">
+                نوع الخدمة <span className="text-destructive">*</span>
+              </label>
+              <select
+                name="serviceType"
+                value={formData.serviceType}
+                onChange={handleChange}
+                className={`form-input ${errors.serviceType ? 'border-destructive' : ''}`}
+              >
+                <option value="">اختر الخدمة المطلوبة</option>
+                {serviceTypes.map((type) => (
+                  <option key={type} value={type}>{type}</option>
+                ))}
+              </select>
+              {errors.serviceType && (
+                <p className="text-xs text-destructive mt-1">{errors.serviceType}</p>
               )}
             </div>
+
+            <div>
+              <label className="form-label">
+                مستوى الاستعجال <span className="text-destructive">*</span>
+              </label>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+                {urgencyLevels.map((level) => (
+                  <label
+                    key={level.value}
+                    className={`glass p-4 rounded-xl cursor-pointer transition-all duration-300 ${
+                      formData.urgency === level.value
+                        ? 'border-2 border-primary bg-primary/10'
+                        : 'border-2 border-transparent hover:border-muted-foreground'
+                    }`}
+                  >
+                    <input
+                      type="radio"
+                      name="urgency"
+                      value={level.value}
+                      checked={formData.urgency === level.value}
+                      onChange={handleChange}
+                      className="hidden"
+                    />
+                    <div className="flex items-center gap-2 mb-1">
+                      {formData.urgency === level.value && (
+                        <CheckCircle2 className="w-4 h-4 text-primary" />
+                      )}
+                      <span className="font-semibold text-foreground">{level.label}</span>
+                    </div>
+                    <p className="text-xs text-muted-foreground">{level.description}</p>
+                  </label>
+                ))}
+              </div>
+              {errors.urgency && (
+                <p className="text-xs text-destructive mt-1">{errors.urgency}</p>
+              )}
+            </div>
+
+            <FloatingTextarea
+              label="تفاصيل إضافية"
+              name="details"
+              value={formData.details}
+              onChange={handleChange}
+              helperText="اكتب أي تفاصيل إضافية تريد مشاركتها معنا"
+            />
+
+            <button
+              type="submit"
+              disabled={isSubmitting}
+              className="btn-secondary w-full min-w-[150px] haptic-feedback py-4"
+            >
+              {isSubmitting ? (
+                <span className="flex items-center gap-2 justify-center">
+                  <Loader2 className="w-5 h-5 animate-spin" />
+                  جاري الإرسال...
+                </span>
+              ) : (
+                'إرسال الطلب'
+              )}
+            </button>
           </motion.form>
 
           {/* Auto-save indicator */}

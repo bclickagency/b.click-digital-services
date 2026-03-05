@@ -1,6 +1,13 @@
 import { Link } from 'react-router-dom';
 import { Phone, MapPin, MessageCircle } from 'lucide-react';
 
+const serviceLinks = [
+  { name: 'تصميم المواقع', slug: 'web-development' },
+  { name: 'تطوير التطبيقات', slug: 'mobile-apps' },
+  { name: 'التسويق الرقمي', slug: 'digital-marketing' },
+  { name: 'تصميم الهوية البصرية', slug: 'branding' },
+];
+
 const Footer = () => {
   const currentYear = new Date().getFullYear();
 
@@ -13,7 +20,7 @@ const Footer = () => {
           <div className="space-y-4">
             <Link to="/" className="inline-block">
               <span className="text-3xl font-black text-foreground tracking-tight">
-                B<span className="text-gradient">.</span>CLICK
+                B<span className="text-primary">.</span>CLICK
               </span>
             </Link>
             <p className="text-muted-foreground text-sm leading-relaxed">
@@ -25,26 +32,36 @@ const Footer = () => {
           <div>
             <h4 className="text-lg font-bold text-foreground mb-4">روابط سريعة</h4>
             <ul className="space-y-2">
-              {['الرئيسية', 'من نحن', 'الخدمات', 'أعمالنا'].map((item) => (
-                <li key={item}>
+              {[
+                { name: 'الرئيسية', path: '/' },
+                { name: 'من نحن', path: '/about' },
+                { name: 'الخدمات', path: '/services' },
+                { name: 'أعمالنا', path: '/portfolio' },
+              ].map((item) => (
+                <li key={item.name}>
                   <Link
-                    to={`/${item === 'الرئيسية' ? '' : item === 'من نحن' ? 'about' : item === 'الخدمات' ? 'services' : 'portfolio'}`}
+                    to={item.path}
                     className="text-muted-foreground hover:text-primary transition-colors duration-300 text-sm"
                   >
-                    {item}
+                    {item.name}
                   </Link>
                 </li>
               ))}
             </ul>
           </div>
 
-          {/* Services */}
+          {/* Services - now with links */}
           <div>
             <h4 className="text-lg font-bold text-foreground mb-4">خدماتنا</h4>
             <ul className="space-y-2">
-              {['تصميم المواقع', 'تطوير التطبيقات', 'التسويق الرقمي', 'تصميم الهوية البصرية'].map((service) => (
-                <li key={service}>
-                  <span className="text-muted-foreground text-sm">{service}</span>
+              {serviceLinks.map((service) => (
+                <li key={service.slug}>
+                  <Link
+                    to={`/services/${service.slug}`}
+                    className="text-muted-foreground hover:text-primary transition-colors duration-300 text-sm"
+                  >
+                    {service.name}
+                  </Link>
                 </li>
               ))}
             </ul>
@@ -90,7 +107,7 @@ const Footer = () => {
           </div>
         </div>
 
-        {/* Bottom Bar - removed /admin link */}
+        {/* Bottom Bar */}
         <div className="mt-12 pt-8 border-t border-border flex flex-col md:flex-row items-center justify-between gap-4">
           <p className="text-muted-foreground text-sm">
             © {currentYear} B.CLICK - جميع الحقوق محفوظة

@@ -7,22 +7,15 @@ const BackToTop = () => {
 
   useEffect(() => {
     const toggleVisibility = () => {
-      if (window.scrollY > 300) {
-        setIsVisible(true);
-      } else {
-        setIsVisible(false);
-      }
+      setIsVisible(window.scrollY > 300);
     };
 
-    window.addEventListener('scroll', toggleVisibility);
+    window.addEventListener('scroll', toggleVisibility, { passive: true });
     return () => window.removeEventListener('scroll', toggleVisibility);
   }, []);
 
   const scrollToTop = () => {
-    window.scrollTo({
-      top: 0,
-      behavior: 'smooth'
-    });
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
   return (
@@ -35,7 +28,7 @@ const BackToTop = () => {
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
           onClick={scrollToTop}
-          className="fixed bottom-32 left-6 z-40 w-11 h-11 rounded-xl bg-background/80 backdrop-blur-xl border border-border/50 text-foreground shadow-lg flex items-center justify-center hover:bg-muted/80 transition-all duration-300"
+          className="fixed bottom-6 right-6 z-40 w-11 h-11 rounded-xl bg-background/80 backdrop-blur-xl border border-border/50 text-foreground shadow-lg flex items-center justify-center hover:bg-muted/80 transition-all duration-300"
           aria-label="العودة لأعلى"
         >
           <ArrowUp className="w-5 h-5" />

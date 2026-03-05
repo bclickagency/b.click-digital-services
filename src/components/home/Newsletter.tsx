@@ -99,7 +99,7 @@ const Newsletter = () => {
               type="submit"
               disabled={isLoading || isSubscribed}
               className={`btn-primary whitespace-nowrap min-w-[140px] ${
-                isSubscribed ? 'bg-green-600 hover:bg-green-600' : ''
+                isSubscribed ? 'bg-[hsl(142_70%_45%)] hover:bg-[hsl(142_70%_45%)]' : ''
               }`}
             >
               {isLoading ? (
