@@ -3,8 +3,8 @@ import { useNavigate } from 'react-router-dom';
 import { supabase } from '@/integrations/supabase/client';
 import { User } from '@supabase/supabase-js';
 import { 
-   LogOut, LayoutDashboard, FileText, Menu, X, MessagesSquare,
-   BookOpen, Briefcase, Users, Mail
+  LayoutDashboard, FileText, Menu, MessagesSquare,
+  BookOpen, Briefcase, Users, Mail
 } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import BlogManager from '@/components/admin/BlogManager';
@@ -13,10 +13,11 @@ import UserManager from '@/components/admin/UserManager';
 import ChatManager from '@/components/admin/ChatManager';
 import RequestsTab from '@/components/admin/RequestsTab';
 import ContactsTab from '@/components/admin/ContactsTab';
+import DashboardOverview from '@/components/admin/DashboardOverview';
+import DashboardSidebar, { type TabType, type SidebarTab } from '@/components/admin/DashboardSidebar';
 import { useUnreadCount } from '@/hooks/useChat';
 
 type RequestStatus = 'new' | 'contacted' | 'closed';
-type TabType = 'requests' | 'blog' | 'portfolio' | 'users' | 'chat' | 'contacts';
 
 interface ServiceRequest {
   id: string;
@@ -49,7 +50,7 @@ const Dashboard = () => {
   const [contacts, setContacts] = useState<ContactMessage[]>([]);
   const [loading, setLoading] = useState(true);
   const [userRole, setUserRole] = useState<string | null>(null);
-  const [activeTab, setActiveTab] = useState<TabType>('requests');
+  const [activeTab, setActiveTab] = useState<TabType>('overview');
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [statusFilter, setStatusFilter] = useState<string>('all');
@@ -73,7 +74,6 @@ const Dashboard = () => {
     return () => subscription.unsubscribe();
   }, [navigate]);
 
-  // Realtime for new requests
   useEffect(() => {
     const channel = supabase
       .channel('new-requests')
@@ -119,69 +119,89 @@ const Dashboard = () => {
 
   const handleLogout = async () => { await supabase.auth.signOut(); navigate('/admin'); };
 
-  const tabs = [
-    { id: 'requests' as TabType, label: 'الطلبات', icon: FileText },
-    { id: 'contacts' as TabType, label: 'الرسائل', icon: Mail, badge: contacts.filter(c => c.status === 'new').length },
-    { id: 'chat' as TabType, label: 'المحادثات', icon: MessagesSquare, badge: unreadChatCount },
-    { id: 'blog' as TabType, label: 'المدونة', icon: BookOpen },
-    { id: 'portfolio' as TabType, label: 'الأعمال', icon: Briefcase },
+  const newRequestsCount = useMemo(() => requests.filter(r => r.status === 'new').length, [requests]);
+  const newContactsCount = useMemo(() => contacts.filter(c => c.status === 'new').length, [contacts]);
+
+  const tabs: SidebarTab[] = useMemo(() => [
+    { id: 'overview', label: 'نظرة عامة', icon: LayoutDashboard },
+    { id: 'requests', label: 'الطلبات', icon: FileText, badge: newRequestsCount },
+    { id: 'contacts', label: 'الرسائل', icon: Mail, badge: newContactsCount },
+    { id: 'chat', label: 'المحادثات', icon: MessagesSquare, badge: unreadChatCount },
+    { id: 'blog', label: 'المدونة', icon: BookOpen },
+    { id: 'portfolio', label: 'الأعمال', icon: Briefcase },
     ...(userRole === 'admin' ? [{ id: 'users' as TabType, label: 'المستخدمين', icon: Users }] : []),
-  ];
+  ], [userRole, newRequestsCount, newContactsCount, unreadChatCount]);
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-background" dir="rtl">
-        <div className="text-xl">جاري التحميل...</div>
+      <div className="min-h-screen bg-background flex items-center justify-center" dir="rtl">
+        <div className="flex flex-col items-center gap-4">
+          <div className="w-10 h-10 rounded-xl bg-primary flex items-center justify-center animate-pulse">
+            <span className="text-primary-foreground font-black text-sm">B</span>
+          </div>
+          <div className="flex items-center gap-2">
+            <div className="w-2 h-2 rounded-full bg-primary animate-bounce" style={{ animationDelay: '0ms' }} />
+            <div className="w-2 h-2 rounded-full bg-primary animate-bounce" style={{ animationDelay: '150ms' }} />
+            <div className="w-2 h-2 rounded-full bg-primary animate-bounce" style={{ animationDelay: '300ms' }} />
+          </div>
+        </div>
       </div>
     );
   }
 
+  const tabTitles: Record<TabType, string> = {
+    overview: 'نظرة عامة',
+    requests: 'إدارة الطلبات',
+    contacts: 'رسائل التواصل',
+    chat: 'المحادثات',
+    blog: 'إدارة المدونة',
+    portfolio: 'إدارة الأعمال',
+    users: 'إدارة المستخدمين',
+  };
+
   return (
     <div className="min-h-screen bg-background" dir="rtl">
-      {/* Header */}
-      <header className="glass-header !rounded-none !top-0 !left-0 !right-0">
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-4">
-            <LayoutDashboard className="w-6 h-6 text-primary" />
-            <span className="text-xl font-bold">لوحة التحكم</span>
+      <DashboardSidebar
+        activeTab={activeTab}
+        setActiveTab={setActiveTab}
+        tabs={tabs}
+        onLogout={handleLogout}
+        userEmail={user?.email}
+        userRole={userRole}
+        isOpen={sidebarOpen}
+        onClose={() => setSidebarOpen(false)}
+      />
+
+      {/* Main Content */}
+      <div className="lg:mr-64 min-h-screen transition-all duration-300">
+        {/* Top Bar */}
+        <header className="sticky top-0 z-30 bg-background/95 backdrop-blur-sm border-b border-border/50 px-4 lg:px-6 h-16 flex items-center justify-between">
+          <div className="flex items-center gap-3">
+            <button onClick={() => setSidebarOpen(true)} className="lg:hidden p-2 rounded-xl hover:bg-muted/50 transition-colors">
+              <Menu className="w-5 h-5 text-foreground" />
+            </button>
+            <h1 className="text-lg font-semibold text-foreground">{tabTitles[activeTab]}</h1>
           </div>
-          <div className="flex items-center gap-4">
-            <span className="text-sm text-muted-foreground hidden md:block">{user?.email}</span>
-            <span className={`text-xs px-2 py-1 rounded-full hidden sm:block ${userRole === 'admin' ? 'bg-primary/20 text-primary' : 'bg-secondary/20 text-secondary'}`}>
+          <div className="flex items-center gap-3">
+            <span className="text-xs text-muted-foreground hidden sm:block">{user?.email}</span>
+            <span className={`text-[10px] px-2 py-0.5 rounded-full font-medium hidden sm:block ${
+              userRole === 'admin' ? 'bg-primary/15 text-primary' : 'bg-muted text-muted-foreground'
+            }`}>
               {userRole === 'admin' ? 'مدير' : 'عضو فريق'}
             </span>
-            <button onClick={handleLogout} className="btn-ghost text-sm py-2 px-3 hidden sm:flex"><LogOut className="w-4 h-4" />خروج</button>
-            <button onClick={() => setSidebarOpen(!sidebarOpen)} className="lg:hidden p-2 rounded-xl bg-muted/50 hover:bg-muted transition-colors">
-              {sidebarOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
-            </button>
           </div>
-        </div>
-      </header>
+        </header>
 
-      <div className="pt-24 flex">
-        {/* Sidebar */}
-        <aside className={`w-64 fixed right-0 top-24 bottom-0 border-l border-border bg-background/95 backdrop-blur-sm p-4 z-40 transition-transform duration-300 lg:translate-x-0 ${sidebarOpen ? 'translate-x-0' : 'translate-x-full'}`}>
-          <nav className="space-y-2">
-            {tabs.map((tab) => (
-              <button key={tab.id} onClick={() => { setActiveTab(tab.id); setSidebarOpen(false); }}
-                className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all ${activeTab === tab.id ? 'bg-primary text-white' : 'hover:bg-muted text-muted-foreground hover:text-foreground'}`}>
-                <tab.icon className="w-5 h-5" />
-                {tab.label}
-                {'badge' in tab && tab.badge && tab.badge > 0 && (
-                  <span className="mr-auto bg-destructive text-white text-xs px-2 py-0.5 rounded-full">{tab.badge}</span>
-                )}
-              </button>
-            ))}
-          </nav>
-          <div className="lg:hidden mt-8 pt-4 border-t border-border">
-            <button onClick={handleLogout} className="w-full btn-ghost text-sm py-3 justify-start"><LogOut className="w-4 h-4" />تسجيل الخروج</button>
-          </div>
-        </aside>
+        {/* Page Content */}
+        <main className="p-4 lg:p-6">
+          {activeTab === 'overview' && (
+            <DashboardOverview
+              requests={requests}
+              contacts={contacts}
+              onNavigate={(tab) => setActiveTab(tab as TabType)}
+            />
+          )}
 
-        {sidebarOpen && <div className="fixed inset-0 bg-black/50 z-30 lg:hidden" onClick={() => setSidebarOpen(false)} />}
-
-        {/* Main Content */}
-        <main className="flex-1 lg:mr-64 px-4 lg:px-6 pb-8">
           {activeTab === 'requests' && (
             <RequestsTab
               requests={requests}
