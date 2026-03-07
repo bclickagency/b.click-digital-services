@@ -105,7 +105,7 @@ const Header = () => {
 
             {/* Login CTA - Desktop */}
             <Link
-              to="/admin"
+              to="/login"
               className="hidden lg:flex items-center gap-2 btn-secondary text-sm"
             >
               <LogIn className="w-4 h-4" />
