@@ -29,6 +29,8 @@ import ResetPassword from "./pages/ResetPassword";
 import AdminLogin from "./pages/AdminLogin";
 import Dashboard from "./pages/Dashboard";
 import ClientPortal from "./pages/ClientPortal";
+import ClientShowcase from "./pages/ClientShowcase";
+import CaseStudy from "./pages/CaseStudy";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -60,6 +62,8 @@ const AnimatedRoutes = () => {
           <Route path="/admin" element={<AdminLogin />} />
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/client" element={<ClientPortal />} />
+          <Route path="/clients/:clientId" element={<ClientShowcase />} />
+          <Route path="/clients/:clientId/projects/:projectId" element={<CaseStudy />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </AnimatePresence>

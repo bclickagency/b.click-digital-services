@@ -180,46 +180,82 @@ export type Database = {
       client_projects: {
         Row: {
           client_id: string
+          client_story: string | null
+          cover_image: string | null
           created_at: string
           description: string | null
           end_date: string | null
+          how_we_helped: string | null
           id: string
+          images: string[] | null
+          is_featured: boolean | null
+          is_public: boolean | null
           notes: string | null
           priority: string
+          problem: string | null
           progress: number
+          project_url: string | null
+          results: string | null
+          results_metrics: Json | null
           service_type: string | null
+          solution: string | null
           start_date: string | null
           status: string
+          tags: string[] | null
           title: string
           updated_at: string
         }
         Insert: {
           client_id: string
+          client_story?: string | null
+          cover_image?: string | null
           created_at?: string
           description?: string | null
           end_date?: string | null
+          how_we_helped?: string | null
           id?: string
+          images?: string[] | null
+          is_featured?: boolean | null
+          is_public?: boolean | null
           notes?: string | null
           priority?: string
+          problem?: string | null
           progress?: number
+          project_url?: string | null
+          results?: string | null
+          results_metrics?: Json | null
           service_type?: string | null
+          solution?: string | null
           start_date?: string | null
           status?: string
+          tags?: string[] | null
           title: string
           updated_at?: string
         }
         Update: {
           client_id?: string
+          client_story?: string | null
+          cover_image?: string | null
           created_at?: string
           description?: string | null
           end_date?: string | null
+          how_we_helped?: string | null
           id?: string
+          images?: string[] | null
+          is_featured?: boolean | null
+          is_public?: boolean | null
           notes?: string | null
           priority?: string
+          problem?: string | null
           progress?: number
+          project_url?: string | null
+          results?: string | null
+          results_metrics?: Json | null
           service_type?: string | null
+          solution?: string | null
           start_date?: string | null
           status?: string
+          tags?: string[] | null
           title?: string
           updated_at?: string
         }
@@ -505,34 +541,52 @@ export type Database = {
         Row: {
           avatar_url: string | null
           bio: string | null
+          collaboration_start: string | null
           company_name: string | null
           created_at: string
           email: string
           full_name: string
           id: string
+          industry: string | null
+          is_featured: boolean | null
+          logo_url: string | null
           phone: string | null
+          rating: number | null
+          testimonial: string | null
           updated_at: string
         }
         Insert: {
           avatar_url?: string | null
           bio?: string | null
+          collaboration_start?: string | null
           company_name?: string | null
           created_at?: string
           email?: string
           full_name?: string
           id: string
+          industry?: string | null
+          is_featured?: boolean | null
+          logo_url?: string | null
           phone?: string | null
+          rating?: number | null
+          testimonial?: string | null
           updated_at?: string
         }
         Update: {
           avatar_url?: string | null
           bio?: string | null
+          collaboration_start?: string | null
           company_name?: string | null
           created_at?: string
           email?: string
           full_name?: string
           id?: string
+          industry?: string | null
+          is_featured?: boolean | null
+          logo_url?: string | null
           phone?: string | null
+          rating?: number | null
+          testimonial?: string | null
           updated_at?: string
         }
         Relationships: []

@@ -19,6 +19,7 @@ import FAQ from '@/components/home/FAQ';
 import TrustedCompanies from '@/components/home/TrustedCompanies';
 import HowWeWork from '@/components/home/HowWeWork';
 import FeaturedProject from '@/components/home/FeaturedProject';
+import OurClients from '@/components/home/OurClients';
 import SEO from '@/components/SEO';
 
 const services = [
@@ -205,6 +206,11 @@ const Index = () => {
       {/* Featured Project */}
       <div id="featured">
         <FeaturedProject />
+      </div>
+
+      {/* Our Clients */}
+      <div id="our-clients">
+        <OurClients />
       </div>
 
       {/* Testimonials */}
