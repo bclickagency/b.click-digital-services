@@ -208,6 +208,11 @@ const Index = () => {
         <FeaturedProject />
       </div>
 
+      {/* Our Clients */}
+      <div id="our-clients">
+        <OurClients />
+      </div>
+
       {/* Testimonials */}
       <div id="testimonials">
         <Testimonials />
