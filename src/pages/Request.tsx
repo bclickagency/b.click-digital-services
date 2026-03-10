@@ -47,12 +47,12 @@ const RequestPage = () => {
 
   // Auto-save draft
   useEffect(() => {
-    const saved = localStorage.getItem('request-draft');
+    const saved = sessionStorage.getItem('request-draft');
     if (saved) {
       try {
         setFormData(JSON.parse(saved));
-      } catch (e) {
-        console.error('Failed to load draft');
+      } catch {
+        // Silently ignore
       }
     }
   }, []);
