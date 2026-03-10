@@ -186,7 +186,7 @@ const SalesAssistant = () => {
       timestamp: new Date(),
     };
     setMessages([initialMessage]);
-    localStorage.removeItem('bclick-chat-history');
+    sessionStorage.removeItem('bclick-chat-history');
     setShowHistory(false);
   };
 

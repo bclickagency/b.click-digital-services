@@ -1,6 +1,7 @@
 import { useState, useEffect, useMemo } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
+import { getSafeErrorMessage } from '@/lib/errorHandler';
 import { 
   UserPlus, Trash2, Shield, User, Mail, Search, 
   Users as UsersIcon, FolderPlus, Briefcase, Loader2

@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
+import { getSafeErrorMessage } from '@/lib/errorHandler';
 import RichTextEditor from './RichTextEditor';
 import { Plus, Edit2, Trash2, Star, X, Save, ExternalLink } from 'lucide-react';
 

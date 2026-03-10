@@ -139,7 +139,7 @@ const RequestPage = () => {
 
       if (error) throw error;
 
-      localStorage.removeItem('request-draft');
+      sessionStorage.removeItem('request-draft');
       setShowConfetti(true);
       setIsSubmitted(true);
 
