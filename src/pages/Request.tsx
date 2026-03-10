@@ -59,7 +59,7 @@ const RequestPage = () => {
 
   useEffect(() => {
     if (formData.fullName || formData.whatsapp || formData.serviceType) {
-      localStorage.setItem('request-draft', JSON.stringify(formData));
+      sessionStorage.setItem('request-draft', JSON.stringify(formData));
     }
   }, [formData]);
 
