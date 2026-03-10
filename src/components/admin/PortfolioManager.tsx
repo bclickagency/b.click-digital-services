@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
+import { getSafeErrorMessage } from '@/lib/errorHandler';
 import RichTextEditor from './RichTextEditor';
 import { Plus, Edit2, Trash2, Star, X, Save, ExternalLink } from 'lucide-react';
 
@@ -78,7 +79,7 @@ const PortfolioManager = ({ userRole }: PortfolioManagerProps) => {
         .eq('id', editingItem.id);
 
       if (error) {
-        toast({ title: 'خطأ', description: error.message, variant: 'destructive' });
+        toast({ title: 'خطأ', description: getSafeErrorMessage(error), variant: 'destructive' });
       } else {
         toast({ title: 'تم التحديث', description: 'تم تحديث المشروع بنجاح' });
         fetchItems();
@@ -91,7 +92,7 @@ const PortfolioManager = ({ userRole }: PortfolioManagerProps) => {
         .insert(itemData as any);
 
       if (error) {
-        toast({ title: 'خطأ', description: error.message, variant: 'destructive' });
+        toast({ title: 'خطأ', description: getSafeErrorMessage(error), variant: 'destructive' });
       } else {
         toast({ title: 'تم الإنشاء', description: 'تم إنشاء المشروع بنجاح' });
         fetchItems();

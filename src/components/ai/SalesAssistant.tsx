@@ -2,6 +2,7 @@ import { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { MessageCircle, X, Send, Bot, User, Loader2, Sparkles, Mic, MicOff, Paperclip, History, ChevronDown } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
+import { getSafeErrorMessage } from '@/lib/errorHandler';
 import ReactMarkdown from 'react-markdown';
 
 interface Message {
@@ -36,25 +37,25 @@ const SalesAssistant = () => {
     scrollToBottom();
   }, [messages]);
 
-  // Load chat history from localStorage
+  // Load chat history from sessionStorage (more secure than localStorage)
   useEffect(() => {
-    const saved = localStorage.getItem('bclick-chat-history');
+    const saved = sessionStorage.getItem('bclick-chat-history');
     if (saved) {
       try {
         const parsed = JSON.parse(saved);
         if (parsed.length > 1) {
           setMessages(parsed.map((m: any) => ({ ...m, timestamp: new Date(m.timestamp) })));
         }
-      } catch (e) {
-        console.error('Failed to parse chat history');
+      } catch {
+        // Silently ignore parse errors
       }
     }
   }, []);
 
-  // Save chat history
+  // Save chat history to sessionStorage (clears on tab close)
   useEffect(() => {
     if (messages.length > 1) {
-      localStorage.setItem('bclick-chat-history', JSON.stringify(messages));
+      sessionStorage.setItem('bclick-chat-history', JSON.stringify(messages));
     }
   }, [messages]);
 
@@ -164,10 +165,9 @@ const SalesAssistant = () => {
     try {
       await streamChat(newMessages);
     } catch (error) {
-      console.error('Chat error:', error);
       toast({
         title: 'خطأ',
-        description: error instanceof Error ? error.message : 'حدث خطأ في الاتصال',
+        description: getSafeErrorMessage(error),
         variant: 'destructive',
       });
     } finally {
@@ -186,7 +186,7 @@ const SalesAssistant = () => {
       timestamp: new Date(),
     };
     setMessages([initialMessage]);
-    localStorage.removeItem('bclick-chat-history');
+    sessionStorage.removeItem('bclick-chat-history');
     setShowHistory(false);
   };
 

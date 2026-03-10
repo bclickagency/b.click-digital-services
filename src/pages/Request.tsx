@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { CheckCircle2, Loader2 } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
+import { getSafeErrorMessage } from '@/lib/errorHandler';
 import Layout from '@/components/layout/Layout';
 import { supabase } from '@/integrations/supabase/client';
 import { FloatingInput, FloatingTextarea } from '@/components/ui/FloatingInput';
@@ -46,19 +47,19 @@ const RequestPage = () => {
 
   // Auto-save draft
   useEffect(() => {
-    const saved = localStorage.getItem('request-draft');
+    const saved = sessionStorage.getItem('request-draft');
     if (saved) {
       try {
         setFormData(JSON.parse(saved));
-      } catch (e) {
-        console.error('Failed to load draft');
+      } catch {
+        // Silently ignore
       }
     }
   }, []);
 
   useEffect(() => {
     if (formData.fullName || formData.whatsapp || formData.serviceType) {
-      localStorage.setItem('request-draft', JSON.stringify(formData));
+      sessionStorage.setItem('request-draft', JSON.stringify(formData));
     }
   }, [formData]);
 
@@ -138,7 +139,7 @@ const RequestPage = () => {
 
       if (error) throw error;
 
-      localStorage.removeItem('request-draft');
+      sessionStorage.removeItem('request-draft');
       setShowConfetti(true);
       setIsSubmitted(true);
 
@@ -148,10 +149,10 @@ const RequestPage = () => {
       });
 
       setTimeout(() => setShowConfetti(false), 3000);
-    } catch (error: any) {
+    } catch (error: unknown) {
       toast({
         title: 'حدث خطأ',
-        description: error.message || 'يرجى المحاولة مرة أخرى',
+        description: getSafeErrorMessage(error),
         variant: 'destructive',
       });
     } finally {

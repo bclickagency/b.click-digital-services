@@ -1,6 +1,7 @@
 import { useState, useEffect, useMemo } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
+import { getSafeErrorMessage } from '@/lib/errorHandler';
 import { 
   UserPlus, Trash2, Shield, User, Mail, Search, 
   Users as UsersIcon, FolderPlus, Briefcase, Loader2
@@ -67,7 +68,7 @@ const UserManager = ({ currentUserId }: UserManagerProps) => {
   const updateRole = async (id: string, role: 'admin' | 'team_member' | 'client') => {
     const { error } = await supabase.from('user_roles').update({ role: role as any }).eq('id', id);
     if (error) {
-      toast({ title: 'خطأ', description: error.message, variant: 'destructive' });
+      toast({ title: 'خطأ', description: getSafeErrorMessage(error), variant: 'destructive' });
     } else {
       setUsers(users.map(u => u.id === id ? { ...u, role } : u));
       toast({ title: 'تم التحديث', description: 'تم تحديث صلاحيات المستخدم' });

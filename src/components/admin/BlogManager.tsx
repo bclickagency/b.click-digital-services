@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
+import { getSafeErrorMessage } from '@/lib/errorHandler';
 import RichTextEditor from './RichTextEditor';
 import { Plus, Edit2, Trash2, Eye, Clock, Calendar, X, Save } from 'lucide-react';
 
@@ -81,7 +82,7 @@ const BlogManager = ({ userRole }: BlogManagerProps) => {
         .eq('id', editingPost.id);
 
       if (error) {
-        toast({ title: 'خطأ', description: error.message, variant: 'destructive' });
+        toast({ title: 'خطأ', description: getSafeErrorMessage(error), variant: 'destructive' });
       } else {
         toast({ title: 'تم التحديث', description: 'تم تحديث المقال بنجاح' });
         fetchPosts();
@@ -95,7 +96,7 @@ const BlogManager = ({ userRole }: BlogManagerProps) => {
         .insert(postData as any);
 
       if (error) {
-        toast({ title: 'خطأ', description: error.message, variant: 'destructive' });
+        toast({ title: 'خطأ', description: getSafeErrorMessage(error), variant: 'destructive' });
       } else {
         toast({ title: 'تم الإنشاء', description: 'تم إنشاء المقال بنجاح' });
         fetchPosts();
