@@ -164,10 +164,9 @@ const SalesAssistant = () => {
     try {
       await streamChat(newMessages);
     } catch (error) {
-      console.error('Chat error:', error);
       toast({
         title: 'خطأ',
-        description: error instanceof Error ? error.message : 'حدث خطأ في الاتصال',
+        description: getSafeErrorMessage(error),
         variant: 'destructive',
       });
     } finally {

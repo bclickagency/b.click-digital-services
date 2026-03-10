@@ -36,8 +36,8 @@ const AdminLogin = () => {
 
       toast({ title: 'مرحباً بك!', description: 'تم تسجيل الدخول بنجاح' });
       navigate('/dashboard');
-    } catch (error: any) {
-      toast({ title: 'خطأ', description: error.message, variant: 'destructive' });
+    } catch (error: unknown) {
+      toast({ title: 'خطأ', description: getSafeErrorMessage(error), variant: 'destructive' });
     } finally {
       setIsLoading(false);
     }

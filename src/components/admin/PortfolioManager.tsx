@@ -78,7 +78,7 @@ const PortfolioManager = ({ userRole }: PortfolioManagerProps) => {
         .eq('id', editingItem.id);
 
       if (error) {
-        toast({ title: 'خطأ', description: error.message, variant: 'destructive' });
+        toast({ title: 'خطأ', description: getSafeErrorMessage(error), variant: 'destructive' });
       } else {
         toast({ title: 'تم التحديث', description: 'تم تحديث المشروع بنجاح' });
         fetchItems();
@@ -91,7 +91,7 @@ const PortfolioManager = ({ userRole }: PortfolioManagerProps) => {
         .insert(itemData as any);
 
       if (error) {
-        toast({ title: 'خطأ', description: error.message, variant: 'destructive' });
+        toast({ title: 'خطأ', description: getSafeErrorMessage(error), variant: 'destructive' });
       } else {
         toast({ title: 'تم الإنشاء', description: 'تم إنشاء المشروع بنجاح' });
         fetchItems();

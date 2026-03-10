@@ -81,7 +81,7 @@ const BlogManager = ({ userRole }: BlogManagerProps) => {
         .eq('id', editingPost.id);
 
       if (error) {
-        toast({ title: 'خطأ', description: error.message, variant: 'destructive' });
+        toast({ title: 'خطأ', description: getSafeErrorMessage(error), variant: 'destructive' });
       } else {
         toast({ title: 'تم التحديث', description: 'تم تحديث المقال بنجاح' });
         fetchPosts();
@@ -95,7 +95,7 @@ const BlogManager = ({ userRole }: BlogManagerProps) => {
         .insert(postData as any);
 
       if (error) {
-        toast({ title: 'خطأ', description: error.message, variant: 'destructive' });
+        toast({ title: 'خطأ', description: getSafeErrorMessage(error), variant: 'destructive' });
       } else {
         toast({ title: 'تم الإنشاء', description: 'تم إنشاء المقال بنجاح' });
         fetchPosts();

@@ -148,10 +148,10 @@ const RequestPage = () => {
       });
 
       setTimeout(() => setShowConfetti(false), 3000);
-    } catch (error: any) {
+    } catch (error: unknown) {
       toast({
         title: 'حدث خطأ',
-        description: error.message || 'يرجى المحاولة مرة أخرى',
+        description: getSafeErrorMessage(error),
         variant: 'destructive',
       });
     } finally {
