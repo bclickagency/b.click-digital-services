@@ -37,25 +37,25 @@ const SalesAssistant = () => {
     scrollToBottom();
   }, [messages]);
 
-  // Load chat history from localStorage
+  // Load chat history from sessionStorage (more secure than localStorage)
   useEffect(() => {
-    const saved = localStorage.getItem('bclick-chat-history');
+    const saved = sessionStorage.getItem('bclick-chat-history');
     if (saved) {
       try {
         const parsed = JSON.parse(saved);
         if (parsed.length > 1) {
           setMessages(parsed.map((m: any) => ({ ...m, timestamp: new Date(m.timestamp) })));
         }
-      } catch (e) {
-        console.error('Failed to parse chat history');
+      } catch {
+        // Silently ignore parse errors
       }
     }
   }, []);
 
-  // Save chat history
+  // Save chat history to sessionStorage (clears on tab close)
   useEffect(() => {
     if (messages.length > 1) {
-      localStorage.setItem('bclick-chat-history', JSON.stringify(messages));
+      sessionStorage.setItem('bclick-chat-history', JSON.stringify(messages));
     }
   }, [messages]);
 
