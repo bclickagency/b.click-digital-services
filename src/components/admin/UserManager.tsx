@@ -105,7 +105,8 @@ const UserManager = ({ currentUserId }: UserManagerProps) => {
       setShowProjectModal(null);
       setProjectForm({ title: '', description: '', service_type: '', priority: 'medium', status: 'pending' });
     } catch (err: any) {
-      toast({ title: 'خطأ', description: err.message, variant: 'destructive' });
+      const { getSafeErrorMessage } = await import('@/lib/errorHandler');
+      toast({ title: 'خطأ', description: getSafeErrorMessage(err), variant: 'destructive' });
     } finally {
       setCreatingProject(false);
     }

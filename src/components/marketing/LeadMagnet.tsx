@@ -85,7 +85,7 @@ const LeadMagnet = ({
     await new Promise(resolve => setTimeout(resolve, 1500));
     
     // Here you would typically send the data to your backend
-    console.log('Lead captured:', data);
+    // Lead data captured - do not log PII
     
     setIsSubmitted(true);
     toast({

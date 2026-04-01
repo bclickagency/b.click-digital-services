@@ -45,7 +45,8 @@ const ResetPassword = () => {
       toast({ title: 'تم التحديث', description: 'تم تغيير كلمة المرور بنجاح' });
       navigate('/login');
     } catch (error: any) {
-      toast({ title: 'خطأ', description: error.message, variant: 'destructive' });
+      const { getSafeErrorMessage } = await import('@/lib/errorHandler');
+      toast({ title: 'خطأ', description: getSafeErrorMessage(error), variant: 'destructive' });
     } finally {
       setIsLoading(false);
     }

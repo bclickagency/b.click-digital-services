@@ -58,10 +58,10 @@ const Dashboard = () => {
 
   useEffect(() => {
     const checkAuth = async () => {
-      const { data: { session } } = await supabase.auth.getSession();
-      if (!session) { navigate('/admin'); return; }
-      setUser(session.user);
-      const { data: roles } = await supabase.from('user_roles').select('role').eq('user_id', session.user.id);
+      const { data: { user: authUser }, error: userError } = await supabase.auth.getUser();
+      if (userError || !authUser) { navigate('/admin'); return; }
+      setUser(authUser);
+      const { data: roles } = await supabase.from('user_roles').select('role').eq('user_id', authUser.id);
       if (!roles || roles.length === 0) { await supabase.auth.signOut(); navigate('/admin'); return; }
       setUserRole(roles[0].role);
       fetchRequests();
