@@ -51,6 +51,13 @@ export type Database = {
             foreignKeyName: "activity_log_user_id_fkey"
             columns: ["user_id"]
             isOneToOne: false
+            referencedRelation: "featured_profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "activity_log_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
             referencedRelation: "profiles"
             referencedColumns: ["id"]
           },
@@ -165,7 +172,21 @@ export type Database = {
             foreignKeyName: "client_messages_receiver_id_fkey"
             columns: ["receiver_id"]
             isOneToOne: false
+            referencedRelation: "featured_profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "client_messages_receiver_id_fkey"
+            columns: ["receiver_id"]
+            isOneToOne: false
             referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "client_messages_sender_id_fkey"
+            columns: ["sender_id"]
+            isOneToOne: false
+            referencedRelation: "featured_profiles"
             referencedColumns: ["id"]
           },
           {
@@ -260,6 +281,13 @@ export type Database = {
           updated_at?: string
         }
         Relationships: [
+          {
+            foreignKeyName: "client_projects_client_id_fkey"
+            columns: ["client_id"]
+            isOneToOne: false
+            referencedRelation: "featured_profiles"
+            referencedColumns: ["id"]
+          },
           {
             foreignKeyName: "client_projects_client_id_fkey"
             columns: ["client_id"]
@@ -475,6 +503,13 @@ export type Database = {
             foreignKeyName: "notifications_user_id_fkey"
             columns: ["user_id"]
             isOneToOne: false
+            referencedRelation: "featured_profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "notifications_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
             referencedRelation: "profiles"
             referencedColumns: ["id"]
           },
@@ -634,6 +669,13 @@ export type Database = {
             foreignKeyName: "project_files_uploaded_by_fkey"
             columns: ["uploaded_by"]
             isOneToOne: false
+            referencedRelation: "featured_profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "project_files_uploaded_by_fkey"
+            columns: ["uploaded_by"]
+            isOneToOne: false
             referencedRelation: "profiles"
             referencedColumns: ["id"]
           },
@@ -713,7 +755,48 @@ export type Database = {
       }
     }
     Views: {
-      [_ in never]: never
+      featured_profiles: {
+        Row: {
+          avatar_url: string | null
+          bio: string | null
+          collaboration_start: string | null
+          company_name: string | null
+          full_name: string | null
+          id: string | null
+          industry: string | null
+          is_featured: boolean | null
+          logo_url: string | null
+          rating: number | null
+          testimonial: string | null
+        }
+        Insert: {
+          avatar_url?: string | null
+          bio?: string | null
+          collaboration_start?: string | null
+          company_name?: string | null
+          full_name?: string | null
+          id?: string | null
+          industry?: string | null
+          is_featured?: boolean | null
+          logo_url?: string | null
+          rating?: number | null
+          testimonial?: string | null
+        }
+        Update: {
+          avatar_url?: string | null
+          bio?: string | null
+          collaboration_start?: string | null
+          company_name?: string | null
+          full_name?: string | null
+          id?: string | null
+          industry?: string | null
+          is_featured?: boolean | null
+          logo_url?: string | null
+          rating?: number | null
+          testimonial?: string | null
+        }
+        Relationships: []
+      }
     }
     Functions: {
       has_role: {
