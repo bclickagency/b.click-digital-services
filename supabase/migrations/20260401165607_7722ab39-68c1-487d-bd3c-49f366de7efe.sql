@@ -1,0 +1,1 @@
+DROP POLICY IF EXISTS "Anyone can view featured profiles via direct query" ON public.profiles;

@@ -103,10 +103,8 @@ const Login = () => {
         navigate('/client');
       }
     } catch (error: any) {
-      const msg = error.message === 'Invalid login credentials'
-        ? 'بيانات الدخول غير صحيحة'
-        : error.message;
-      toast({ title: 'خطأ', description: msg, variant: 'destructive' });
+      const { getSafeErrorMessage } = await import('@/lib/errorHandler');
+      toast({ title: 'خطأ', description: getSafeErrorMessage(error), variant: 'destructive' });
     } finally {
       setIsLoading(false);
     }
