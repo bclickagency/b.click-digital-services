@@ -123,11 +123,10 @@ const DashboardOverview = ({ requests, contacts, onNavigate }: OverviewProps) =>
   const quickActions = [
     { label: 'الطلبات الجديدة', icon: FileText, tab: 'requests', count: stats.newCount },
     { label: 'الرسائل', icon: MessageCircle, tab: 'contacts', count: stats.newMessages },
-    { label: 'المحادثات', icon: MessagesSquare, tab: 'chat' },
+    { label: 'المحادثات', icon: MessageCircle, tab: 'chat' },
     { label: 'إدارة الأعمال', icon: Briefcase, tab: 'portfolio' },
   ];
 
-  const MessagesSquare = MessageCircle;
 
   const statusBadge = (status: RequestStatus) => {
     const map: Record<RequestStatus, { label: string; cls: string; dot: string }> = {
