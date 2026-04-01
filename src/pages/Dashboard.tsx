@@ -4,9 +4,10 @@ import { supabase } from '@/integrations/supabase/client';
 import { User } from '@supabase/supabase-js';
 import { 
   LayoutDashboard, FileText, Menu, MessagesSquare,
-  BookOpen, Briefcase, Users, Mail
+  BookOpen, Briefcase, Users, Mail, RefreshCw
 } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
+import { motion, AnimatePresence } from 'framer-motion';
 import BlogManager from '@/components/admin/BlogManager';
 import PortfolioManager from '@/components/admin/PortfolioManager';
 import UserManager from '@/components/admin/UserManager';
@@ -132,23 +133,6 @@ const Dashboard = () => {
     ...(userRole === 'admin' ? [{ id: 'users' as TabType, label: 'المستخدمين', icon: Users }] : []),
   ], [userRole, newRequestsCount, newContactsCount, unreadChatCount]);
 
-  if (loading) {
-    return (
-      <div className="min-h-screen bg-background flex items-center justify-center" dir="rtl">
-        <div className="flex flex-col items-center gap-4">
-          <div className="w-10 h-10 rounded-xl bg-primary flex items-center justify-center animate-pulse">
-            <span className="text-primary-foreground font-black text-sm">B</span>
-          </div>
-          <div className="flex items-center gap-2">
-            <div className="w-2 h-2 rounded-full bg-primary animate-bounce" style={{ animationDelay: '0ms' }} />
-            <div className="w-2 h-2 rounded-full bg-primary animate-bounce" style={{ animationDelay: '150ms' }} />
-            <div className="w-2 h-2 rounded-full bg-primary animate-bounce" style={{ animationDelay: '300ms' }} />
-          </div>
-        </div>
-      </div>
-    );
-  }
-
   const tabTitles: Record<TabType, string> = {
     overview: 'نظرة عامة',
     requests: 'إدارة الطلبات',
@@ -158,6 +142,26 @@ const Dashboard = () => {
     portfolio: 'إدارة الأعمال',
     users: 'إدارة المستخدمين',
   };
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-background flex items-center justify-center" dir="rtl">
+        <div className="flex flex-col items-center gap-4">
+          <div className="w-12 h-12 rounded-xl bg-primary flex items-center justify-center">
+            <RefreshCw className="w-5 h-5 text-primary-foreground animate-spin" />
+          </div>
+          <div className="space-y-2 text-center">
+            <p className="text-sm font-medium text-foreground">جاري تحميل لوحة التحكم</p>
+            <div className="flex items-center gap-1.5 justify-center">
+              <div className="w-1.5 h-1.5 rounded-full bg-primary animate-bounce" style={{ animationDelay: '0ms' }} />
+              <div className="w-1.5 h-1.5 rounded-full bg-primary animate-bounce" style={{ animationDelay: '150ms' }} />
+              <div className="w-1.5 h-1.5 rounded-full bg-primary animate-bounce" style={{ animationDelay: '300ms' }} />
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-background" dir="rtl">
@@ -175,16 +179,18 @@ const Dashboard = () => {
       {/* Main Content */}
       <div className="lg:mr-64 min-h-screen transition-all duration-300">
         {/* Top Bar */}
-        <header className="sticky top-0 z-30 bg-background/95 backdrop-blur-sm border-b border-border/50 px-4 lg:px-6 h-16 flex items-center justify-between">
+        <header className="sticky top-0 z-30 bg-background/80 backdrop-blur-xl border-b border-border/20 px-4 lg:px-6 h-14 flex items-center justify-between">
           <div className="flex items-center gap-3">
             <button onClick={() => setSidebarOpen(true)} className="lg:hidden p-2 rounded-xl hover:bg-muted/50 transition-colors">
               <Menu className="w-5 h-5 text-foreground" />
             </button>
-            <h1 className="text-lg font-semibold text-foreground">{tabTitles[activeTab]}</h1>
+            <div>
+              <h1 className="text-base font-semibold text-foreground">{tabTitles[activeTab]}</h1>
+            </div>
           </div>
           <div className="flex items-center gap-3">
-            <span className="text-xs text-muted-foreground hidden sm:block">{user?.email}</span>
-            <span className={`text-[10px] px-2 py-0.5 rounded-full font-medium hidden sm:block ${
+            <span className="text-[11px] text-muted-foreground hidden sm:block">{user?.email}</span>
+            <span className={`text-[10px] px-2 py-0.5 rounded-full font-semibold hidden sm:block ${
               userRole === 'admin' ? 'bg-primary/15 text-primary' : 'bg-muted text-muted-foreground'
             }`}>
               {userRole === 'admin' ? 'مدير' : 'عضو فريق'}
@@ -194,35 +200,45 @@ const Dashboard = () => {
 
         {/* Page Content */}
         <main className="p-4 lg:p-6">
-          {activeTab === 'overview' && (
-            <DashboardOverview
-              requests={requests}
-              contacts={contacts}
-              onNavigate={(tab) => setActiveTab(tab as TabType)}
-            />
-          )}
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={activeTab}
+              initial={{ opacity: 0, y: 8 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -8 }}
+              transition={{ duration: 0.2 }}
+            >
+              {activeTab === 'overview' && (
+                <DashboardOverview
+                  requests={requests}
+                  contacts={contacts}
+                  onNavigate={(tab) => setActiveTab(tab as TabType)}
+                />
+              )}
 
-          {activeTab === 'requests' && (
-            <RequestsTab
-              requests={requests}
-              userRole={userRole}
-              searchQuery={searchQuery}
-              setSearchQuery={setSearchQuery}
-              statusFilter={statusFilter}
-              setStatusFilter={setStatusFilter}
-              updateStatus={updateStatus}
-              deleteRequest={deleteRequest}
-            />
-          )}
+              {activeTab === 'requests' && (
+                <RequestsTab
+                  requests={requests}
+                  userRole={userRole}
+                  searchQuery={searchQuery}
+                  setSearchQuery={setSearchQuery}
+                  statusFilter={statusFilter}
+                  setStatusFilter={setStatusFilter}
+                  updateStatus={updateStatus}
+                  deleteRequest={deleteRequest}
+                />
+              )}
 
-          {activeTab === 'contacts' && (
-            <ContactsTab contacts={contacts} setContacts={setContacts} userRole={userRole} />
-          )}
+              {activeTab === 'contacts' && (
+                <ContactsTab contacts={contacts} setContacts={setContacts} userRole={userRole} />
+              )}
 
-          {activeTab === 'chat' && <ChatManager />}
-          {activeTab === 'blog' && userRole && <BlogManager userRole={userRole} />}
-          {activeTab === 'portfolio' && userRole && <PortfolioManager userRole={userRole} />}
-          {activeTab === 'users' && userRole === 'admin' && user && <UserManager currentUserId={user.id} />}
+              {activeTab === 'chat' && <ChatManager />}
+              {activeTab === 'blog' && userRole && <BlogManager userRole={userRole} />}
+              {activeTab === 'portfolio' && userRole && <PortfolioManager userRole={userRole} />}
+              {activeTab === 'users' && userRole === 'admin' && user && <UserManager currentUserId={user.id} />}
+            </motion.div>
+          </AnimatePresence>
         </main>
       </div>
     </div>
