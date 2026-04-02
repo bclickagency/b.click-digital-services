@@ -387,6 +387,119 @@ export type Database = {
         }
         Relationships: []
       }
+      job_applications: {
+        Row: {
+          availability: string | null
+          created_at: string
+          email: string
+          expected_salary: string | null
+          experience_years: string | null
+          expertise: string | null
+          freelance_experience: string | null
+          full_name: string
+          id: string
+          job_id: string | null
+          location: string | null
+          phone: string
+          portfolio_link: string | null
+          previous_experience: string | null
+          pricing_details: string | null
+          skill_level: string | null
+          specialization: string
+          status: string
+        }
+        Insert: {
+          availability?: string | null
+          created_at?: string
+          email: string
+          expected_salary?: string | null
+          experience_years?: string | null
+          expertise?: string | null
+          freelance_experience?: string | null
+          full_name: string
+          id?: string
+          job_id?: string | null
+          location?: string | null
+          phone: string
+          portfolio_link?: string | null
+          previous_experience?: string | null
+          pricing_details?: string | null
+          skill_level?: string | null
+          specialization: string
+          status?: string
+        }
+        Update: {
+          availability?: string | null
+          created_at?: string
+          email?: string
+          expected_salary?: string | null
+          experience_years?: string | null
+          expertise?: string | null
+          freelance_experience?: string | null
+          full_name?: string
+          id?: string
+          job_id?: string | null
+          location?: string | null
+          phone?: string
+          portfolio_link?: string | null
+          previous_experience?: string | null
+          pricing_details?: string | null
+          skill_level?: string | null
+          specialization?: string
+          status?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "job_applications_job_id_fkey"
+            columns: ["job_id"]
+            isOneToOne: false
+            referencedRelation: "job_listings"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      job_listings: {
+        Row: {
+          created_at: string
+          department: string
+          description: string | null
+          display_order: number | null
+          id: string
+          is_active: boolean | null
+          location: string
+          requirements: string[] | null
+          title: string
+          type: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          department: string
+          description?: string | null
+          display_order?: number | null
+          id?: string
+          is_active?: boolean | null
+          location?: string
+          requirements?: string[] | null
+          title: string
+          type?: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          department?: string
+          description?: string | null
+          display_order?: number | null
+          id?: string
+          is_active?: boolean | null
+          location?: string
+          requirements?: string[] | null
+          title?: string
+          type?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       messages: {
         Row: {
           content: string | null
@@ -448,6 +561,7 @@ export type Database = {
           created_at: string
           email: string
           id: string
+          interests: string[] | null
           is_active: boolean
           source: string | null
         }
@@ -455,6 +569,7 @@ export type Database = {
           created_at?: string
           email: string
           id?: string
+          interests?: string[] | null
           is_active?: boolean
           source?: string | null
         }
@@ -462,6 +577,7 @@ export type Database = {
           created_at?: string
           email?: string
           id?: string
+          interests?: string[] | null
           is_active?: boolean
           source?: string | null
         }
@@ -568,6 +684,54 @@ export type Database = {
           status?: string
           technologies?: string[] | null
           title?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      pricing_plans: {
+        Row: {
+          billing_period: string | null
+          created_at: string
+          currency: string
+          description: string | null
+          display_order: number | null
+          features: string[] | null
+          id: string
+          is_active: boolean | null
+          is_popular: boolean | null
+          name: string
+          price: number
+          service_type: string | null
+          updated_at: string
+        }
+        Insert: {
+          billing_period?: string | null
+          created_at?: string
+          currency?: string
+          description?: string | null
+          display_order?: number | null
+          features?: string[] | null
+          id?: string
+          is_active?: boolean | null
+          is_popular?: boolean | null
+          name: string
+          price?: number
+          service_type?: string | null
+          updated_at?: string
+        }
+        Update: {
+          billing_period?: string | null
+          created_at?: string
+          currency?: string
+          description?: string | null
+          display_order?: number | null
+          features?: string[] | null
+          id?: string
+          is_active?: boolean | null
+          is_popular?: boolean | null
+          name?: string
+          price?: number
+          service_type?: string | null
           updated_at?: string
         }
         Relationships: []
@@ -729,6 +893,78 @@ export type Database = {
           utm_medium?: string | null
           utm_source?: string | null
           whatsapp?: string
+        }
+        Relationships: []
+      }
+      site_content: {
+        Row: {
+          content: Json
+          created_at: string
+          display_order: number | null
+          id: string
+          is_active: boolean | null
+          section_key: string
+          title: string | null
+          updated_at: string
+        }
+        Insert: {
+          content?: Json
+          created_at?: string
+          display_order?: number | null
+          id?: string
+          is_active?: boolean | null
+          section_key: string
+          title?: string | null
+          updated_at?: string
+        }
+        Update: {
+          content?: Json
+          created_at?: string
+          display_order?: number | null
+          id?: string
+          is_active?: boolean | null
+          section_key?: string
+          title?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      team_members: {
+        Row: {
+          avatar_url: string | null
+          bio: string | null
+          created_at: string
+          display_order: number | null
+          id: string
+          is_active: boolean | null
+          name: string
+          role: string
+          social_links: Json | null
+          updated_at: string
+        }
+        Insert: {
+          avatar_url?: string | null
+          bio?: string | null
+          created_at?: string
+          display_order?: number | null
+          id?: string
+          is_active?: boolean | null
+          name: string
+          role: string
+          social_links?: Json | null
+          updated_at?: string
+        }
+        Update: {
+          avatar_url?: string | null
+          bio?: string | null
+          created_at?: string
+          display_order?: number | null
+          id?: string
+          is_active?: boolean | null
+          name?: string
+          role?: string
+          social_links?: Json | null
+          updated_at?: string
         }
         Relationships: []
       }
