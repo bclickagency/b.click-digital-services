@@ -4,7 +4,8 @@ import { supabase } from '@/integrations/supabase/client';
 import { User } from '@supabase/supabase-js';
 import { 
   LayoutDashboard, FileText, Menu, MessagesSquare,
-  BookOpen, Briefcase, Users, Mail, RefreshCw
+  BookOpen, Briefcase, Users, Mail, RefreshCw,
+  Globe, UserCircle, DollarSign, Newspaper, BriefcaseBusiness
 } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -16,6 +17,11 @@ import RequestsTab from '@/components/admin/RequestsTab';
 import ContactsTab from '@/components/admin/ContactsTab';
 import DashboardOverview from '@/components/admin/DashboardOverview';
 import DashboardSidebar, { type TabType, type SidebarTab } from '@/components/admin/DashboardSidebar';
+import SiteContentManager from '@/components/admin/SiteContentManager';
+import TeamManager from '@/components/admin/TeamManager';
+import CareersManager from '@/components/admin/CareersManager';
+import PricingManager from '@/components/admin/PricingManager';
+import NewsletterManager from '@/components/admin/NewsletterManager';
 import { useUnreadCount } from '@/hooks/useChat';
 
 type RequestStatus = 'new' | 'contacted' | 'closed';
@@ -123,6 +129,8 @@ const Dashboard = () => {
   const newRequestsCount = useMemo(() => requests.filter(r => r.status === 'new').length, [requests]);
   const newContactsCount = useMemo(() => contacts.filter(c => c.status === 'new').length, [contacts]);
 
+  const isAdmin = userRole === 'admin';
+
   const tabs: SidebarTab[] = useMemo(() => [
     { id: 'overview', label: 'نظرة عامة', icon: LayoutDashboard },
     { id: 'requests', label: 'الطلبات', icon: FileText, badge: newRequestsCount },
@@ -130,10 +138,17 @@ const Dashboard = () => {
     { id: 'chat', label: 'المحادثات', icon: MessagesSquare, badge: unreadChatCount },
     { id: 'blog', label: 'المدونة', icon: BookOpen },
     { id: 'portfolio', label: 'الأعمال', icon: Briefcase },
-    ...(userRole === 'admin' ? [{ id: 'users' as TabType, label: 'المستخدمين', icon: Users }] : []),
-  ], [userRole, newRequestsCount, newContactsCount, unreadChatCount]);
+    ...(isAdmin ? [
+      { id: 'users' as TabType, label: 'المستخدمين', icon: Users },
+      { id: 'site_content' as TabType, label: 'محتوى الموقع', icon: Globe },
+      { id: 'team' as TabType, label: 'الفريق', icon: UserCircle },
+      { id: 'careers' as TabType, label: 'الوظائف', icon: BriefcaseBusiness },
+      { id: 'pricing' as TabType, label: 'الباقات', icon: DollarSign },
+      { id: 'newsletter' as TabType, label: 'النشرة البريدية', icon: Newspaper },
+    ] : []),
+  ], [userRole, newRequestsCount, newContactsCount, unreadChatCount, isAdmin]);
 
-  const tabTitles: Record<TabType, string> = {
+  const tabTitles: Record<string, string> = {
     overview: 'نظرة عامة',
     requests: 'إدارة الطلبات',
     contacts: 'رسائل التواصل',
@@ -141,6 +156,11 @@ const Dashboard = () => {
     blog: 'إدارة المدونة',
     portfolio: 'إدارة الأعمال',
     users: 'إدارة المستخدمين',
+    site_content: 'محتوى الموقع',
+    team: 'إدارة الفريق',
+    careers: 'إدارة الوظائف',
+    pricing: 'إدارة الباقات',
+    newsletter: 'النشرة البريدية',
   };
 
   if (loading) {
@@ -176,16 +196,14 @@ const Dashboard = () => {
         onClose={() => setSidebarOpen(false)}
       />
 
-      {/* Main Content */}
       <div className="lg:mr-64 min-h-screen transition-all duration-300">
-        {/* Top Bar */}
         <header className="sticky top-0 z-30 bg-background/80 backdrop-blur-xl border-b border-border/20 px-4 lg:px-6 h-14 flex items-center justify-between">
           <div className="flex items-center gap-3">
             <button onClick={() => setSidebarOpen(true)} className="lg:hidden p-2 rounded-xl hover:bg-muted/50 transition-colors">
               <Menu className="w-5 h-5 text-foreground" />
             </button>
             <div>
-              <h1 className="text-base font-semibold text-foreground">{tabTitles[activeTab]}</h1>
+              <h1 className="text-base font-semibold text-foreground">{tabTitles[activeTab] || activeTab}</h1>
             </div>
           </div>
           <div className="flex items-center gap-3">
@@ -198,7 +216,6 @@ const Dashboard = () => {
           </div>
         </header>
 
-        {/* Page Content */}
         <main className="p-4 lg:p-6">
           <AnimatePresence mode="wait">
             <motion.div
@@ -209,34 +226,21 @@ const Dashboard = () => {
               transition={{ duration: 0.2 }}
             >
               {activeTab === 'overview' && (
-                <DashboardOverview
-                  requests={requests}
-                  contacts={contacts}
-                  onNavigate={(tab) => setActiveTab(tab as TabType)}
-                />
+                <DashboardOverview requests={requests} contacts={contacts} onNavigate={(tab) => setActiveTab(tab as TabType)} />
               )}
-
               {activeTab === 'requests' && (
-                <RequestsTab
-                  requests={requests}
-                  userRole={userRole}
-                  searchQuery={searchQuery}
-                  setSearchQuery={setSearchQuery}
-                  statusFilter={statusFilter}
-                  setStatusFilter={setStatusFilter}
-                  updateStatus={updateStatus}
-                  deleteRequest={deleteRequest}
-                />
+                <RequestsTab requests={requests} userRole={userRole} searchQuery={searchQuery} setSearchQuery={setSearchQuery} statusFilter={statusFilter} setStatusFilter={setStatusFilter} updateStatus={updateStatus} deleteRequest={deleteRequest} />
               )}
-
-              {activeTab === 'contacts' && (
-                <ContactsTab contacts={contacts} setContacts={setContacts} userRole={userRole} />
-              )}
-
+              {activeTab === 'contacts' && <ContactsTab contacts={contacts} setContacts={setContacts} userRole={userRole} />}
               {activeTab === 'chat' && <ChatManager />}
               {activeTab === 'blog' && userRole && <BlogManager userRole={userRole} />}
               {activeTab === 'portfolio' && userRole && <PortfolioManager userRole={userRole} />}
-              {activeTab === 'users' && userRole === 'admin' && user && <UserManager currentUserId={user.id} />}
+              {activeTab === 'users' && isAdmin && user && <UserManager currentUserId={user.id} />}
+              {activeTab === 'site_content' && isAdmin && <SiteContentManager />}
+              {activeTab === 'team' && isAdmin && <TeamManager />}
+              {activeTab === 'careers' && isAdmin && <CareersManager />}
+              {activeTab === 'pricing' && isAdmin && <PricingManager />}
+              {activeTab === 'newsletter' && isAdmin && <NewsletterManager />}
             </motion.div>
           </AnimatePresence>
         </main>
