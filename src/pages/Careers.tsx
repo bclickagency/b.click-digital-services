@@ -1,16 +1,11 @@
+import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { Link } from 'react-router-dom';
 import { MapPin, Clock, Briefcase, Users, Zap, Heart, Coffee, Laptop } from 'lucide-react';
 import Layout from '@/components/layout/Layout';
 import SEO from '@/components/SEO';
 import PageHero from '@/components/layout/PageHero';
-
-const jobs = [
-  { id: 1, title: 'مصمم UI/UX', type: 'دوام كامل', location: 'عن بُعد', department: 'التصميم', description: 'نبحث عن مصمم UI/UX موهوب لإنشاء تجارب مستخدم استثنائية لمشاريعنا المتنوعة.' },
-  { id: 2, title: 'مطور Full Stack', type: 'دوام كامل', location: 'عن بُعد', department: 'التطوير', description: 'نبحث عن مطور Full Stack متمرس للعمل على مشاريع ويب متقدمة باستخدام React و Node.js.' },
-  { id: 3, title: 'أخصائي تسويق رقمي', type: 'دوام كامل', location: 'عن بُعد', department: 'التسويق', description: 'نبحث عن أخصائي تسويق رقمي لإدارة حملات العملاء وتحقيق نتائج مميزة.' },
-  { id: 4, title: 'مدير مشاريع', type: 'دوام جزئي', location: 'عن بُعد', department: 'الإدارة', description: 'نبحث عن مدير مشاريع لتنسيق العمل بين الفرق وضمان تسليم المشاريع في الوقت المحدد.' },
-];
+import JobApplicationForm from '@/components/careers/JobApplicationForm';
+import { supabase } from '@/integrations/supabase/client';
 
 const benefits = [
   { icon: Laptop, title: 'العمل عن بُعد', description: 'اعمل من أي مكان في العالم بمرونة كاملة' },
@@ -21,7 +16,33 @@ const benefits = [
   { icon: Coffee, title: 'ثقافة إيجابية', description: 'بيئة عمل ممتعة ومحفزة' },
 ];
 
+interface Job {
+  id: string;
+  title: string;
+  type: string;
+  location: string;
+  department: string;
+  description: string | null;
+}
+
 const CareersPage = () => {
+  const [jobs, setJobs] = useState<Job[]>([]);
+  const [selectedJob, setSelectedJob] = useState<Job | null>(null);
+  const [showForm, setShowForm] = useState(false);
+
+  useEffect(() => {
+    const fetchJobs = async () => {
+      const { data } = await supabase.from('job_listings').select('*').eq('is_active', true).order('display_order');
+      if (data) setJobs(data as Job[]);
+    };
+    fetchJobs();
+  }, []);
+
+  const openApplication = (job?: Job) => {
+    setSelectedJob(job || null);
+    setShowForm(true);
+  };
+
   return (
     <Layout>
       <SEO
@@ -79,16 +100,21 @@ const CareersPage = () => {
                     <h3 className="text-xl font-bold text-foreground">{job.title}</h3>
                     <span className="px-3 py-1 bg-primary/10 text-primary text-xs font-medium rounded-lg">{job.department}</span>
                   </div>
-                  <p className="text-muted-foreground text-sm mb-3">{job.description}</p>
+                  {job.description && <p className="text-muted-foreground text-sm mb-3">{job.description}</p>}
                   <div className="flex flex-wrap items-center gap-4 text-sm text-muted-foreground">
                     <span className="flex items-center gap-1"><Briefcase className="w-4 h-4" />{job.type}</span>
                     <span className="flex items-center gap-1"><MapPin className="w-4 h-4" />{job.location}</span>
                   </div>
                 </div>
-                <Link to="/contact" className="btn-primary text-sm whitespace-nowrap">تقدم الآن</Link>
+                <button onClick={() => openApplication(job)} className="btn-primary text-sm whitespace-nowrap">تقدم الآن</button>
               </div>
             </motion.div>
           ))}
+          {jobs.length === 0 && (
+            <div className="text-center py-12 text-muted-foreground">
+              <p>لا توجد وظائف متاحة حالياً. تابعنا للحصول على فرص جديدة!</p>
+            </div>
+          )}
         </div>
       </section>
 
@@ -97,9 +123,16 @@ const CareersPage = () => {
         <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="glass-card text-center max-w-2xl mx-auto">
           <h2 className="text-2xl md:text-3xl font-bold text-foreground mb-4">لم تجد الوظيفة المناسبة؟</h2>
           <p className="text-muted-foreground mb-6">أرسل لنا سيرتك الذاتية وسنتواصل معك عند توفر فرصة مناسبة</p>
-          <Link to="/contact" className="btn-primary inline-flex items-center gap-2">تواصل معنا</Link>
+          <button onClick={() => openApplication()} className="btn-primary inline-flex items-center gap-2">تقدم الآن</button>
         </motion.div>
       </section>
+
+      <JobApplicationForm
+        isOpen={showForm}
+        onClose={() => setShowForm(false)}
+        jobId={selectedJob?.id}
+        jobTitle={selectedJob?.title}
+      />
     </Layout>
   );
 };
