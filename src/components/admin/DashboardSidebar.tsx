@@ -8,7 +8,7 @@ import { cn } from '@/lib/utils';
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 
-type TabType = 'overview' | 'requests' | 'contacts' | 'chat' | 'blog' | 'portfolio' | 'users';
+type TabType = 'overview' | 'requests' | 'contacts' | 'chat' | 'blog' | 'portfolio' | 'users' | 'site_content' | 'team' | 'careers' | 'pricing' | 'newsletter';
 
 interface SidebarTab {
   id: TabType;

@@ -248,8 +248,7 @@ const ContactPage = () => {
               rel="noopener noreferrer"
               className="btn-secondary inline-flex text-lg py-4 px-8"
             >
-              <MessageCircle className="w-6 h-6" />
-              تواصل عبر واتساب
+              تواصل مع B.CLICK
             </a>
           </div>
         </motion.div>
