@@ -1,19 +1,22 @@
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { ArrowLeft, TrendingUp, Users, Eye, Star } from 'lucide-react';
+import { useLanguage } from '@/contexts/LanguageContext';
 
 const FeaturedProject = () => {
+  const { t } = useLanguage();
+
   return (
     <section className="section-container">
-      <div className="text-center mb-12">
+      <div className="text-center mb-10">
         <motion.span
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          className="inline-block px-4 py-2 rounded-xl bg-secondary/10 text-secondary text-sm font-medium mb-4"
+          className="inline-block px-3 py-1.5 rounded-xl bg-primary/10 text-primary text-xs font-medium mb-3"
         >
-          <Star className="w-4 h-4 inline-block ml-1" />
-          مشروع مميز
+          <Star className="w-3 h-3 inline-block ml-1" />
+          {t.featured.badge}
         </motion.span>
         <motion.h2
           initial={{ opacity: 0, y: 20 }}
@@ -22,7 +25,7 @@ const FeaturedProject = () => {
           transition={{ delay: 0.1 }}
           className="section-title"
         >
-          كيف <span className="text-gradient">ضاعفنا</span> مبيعات عملائنا
+          {t.featured.title} <span className="text-gradient">{t.featured.titleHighlight}</span> {t.featured.titleSuffix}
         </motion.h2>
       </div>
 
@@ -37,82 +40,77 @@ const FeaturedProject = () => {
           <div className="relative aspect-video lg:aspect-auto overflow-hidden">
             <img
               src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=800&h=600&fit=crop"
-              alt="Case Study - متجر إلكتروني"
+              alt="Case Study"
               className="w-full h-full object-cover"
             />
             <div className="absolute inset-0 bg-gradient-to-t from-background/80 to-transparent lg:bg-gradient-to-l" />
             
-            {/* Stats Overlay */}
             <div className="absolute bottom-6 left-6 right-6 flex flex-wrap gap-3 lg:hidden">
               <div className="glass-card py-2 px-4">
-                <div className="flex items-center gap-2 text-secondary">
+                <div className="flex items-center gap-2 text-primary">
                   <TrendingUp className="w-4 h-4" />
-                  <span className="text-sm font-bold">+150%</span>
+                  <span className="text-xs font-bold">+150%</span>
                 </div>
               </div>
             </div>
           </div>
 
           {/* Content Side */}
-          <div className="p-8 lg:p-10 flex flex-col justify-center">
-            <span className="text-primary text-sm font-medium mb-2">متجر إلكتروني للأزياء</span>
-            <h3 className="text-2xl lg:text-3xl font-bold text-foreground mb-4">
+          <div className="p-6 lg:p-8 flex flex-col justify-center">
+            <span className="text-primary text-xs font-medium mb-2">متجر إلكتروني للأزياء</span>
+            <h3 className="text-xl lg:text-2xl font-bold text-foreground mb-3">
               زيادة المبيعات بنسبة 150% خلال 3 أشهر
             </h3>
             
-            {/* Challenge */}
-            <div className="mb-6">
-              <h4 className="text-sm font-semibold text-foreground mb-2">التحدي:</h4>
-              <p className="text-muted-foreground text-sm leading-relaxed">
+            <div className="mb-4">
+              <h4 className="text-xs font-semibold text-foreground mb-1">التحدي:</h4>
+              <p className="text-muted-foreground text-xs leading-relaxed">
                 متجر إلكتروني يعاني من ضعف المبيعات وتجربة مستخدم سيئة مع معدل ارتداد مرتفع يصل إلى 70%
               </p>
             </div>
 
-            {/* Solution */}
-            <div className="mb-6">
-              <h4 className="text-sm font-semibold text-foreground mb-2">الحل:</h4>
-              <p className="text-muted-foreground text-sm leading-relaxed">
+            <div className="mb-4">
+              <h4 className="text-xs font-semibold text-foreground mb-1">الحل:</h4>
+              <p className="text-muted-foreground text-xs leading-relaxed">
                 أعدنا تصميم المتجر بالكامل مع تحسين تجربة المستخدم وإطلاق حملات تسويقية مستهدفة
               </p>
             </div>
 
             {/* Results */}
-            <div className="grid grid-cols-3 gap-4 mb-8">
-              <div className="text-center p-4 rounded-xl bg-muted/50">
-                <TrendingUp className="w-6 h-6 text-secondary mx-auto mb-2" />
-                <div className="text-2xl font-bold text-foreground">+150%</div>
-                <div className="text-xs text-muted-foreground">زيادة المبيعات</div>
+            <div className="grid grid-cols-3 gap-3 mb-6">
+              <div className="text-center p-3 rounded-xl bg-muted/50">
+                <TrendingUp className="w-5 h-5 text-primary mx-auto mb-1" />
+                <div className="text-lg font-bold text-foreground">+150%</div>
+                <div className="text-[10px] text-muted-foreground">زيادة المبيعات</div>
               </div>
-              <div className="text-center p-4 rounded-xl bg-muted/50">
-                <Users className="w-6 h-6 text-primary mx-auto mb-2" />
-                <div className="text-2xl font-bold text-foreground">+80%</div>
-                <div className="text-xs text-muted-foreground">عملاء جدد</div>
+              <div className="text-center p-3 rounded-xl bg-muted/50">
+                <Users className="w-5 h-5 text-primary mx-auto mb-1" />
+                <div className="text-lg font-bold text-foreground">+80%</div>
+                <div className="text-[10px] text-muted-foreground">عملاء جدد</div>
               </div>
-              <div className="text-center p-4 rounded-xl bg-muted/50">
-                <Eye className="w-6 h-6 text-secondary mx-auto mb-2" />
-                <div className="text-2xl font-bold text-foreground">-45%</div>
-                <div className="text-xs text-muted-foreground">معدل الارتداد</div>
+              <div className="text-center p-3 rounded-xl bg-muted/50">
+                <Eye className="w-5 h-5 text-primary mx-auto mb-1" />
+                <div className="text-lg font-bold text-foreground">-45%</div>
+                <div className="text-[10px] text-muted-foreground">معدل الارتداد</div>
               </div>
             </div>
 
-            {/* Client Quote */}
-            <blockquote className="border-r-4 border-primary pr-4 mb-8">
-              <p className="text-muted-foreground text-sm italic mb-2">
+            <blockquote className="border-r-4 border-primary pr-4 mb-6">
+              <p className="text-muted-foreground text-xs italic mb-1">
                 "فريق B.CLICK غيّر مسار متجرنا بالكامل. النتائج فاقت كل توقعاتنا!"
               </p>
-              <cite className="text-foreground text-sm font-medium not-italic">
+              <cite className="text-foreground text-xs font-medium not-italic">
                 - أحمد محمود، مؤسس Fashion Store
               </cite>
             </blockquote>
 
-            {/* CTAs */}
-            <div className="flex flex-wrap gap-4">
-              <Link to="/portfolio" className="btn-primary">
-                شاهد المزيد من أعمالنا
-                <ArrowLeft className="w-5 h-5" />
+            <div className="flex flex-wrap gap-3">
+              <Link to="/portfolio" className="btn-primary text-xs">
+                {t.featured.viewMore}
+                <ArrowLeft className="w-4 h-4" />
               </Link>
-              <Link to="/request" className="btn-ghost">
-                هل تريد نتائج مشابهة؟
+              <Link to="/request" className="btn-ghost text-xs">
+                {t.featured.wantSimilar}
               </Link>
             </div>
           </div>
