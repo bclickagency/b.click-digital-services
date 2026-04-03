@@ -1,27 +1,20 @@
-## خطة التنفيذ
 
-### المرحلة 1: إصلاح نموذج التواصل + تحديث UI
-- إصلاح أي أخطاء في نموذج "تواصل معنا"
-- تغيير زر CTA إلى "تواصل مع B.CLICK" (نص فقط بدون أيقونة)
+# خطة تطوير B.CLICK - 8 تحسينات رئيسية
 
-### المرحلة 2: تحسين نظام النشرة البريدية
-- إضافة أعمدة `interests` لجدول newsletter_subscribers لحفظ اختيارات المستخدم (Portfolio, Blog, Careers)
-- إضافة خيارات Checkboxes في النموذج
-- إضافة تبويب "النشرة البريدية" في Dashboard لعرض وإدارة المشتركين
+## المرحلة 1: الأساسيات (الألوان + الخطوط + Footer)
+1. **إزالة اللون الثانوي** - توحيد كل الألوان على Primary (#5338FF) فقط
+2. **تصغير حجم الخطوط** - تقليل أحجام العناوين والنصوص بشكل متناسق
+3. **تحديث Footer** - إضافة أيقونات السوشيال ميديا (Facebook, Instagram, TikTok, LinkedIn, Pinterest, YouTube)
 
-### المرحلة 3: أقسام Dashboard للـ Admin فقط
-إنشاء جداول قاعدة بيانات لتخزين المحتوى القابل للتعديل:
-- `site_content` - جدول موحد لتخزين محتوى الأقسام (Results Spotlight, Hero Stats, FAQ, etc.)
-- `team_members` - أعضاء الفريق
-- `careers` - الوظائف المتاحة  
-- `pricing_plans` - الباقات والأسعار
+## المرحلة 2: تحسينات UI
+4. **Premium Dark Mode & Glassmorphism** - تحسين الـ Dark Mode بتأثيرات glassmorphism احترافية (blur, transparency, iOS-style)
+5. **Trusted Companies Enhancement** - تحويل لشريط infinite scroll مع تعطيل تأثير Dark Mode على اللوجوهات
+6. **Clients Showcase Section** - قسم جديد بشريط infinite scroll للعملاء مع دعم Dark Mode
 
-إضافة تبويبات في Dashboard (Admin فقط):
-- إدارة محتوى الموقع (Results, Trusted Companies, Hero Stats, Testimonials, FAQ)
-- إدارة الفريق
-- إدارة الوظائف
-- إدارة الباقات
-- إدارة النشرة البريدية
+## المرحلة 3: Hero Section
+7. **إعادة تصميم Hero** - تصميم futuristic مع neon cyber UI وgласsmorphism وanimated grid background وfloating glass pills، مع الحفاظ على الـ statistics grid الحالي
 
-### ⚠️ ملاحظة مهمة
-إرسال Bulk Email Campaigns (إيميلات جماعية) غير مدعوم في النظام الحالي لأنه يُعتبر بريد تسويقي (Marketing Email). يمكن إدارة المشتركين وتصفيتهم، لكن الإرسال الجماعي يتطلب خدمة بريد تسويقي خارجية.
+## المرحلة 4: Multi-Language
+8. **دعم اللغة الإنجليزية** - إنشاء نظام i18n كامل مع Language Switcher وRTL/LTR وLocal Storage
+
+> ⚠️ ملاحظة: الترجمة الكاملة للموقع (i18n) تتطلب ترجمة كل صفحة وكل مكون. سأبدأ بالبنية الأساسية والصفحات الرئيسية أولاً.
