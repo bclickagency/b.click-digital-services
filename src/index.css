@@ -54,25 +54,26 @@
     --popover: 0 0% 100%;
     --popover-foreground: 240 10% 10%;
 
-    /* Brand color #5337fe = HSL(248, 98%, 60%) */
-    --primary: 248 98% 60%;
+    /* Brand color #5338FF = HSL(248, 100%, 61%) */
+    --primary: 248 100% 61%;
     --primary-foreground: 0 0% 100%;
 
+    /* Secondary = Primary-derived (lighter) */
     --secondary: 248 40% 92%;
-    --secondary-foreground: 248 98% 40%;
+    --secondary-foreground: 248 100% 40%;
 
     --muted: 240 5% 96%;
     --muted-foreground: 240 5% 45%;
 
-    --accent: 248 98% 96%;
-    --accent-foreground: 248 98% 40%;
+    --accent: 248 100% 96%;
+    --accent-foreground: 248 100% 40%;
 
     --destructive: 0 84% 60%;
     --destructive-foreground: 0 0% 100%;
 
     --border: 240 6% 90%;
     --input: 240 6% 90%;
-    --ring: 248 98% 60%;
+    --ring: 248 100% 61%;
 
     --radius: 1rem;
 
@@ -86,7 +87,7 @@
     --shadow-glass: 0 4px 30px hsl(0 0% 0% / 0.08);
     --shadow-glass-hover: 0 8px 40px hsl(0 0% 0% / 0.12);
     --shadow-inner-glow: inset 0 1px 1px hsl(0 0% 100% / 0.4);
-    --shadow-brand-glow: inset 0 0 20px hsl(248 98% 60% / 0.1);
+    --shadow-brand-glow: inset 0 0 20px hsl(248 100% 61% / 0.1);
     
     /* Button specific */
     --btn-glass-bg: 0 0% 100% / 0.6;
@@ -94,68 +95,69 @@
 
     --sidebar-background: 248 20% 98%;
     --sidebar-foreground: 240 10% 10%;
-    --sidebar-primary: 248 98% 60%;
+    --sidebar-primary: 248 100% 61%;
     --sidebar-primary-foreground: 0 0% 100%;
     --sidebar-accent: 248 40% 96%;
-    --sidebar-accent-foreground: 248 98% 40%;
+    --sidebar-accent-foreground: 248 100% 40%;
     --sidebar-border: 240 6% 90%;
-    --sidebar-ring: 248 98% 60%;
+    --sidebar-ring: 248 100% 61%;
   }
 
   .dark {
-    --background: 225 25% 8%;
+    --background: 228 25% 7%;
     --foreground: 0 0% 98%;
 
-    --card: 225 25% 10%;
+    --card: 228 25% 9%;
     --card-foreground: 0 0% 98%;
 
-    --popover: 225 25% 10%;
+    --popover: 228 25% 9%;
     --popover-foreground: 0 0% 98%;
 
     /* Brand color stays consistent */
-    --primary: 248 98% 60%;
+    --primary: 248 100% 61%;
     --primary-foreground: 0 0% 100%;
 
-    --secondary: 248 30% 20%;
-    --secondary-foreground: 248 98% 80%;
+    /* Secondary = Primary-derived (dark mode) */
+    --secondary: 248 30% 18%;
+    --secondary-foreground: 248 100% 80%;
 
-    --muted: 225 20% 15%;
-    --muted-foreground: 225 10% 60%;
+    --muted: 228 20% 13%;
+    --muted-foreground: 228 10% 55%;
 
-    --accent: 248 30% 18%;
-    --accent-foreground: 248 98% 80%;
+    --accent: 248 30% 16%;
+    --accent-foreground: 248 100% 80%;
 
     --destructive: 0 62% 50%;
     --destructive-foreground: 0 0% 100%;
 
-    --border: 225 20% 18%;
-    --input: 225 20% 18%;
-    --ring: 248 98% 60%;
+    --border: 228 18% 15%;
+    --input: 228 18% 15%;
+    --ring: 248 100% 61%;
 
-    /* iOS Dark Glassmorphism */
-    --glass-bg: 225 25% 12% / 0.8;
-    --glass-border: 0 0% 100% / 0.08;
-    --glass-blur: 24px;
+    /* iOS Dark Glassmorphism - Premium */
+    --glass-bg: 228 25% 10% / 0.85;
+    --glass-border: 0 0% 100% / 0.06;
+    --glass-blur: 28px;
     --glass-saturate: 150%;
     
-    /* Dark shadows */
-    --shadow-glass: 0 4px 30px hsl(0 0% 0% / 0.3);
-    --shadow-glass-hover: 0 8px 40px hsl(0 0% 0% / 0.4);
-    --shadow-inner-glow: inset 0 1px 1px hsl(0 0% 100% / 0.06);
-    --shadow-brand-glow: inset 0 0 24px hsl(248 98% 60% / 0.15);
+    /* Dark shadows - deeper */
+    --shadow-glass: 0 4px 30px hsl(0 0% 0% / 0.35);
+    --shadow-glass-hover: 0 8px 40px hsl(0 0% 0% / 0.45);
+    --shadow-inner-glow: inset 0 1px 1px hsl(0 0% 100% / 0.04);
+    --shadow-brand-glow: inset 0 0 24px hsl(248 100% 61% / 0.12);
     
     /* Button specific dark */
-    --btn-glass-bg: 225 25% 15% / 0.7;
-    --btn-glass-border: 0 0% 100% / 0.1;
+    --btn-glass-bg: 228 25% 12% / 0.75;
+    --btn-glass-border: 0 0% 100% / 0.08;
 
-    --sidebar-background: 225 25% 6%;
+    --sidebar-background: 228 25% 5%;
     --sidebar-foreground: 0 0% 98%;
-    --sidebar-primary: 248 98% 60%;
+    --sidebar-primary: 248 100% 61%;
     --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 248 30% 15%;
-    --sidebar-accent-foreground: 248 98% 80%;
-    --sidebar-border: 225 20% 15%;
-    --sidebar-ring: 248 98% 60%;
+    --sidebar-accent: 248 30% 13%;
+    --sidebar-accent-foreground: 248 100% 80%;
+    --sidebar-border: 228 18% 13%;
+    --sidebar-ring: 248 100% 61%;
   }
 }
 
@@ -172,18 +174,23 @@
     @apply bg-background text-foreground antialiased;
     font-family: 'Expo Arabic', sans-serif;
     font-feature-settings: "rlig" 1, "calt" 1;
+    font-size: 14px;
   }
 
-  /* Arabic RTL Support */
+  /* RTL Support */
   [dir="rtl"] {
     text-align: right;
+  }
+
+  [dir="ltr"] {
+    text-align: left;
   }
 }
 
 @layer components {
   /* ==========================================
      iOS GLASSMORPHISM DESIGN SYSTEM
-     Brand Color: #5337fe (solid, no gradients)
+     Brand Color: #5338FF (single brand color)
      ========================================== */
 
   /* Core Glass Effect */
@@ -219,14 +226,14 @@
 
   /* Primary Button - Solid Brand Color */
   .btn-primary {
-    @apply inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl font-semibold text-white transition-all duration-200;
+    @apply inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl font-semibold text-sm text-white transition-all duration-200;
     background: hsl(var(--primary));
-    box-shadow: 0 4px 12px hsl(248 98% 60% / 0.3);
+    box-shadow: 0 4px 12px hsl(248 100% 61% / 0.3);
   }
 
   .btn-primary:hover {
     transform: translateY(-2px);
-    box-shadow: 0 6px 18px hsl(248 98% 60% / 0.4);
+    box-shadow: 0 6px 18px hsl(248 100% 61% / 0.4);
   }
 
   .btn-primary:active {
@@ -235,7 +242,7 @@
 
   /* Secondary Button - Glass with Brand Accent */
   .btn-secondary {
-    @apply inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl font-semibold transition-all duration-200;
+    @apply inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl font-semibold text-sm transition-all duration-200;
     background: hsla(var(--btn-glass-bg));
     border: 1px solid hsla(var(--btn-glass-border));
     color: hsl(var(--primary));
@@ -256,7 +263,7 @@
 
   /* Ghost Button - Minimal */
   .btn-ghost {
-    @apply inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl font-semibold transition-all duration-200;
+    @apply inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl font-semibold text-sm transition-all duration-200;
     @apply text-foreground;
     background: transparent;
   }
@@ -314,28 +321,28 @@
   }
 
   /* ==========================================
-     SECTION STYLES
+     SECTION STYLES - Reduced font sizes
      ========================================== */
 
   .section-container {
-    @apply container mx-auto px-4 py-20;
+    @apply container mx-auto px-4 py-16;
   }
 
   .section-title {
-    @apply text-3xl md:text-4xl lg:text-5xl font-bold mb-4;
+    @apply text-2xl md:text-3xl lg:text-4xl font-bold mb-3;
   }
 
   .section-subtitle {
-    @apply text-lg md:text-xl text-muted-foreground max-w-2xl;
+    @apply text-base md:text-lg text-muted-foreground max-w-2xl;
   }
 
-  /* Hero Styles */
+  /* Hero Styles - Reduced */
   .hero-title {
-    @apply text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-black leading-tight;
+    @apply text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-black leading-tight;
   }
 
   .hero-subtitle {
-    @apply text-lg md:text-xl lg:text-2xl text-muted-foreground;
+    @apply text-base md:text-lg lg:text-xl text-muted-foreground;
   }
 
   /* ==========================================
@@ -343,7 +350,7 @@
      ========================================== */
 
   .form-input {
-    @apply w-full px-5 py-4 rounded-2xl transition-all duration-300 outline-none;
+    @apply w-full px-4 py-3 rounded-2xl transition-all duration-300 outline-none text-sm;
     background: hsla(var(--glass-bg));
     border: 1px solid hsla(var(--glass-border));
     backdrop-filter: blur(12px);
@@ -357,7 +364,7 @@
   }
 
   .form-label {
-    @apply block text-sm font-medium mb-2 text-foreground;
+    @apply block text-xs font-medium mb-1.5 text-foreground;
   }
 
   /* ==========================================
@@ -377,7 +384,7 @@
      ========================================== */
 
   .status-badge {
-    @apply px-4 py-1.5 rounded-full text-xs font-semibold;
+    @apply px-3 py-1 rounded-full text-xs font-semibold;
     backdrop-filter: blur(8px);
     -webkit-backdrop-filter: blur(8px);
   }
@@ -468,29 +475,23 @@
 
 @keyframes pulse-glow {
   0%, 100% {
-    box-shadow: 0 0 20px hsl(248 98% 60% / 0.4);
+    box-shadow: 0 0 20px hsl(248 100% 61% / 0.4);
   }
   50% {
-    box-shadow: 0 0 40px hsl(248 98% 60% / 0.6);
+    box-shadow: 0 0 40px hsl(248 100% 61% / 0.6);
   }
 }
 
 @keyframes gradient-shift {
-  0% {
-    background-position: 0% 50%;
-  }
-  50% {
-    background-position: 100% 50%;
-  }
-  100% {
-    background-position: 0% 50%;
-  }
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
 }
 
 /* Scrollbar Styling */
 ::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
+  width: 6px;
+  height: 6px;
 }
 
 ::-webkit-scrollbar-track {
@@ -518,12 +519,8 @@
 }
 
 @keyframes shimmer {
-  0% {
-    background-position: 200% 0;
-  }
-  100% {
-    background-position: -200% 0;
-  }
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
 }
 
 /* Marquee Animation */
@@ -532,25 +529,21 @@
 }
 
 @keyframes marquee {
-  0% {
-    transform: translateX(0);
-  }
-  100% {
-    transform: translateX(-50%);
-  }
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
 }
 
 /* Prose Styling for Blog */
 .prose {
-  @apply text-foreground leading-relaxed;
+  @apply text-foreground leading-relaxed text-sm;
 }
 
 .prose h2 {
-  @apply text-2xl font-bold text-foreground mt-8 mb-4;
+  @apply text-xl font-bold text-foreground mt-8 mb-4;
 }
 
 .prose h3 {
-  @apply text-xl font-bold text-foreground mt-6 mb-3;
+  @apply text-lg font-bold text-foreground mt-6 mb-3;
 }
 
 .prose p {
@@ -575,13 +568,12 @@
 
 /* Section Padding */
 .section-padding {
-  @apply py-16 md:py-24 px-4;
+  @apply py-12 md:py-20 px-4;
 }
 
 /* Accessibility Styles */
 .high-contrast {
   --primary: 248 100% 50%;
-  --secondary: 0 100% 50%;
   --foreground: 0 0% 0%;
   --background: 0 0% 100%;
   --muted-foreground: 0 0% 20%;
@@ -594,15 +586,15 @@
 }
 
 .large-text {
-  font-size: 1.125rem;
+  font-size: 1rem;
 }
 
 .large-text .hero-title {
-  @apply text-5xl md:text-6xl lg:text-7xl xl:text-8xl;
+  @apply text-4xl md:text-5xl lg:text-6xl xl:text-7xl;
 }
 
 .large-text .section-title {
-  @apply text-4xl md:text-5xl lg:text-6xl;
+  @apply text-3xl md:text-4xl lg:text-5xl;
 }
 
 .reduced-motion * {
@@ -624,7 +616,7 @@
   position: absolute;
   inset: -2px;
   border-radius: inherit;
-  background: linear-gradient(135deg, hsl(var(--primary) / 0.3), hsl(var(--secondary) / 0.3));
+  background: linear-gradient(135deg, hsl(var(--primary) / 0.3), hsl(var(--primary) / 0.15));
   opacity: 0;
   transition: opacity 0.3s ease;
   z-index: -1;
@@ -664,8 +656,8 @@
 }
 
 .loading-dots span {
-  width: 6px;
-  height: 6px;
+  width: 5px;
+  height: 5px;
   border-radius: 50%;
   background: currentColor;
   animation: loading-dots 1.4s infinite ease-in-out both;
@@ -680,8 +672,6 @@
   40% { transform: scale(1); }
 }
 
-/* Parallax - removed unused */
-
 /* Reveal Animation on Scroll */
 .reveal-on-scroll {
   opacity: 0;
@@ -693,10 +683,6 @@
   opacity: 1;
   transform: translateY(0);
 }
-
-/* Stagger - removed unused */
-
-/* Card Flip - removed unused */
 
 /* Haptic Feedback Visual */
 @keyframes haptic-pulse {
@@ -735,6 +721,66 @@
 }
 
 /* ==========================================
+   NEON HERO ANIMATIONS
+   ========================================== */
+
+@keyframes neon-border-rotate {
+  0% { --angle: 0deg; }
+  100% { --angle: 360deg; }
+}
+
+@keyframes grid-move {
+  0% { transform: perspective(800px) rotateX(35deg) translateY(0); }
+  100% { transform: perspective(800px) rotateX(35deg) translateY(50px); }
+}
+
+@keyframes float-gentle {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-12px); }
+}
+
+@keyframes glow-pulse {
+  0%, 100% { opacity: 0.6; }
+  50% { opacity: 1; }
+}
+
+.animate-grid-move {
+  animation: grid-move 8s linear infinite;
+}
+
+.animate-float-gentle {
+  animation: float-gentle 4s ease-in-out infinite;
+}
+
+.animate-glow-pulse {
+  animation: glow-pulse 3s ease-in-out infinite;
+}
+
+/* Neon border animation */
+@property --angle {
+  syntax: "<angle>";
+  initial-value: 0deg;
+  inherits: false;
+}
+
+.neon-border {
+  --angle: 0deg;
+  border: 1px solid transparent;
+  background-origin: border-box;
+  background-clip: padding-box, border-box;
+  background-image: 
+    linear-gradient(hsl(var(--background)), hsl(var(--background))),
+    conic-gradient(from var(--angle), hsl(248 100% 61% / 0.1), hsl(248 100% 61% / 0.8), hsl(190 100% 50% / 0.6), hsl(248 100% 61% / 0.1));
+  animation: neon-border-rotate 4s linear infinite;
+}
+
+.dark .neon-border {
+  background-image: 
+    linear-gradient(hsl(228 25% 9%), hsl(228 25% 9%)),
+    conic-gradient(from var(--angle), hsl(248 100% 61% / 0.1), hsl(248 100% 61% / 0.8), hsl(190 100% 50% / 0.6), hsl(248 100% 61% / 0.1));
+}
+
+/* ==========================================
    MOBILE-FIRST RESPONSIVE IMPROVEMENTS
    ========================================== */
 
@@ -743,28 +789,28 @@
   .btn-primary,
   .btn-secondary,
   .btn-ghost {
-    @apply min-h-[44px] px-5;
+    @apply min-h-[44px] px-4;
   }
 
   /* Improve spacing on mobile */
   .section-container {
-    @apply py-12 px-4;
+    @apply py-10 px-4;
   }
 
   .section-title {
-    @apply text-2xl;
+    @apply text-xl;
   }
 
   .section-subtitle {
-    @apply text-base;
+    @apply text-sm;
   }
 
   .hero-title {
-    @apply text-3xl leading-tight;
+    @apply text-2xl leading-tight;
   }
 
   .hero-subtitle {
-    @apply text-base;
+    @apply text-sm;
   }
 
   /* Glass card mobile adjustments */
@@ -794,7 +840,7 @@
 
   /* Form inputs mobile */
   .form-input {
-    @apply text-base py-3;
+    @apply text-sm py-3;
     /* Prevents zoom on iOS */
     font-size: 16px !important;
   }
@@ -812,7 +858,7 @@
 /* Tablet specific */
 @media (min-width: 768px) and (max-width: 1024px) {
   .section-container {
-    @apply py-16 px-6;
+    @apply py-14 px-6;
   }
 }
 
