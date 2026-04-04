@@ -196,7 +196,7 @@ const Dashboard = () => {
         onClose={() => setSidebarOpen(false)}
       />
 
-      <div className="lg:mr-64 min-h-screen transition-all duration-300">
+      <div className="lg:mr-60 min-h-screen transition-all duration-300">
         <header className="sticky top-0 z-30 bg-background/80 backdrop-blur-xl border-b border-border/20 px-4 lg:px-6 h-14 flex items-center justify-between">
           <div className="flex items-center gap-3">
             <button onClick={() => setSidebarOpen(true)} className="lg:hidden p-2 rounded-xl hover:bg-muted/50 transition-colors">
