@@ -5,7 +5,8 @@ import { User } from '@supabase/supabase-js';
 import { 
   LayoutDashboard, FileText, Menu, MessagesSquare,
   BookOpen, Briefcase, Users, Mail, RefreshCw,
-  Globe, UserCircle, DollarSign, Newspaper, BriefcaseBusiness
+  Globe, UserCircle, DollarSign, Newspaper, BriefcaseBusiness,
+  ListTodo, BarChart3, Bell, Activity
 } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -22,6 +23,10 @@ import TeamManager from '@/components/admin/TeamManager';
 import CareersManager from '@/components/admin/CareersManager';
 import PricingManager from '@/components/admin/PricingManager';
 import NewsletterManager from '@/components/admin/NewsletterManager';
+import TaskManager from '@/components/admin/TaskManager';
+import ReportsAnalytics from '@/components/admin/ReportsAnalytics';
+import NotificationsCenter from '@/components/admin/NotificationsCenter';
+import ActivityLogs from '@/components/admin/ActivityLogs';
 import { useUnreadCount } from '@/hooks/useChat';
 
 type RequestStatus = 'new' | 'contacted' | 'closed';
@@ -136,8 +141,12 @@ const Dashboard = () => {
     { id: 'requests', label: 'الطلبات', icon: FileText, badge: newRequestsCount },
     { id: 'contacts', label: 'الرسائل', icon: Mail, badge: newContactsCount },
     { id: 'chat', label: 'المحادثات', icon: MessagesSquare, badge: unreadChatCount },
+    { id: 'tasks', label: 'المهام', icon: ListTodo },
     { id: 'blog', label: 'المدونة', icon: BookOpen },
     { id: 'portfolio', label: 'الأعمال', icon: Briefcase },
+    { id: 'reports', label: 'التقارير', icon: BarChart3 },
+    { id: 'notifications', label: 'الإشعارات', icon: Bell },
+    { id: 'activity_logs', label: 'سجل النشاط', icon: Activity },
     ...(isAdmin ? [
       { id: 'users' as TabType, label: 'المستخدمين', icon: Users },
       { id: 'site_content' as TabType, label: 'محتوى الموقع', icon: Globe },
@@ -153,8 +162,12 @@ const Dashboard = () => {
     requests: 'إدارة الطلبات',
     contacts: 'رسائل التواصل',
     chat: 'المحادثات',
+    tasks: 'إدارة المهام',
     blog: 'إدارة المدونة',
     portfolio: 'إدارة الأعمال',
+    reports: 'التقارير والتحليلات',
+    notifications: 'الإشعارات',
+    activity_logs: 'سجل النشاط',
     users: 'إدارة المستخدمين',
     site_content: 'محتوى الموقع',
     team: 'إدارة الفريق',
@@ -233,8 +246,12 @@ const Dashboard = () => {
               )}
               {activeTab === 'contacts' && <ContactsTab contacts={contacts} setContacts={setContacts} userRole={userRole} />}
               {activeTab === 'chat' && <ChatManager />}
+              {activeTab === 'tasks' && <TaskManager />}
               {activeTab === 'blog' && userRole && <BlogManager userRole={userRole} />}
               {activeTab === 'portfolio' && userRole && <PortfolioManager userRole={userRole} />}
+              {activeTab === 'reports' && <ReportsAnalytics />}
+              {activeTab === 'notifications' && <NotificationsCenter />}
+              {activeTab === 'activity_logs' && <ActivityLogs />}
               {activeTab === 'users' && isAdmin && user && <UserManager currentUserId={user.id} />}
               {activeTab === 'site_content' && isAdmin && <SiteContentManager />}
               {activeTab === 'team' && isAdmin && <TeamManager />}

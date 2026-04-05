@@ -29,8 +29,9 @@ const DashboardSidebar = ({ activeTab, setActiveTab, tabs, onLogout, userEmail, 
   const [collapsed, setCollapsed] = useState(false);
 
   const sections = [
-    { label: 'الرئيسية', ids: ['overview', 'requests', 'contacts', 'chat'] },
+    { label: 'الرئيسية', ids: ['overview', 'requests', 'contacts', 'chat', 'tasks'] },
     { label: 'المحتوى', ids: ['blog', 'portfolio'] },
+    { label: 'التحليلات', ids: ['reports', 'notifications', 'activity_logs'] },
     { label: 'الإدارة', ids: ['users', 'site_content', 'team', 'careers', 'pricing', 'newsletter'] },
   ];
 
