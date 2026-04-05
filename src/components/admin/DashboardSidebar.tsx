@@ -4,7 +4,7 @@ import { cn } from '@/lib/utils';
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 
-type TabType = 'overview' | 'requests' | 'contacts' | 'chat' | 'blog' | 'portfolio' | 'users' | 'site_content' | 'team' | 'careers' | 'pricing' | 'newsletter';
+type TabType = 'overview' | 'requests' | 'contacts' | 'chat' | 'tasks' | 'blog' | 'portfolio' | 'reports' | 'notifications' | 'activity_logs' | 'users' | 'site_content' | 'team' | 'careers' | 'pricing' | 'newsletter';
 
 interface SidebarTab {
   id: TabType;
@@ -29,8 +29,9 @@ const DashboardSidebar = ({ activeTab, setActiveTab, tabs, onLogout, userEmail, 
   const [collapsed, setCollapsed] = useState(false);
 
   const sections = [
-    { label: 'الرئيسية', ids: ['overview', 'requests', 'contacts', 'chat'] },
+    { label: 'الرئيسية', ids: ['overview', 'requests', 'contacts', 'chat', 'tasks'] },
     { label: 'المحتوى', ids: ['blog', 'portfolio'] },
+    { label: 'التحليلات', ids: ['reports', 'notifications', 'activity_logs'] },
     { label: 'الإدارة', ids: ['users', 'site_content', 'team', 'careers', 'pricing', 'newsletter'] },
   ];
 
