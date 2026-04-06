@@ -1,5 +1,6 @@
-import { useState, useEffect, useCallback, useRef } from 'react';
+import { useState, useEffect, useCallback, useRef, useMemo } from 'react';
 import { supabase } from '@/integrations/supabase/client';
+import { createClient } from '@supabase/supabase-js';
 import { useToast } from '@/hooks/use-toast';
 
 export interface Message {
@@ -52,6 +53,19 @@ const getCustomerSessionId = (): string => {
   return sessionId;
 };
 
+// Create a Supabase client with session ID header for chat RLS validation
+const createChatSupabaseClient = (sessionId: string) => {
+  const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
+  const supabaseKey = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY;
+  return createClient(supabaseUrl, supabaseKey, {
+    global: {
+      headers: {
+        'x-session-id': sessionId,
+      },
+    },
+  });
+};
+
 // Customer hook for chat widget
 export const useCustomerChat = () => {
   const [conversation, setConversation] = useState<Conversation | null>(null);
@@ -61,12 +75,13 @@ export const useCustomerChat = () => {
   const [uploading, setUploading] = useState(false);
   const { toast } = useToast();
   const sessionId = useRef(getCustomerSessionId());
+  const chatClient = useMemo(() => createChatSupabaseClient(sessionId.current), []);
 
   // Load existing conversation
   const loadConversation = useCallback(async () => {
     setLoading(true);
     try {
-      const { data: convs, error } = await supabase
+      const { data: convs, error } = await chatClient
         .from('conversations')
         .select('*')
         .eq('customer_session_id', sessionId.current)
@@ -89,7 +104,7 @@ export const useCustomerChat = () => {
 
   // Load messages for a conversation
   const loadMessages = async (conversationId: string) => {
-    const { data, error } = await supabase
+    const { data, error } = await chatClient
       .from('messages')
       .select('*')
       .eq('conversation_id', conversationId)
@@ -104,7 +119,7 @@ export const useCustomerChat = () => {
   const startConversation = async (name: string, email: string) => {
     setLoading(true);
     try {
-      const { data, error } = await supabase
+      const { data, error } = await chatClient
         .from('conversations')
         .insert({
           customer_name: name,
@@ -119,8 +134,23 @@ export const useCustomerChat = () => {
       
       setConversation(data as Conversation);
       
-      // Send welcome message
-      await sendMessage('مرحباً! شكراً لتواصلكم مع B.CLICK. كيف يمكننا مساعدتكم؟', 'team', 'فريق B.CLICK', data.id);
+      // Add welcome message locally (not stored in DB since customer can't insert as 'team')
+      const welcomeMsg: Message = {
+        id: `welcome_${Date.now()}`,
+        conversation_id: data.id,
+        sender_type: 'team',
+        sender_id: null,
+        sender_name: 'فريق B.CLICK',
+        content: 'مرحباً! شكراً لتواصلكم مع B.CLICK. كيف يمكننا مساعدتكم؟',
+        message_type: 'text',
+        file_url: null,
+        file_name: null,
+        file_size: null,
+        file_type: null,
+        is_read: true,
+        created_at: new Date().toISOString(),
+      };
+      setMessages([welcomeMsg]);
       
       return data;
     } catch (error) {
@@ -148,7 +178,7 @@ export const useCustomerChat = () => {
 
     setSending(true);
     try {
-      const { data, error } = await supabase
+      const { data, error } = await chatClient
         .from('messages')
         .insert({
           conversation_id: conversationId,
@@ -210,14 +240,14 @@ export const useCustomerChat = () => {
       const filePath = `${conversation.id}/${fileName}`;
 
       // Upload file
-      const { error: uploadError } = await supabase.storage
+      const { error: uploadError } = await chatClient.storage
         .from('chat-files')
         .upload(filePath, file);
 
       if (uploadError) throw uploadError;
 
       // Get public URL
-      const { data: urlData } = supabase.storage
+      const { data: urlData } = chatClient.storage
         .from('chat-files')
         .getPublicUrl(filePath);
 
@@ -227,7 +257,7 @@ export const useCustomerChat = () => {
       else if (file.type.startsWith('video/')) messageType = 'video';
 
       // Send message with file
-      const { data, error } = await supabase
+      const { data, error } = await chatClient
         .from('messages')
         .insert({
           conversation_id: conversation.id,
@@ -268,7 +298,7 @@ export const useCustomerChat = () => {
   useEffect(() => {
     if (!conversation?.id) return;
 
-    const channel = supabase
+    const channel = chatClient
       .channel(`messages-${conversation.id}`)
       .on(
         'postgres_changes',
@@ -293,9 +323,9 @@ export const useCustomerChat = () => {
       .subscribe();
 
     return () => {
-      supabase.removeChannel(channel);
+      chatClient.removeChannel(channel);
     };
-  }, [conversation?.id]);
+  }, [conversation?.id, chatClient]);
 
   // Initial load
   useEffect(() => {
