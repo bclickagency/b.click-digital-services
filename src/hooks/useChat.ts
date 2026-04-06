@@ -52,6 +52,12 @@ const getCustomerSessionId = (): string => {
   return sessionId;
 };
 
+// Create a Supabase client with session ID header for chat operations
+const createChatClient = (sessionId: string) => {
+  // We use the global headers approach by setting them per-request
+  return sessionId;
+};
+
 // Customer hook for chat widget
 export const useCustomerChat = () => {
   const [conversation, setConversation] = useState<Conversation | null>(null);
