@@ -134,8 +134,23 @@ export const useCustomerChat = () => {
       
       setConversation(data as Conversation);
       
-      // Send welcome message
-      await sendMessage('مرحباً! شكراً لتواصلكم مع B.CLICK. كيف يمكننا مساعدتكم؟', 'team', 'فريق B.CLICK', data.id);
+      // Add welcome message locally (not stored in DB since customer can't insert as 'team')
+      const welcomeMsg: Message = {
+        id: `welcome_${Date.now()}`,
+        conversation_id: data.id,
+        sender_type: 'team',
+        sender_id: null,
+        sender_name: 'فريق B.CLICK',
+        content: 'مرحباً! شكراً لتواصلكم مع B.CLICK. كيف يمكننا مساعدتكم؟',
+        message_type: 'text',
+        file_url: null,
+        file_name: null,
+        file_size: null,
+        file_type: null,
+        is_read: true,
+        created_at: new Date().toISOString(),
+      };
+      setMessages([welcomeMsg]);
       
       return data;
     } catch (error) {
