@@ -76,9 +76,12 @@ export const useCustomerChat = () => {
   const { toast } = useToast();
   const sessionId = useRef(getCustomerSessionId());
   const chatClient = useMemo(() => createChatSupabaseClient(sessionId.current), []);
+
+  // Load existing conversation
+  const loadConversation = useCallback(async () => {
     setLoading(true);
     try {
-      const { data: convs, error } = await supabase
+      const { data: convs, error } = await chatClient
         .from('conversations')
         .select('*')
         .eq('customer_session_id', sessionId.current)
