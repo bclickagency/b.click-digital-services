@@ -104,7 +104,7 @@ export const useCustomerChat = () => {
 
   // Load messages for a conversation
   const loadMessages = async (conversationId: string) => {
-    const { data, error } = await supabase
+    const { data, error } = await chatClient
       .from('messages')
       .select('*')
       .eq('conversation_id', conversationId)
@@ -119,7 +119,7 @@ export const useCustomerChat = () => {
   const startConversation = async (name: string, email: string) => {
     setLoading(true);
     try {
-      const { data, error } = await supabase
+      const { data, error } = await chatClient
         .from('conversations')
         .insert({
           customer_name: name,
@@ -163,7 +163,7 @@ export const useCustomerChat = () => {
 
     setSending(true);
     try {
-      const { data, error } = await supabase
+      const { data, error } = await chatClient
         .from('messages')
         .insert({
           conversation_id: conversationId,
@@ -225,14 +225,14 @@ export const useCustomerChat = () => {
       const filePath = `${conversation.id}/${fileName}`;
 
       // Upload file
-      const { error: uploadError } = await supabase.storage
+      const { error: uploadError } = await chatClient.storage
         .from('chat-files')
         .upload(filePath, file);
 
       if (uploadError) throw uploadError;
 
       // Get public URL
-      const { data: urlData } = supabase.storage
+      const { data: urlData } = chatClient.storage
         .from('chat-files')
         .getPublicUrl(filePath);
 
@@ -242,7 +242,7 @@ export const useCustomerChat = () => {
       else if (file.type.startsWith('video/')) messageType = 'video';
 
       // Send message with file
-      const { data, error } = await supabase
+      const { data, error } = await chatClient
         .from('messages')
         .insert({
           conversation_id: conversation.id,
@@ -283,7 +283,7 @@ export const useCustomerChat = () => {
   useEffect(() => {
     if (!conversation?.id) return;
 
-    const channel = supabase
+    const channel = chatClient
       .channel(`messages-${conversation.id}`)
       .on(
         'postgres_changes',
@@ -308,9 +308,9 @@ export const useCustomerChat = () => {
       .subscribe();
 
     return () => {
-      supabase.removeChannel(channel);
+      chatClient.removeChannel(channel);
     };
-  }, [conversation?.id]);
+  }, [conversation?.id, chatClient]);
 
   // Initial load
   useEffect(() => {
