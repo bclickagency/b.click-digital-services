@@ -53,10 +53,17 @@ const getCustomerSessionId = (): string => {
   return sessionId;
 };
 
-// Create a Supabase client with session ID header for chat operations
-const createChatClient = (sessionId: string) => {
-  // We use the global headers approach by setting them per-request
-  return sessionId;
+// Create a Supabase client with session ID header for chat RLS validation
+const createChatSupabaseClient = (sessionId: string) => {
+  const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
+  const supabaseKey = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY;
+  return createClient(supabaseUrl, supabaseKey, {
+    global: {
+      headers: {
+        'x-session-id': sessionId,
+      },
+    },
+  });
 };
 
 // Customer hook for chat widget
