@@ -75,9 +75,7 @@ export const useCustomerChat = () => {
   const [uploading, setUploading] = useState(false);
   const { toast } = useToast();
   const sessionId = useRef(getCustomerSessionId());
-
-  // Load existing conversation
-  const loadConversation = useCallback(async () => {
+  const chatClient = useMemo(() => createChatSupabaseClient(sessionId.current), []);
     setLoading(true);
     try {
       const { data: convs, error } = await supabase
