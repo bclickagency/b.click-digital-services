@@ -48,6 +48,13 @@ export type Database = {
             referencedColumns: ["id"]
           },
           {
+            foreignKeyName: "activity_log_project_id_fkey"
+            columns: ["project_id"]
+            isOneToOne: false
+            referencedRelation: "public_client_projects"
+            referencedColumns: ["id"]
+          },
+          {
             foreignKeyName: "activity_log_user_id_fkey"
             columns: ["user_id"]
             isOneToOne: false
@@ -166,6 +173,13 @@ export type Database = {
             columns: ["project_id"]
             isOneToOne: false
             referencedRelation: "client_projects"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "client_messages_project_id_fkey"
+            columns: ["project_id"]
+            isOneToOne: false
+            referencedRelation: "public_client_projects"
             referencedColumns: ["id"]
           },
           {
@@ -830,6 +844,13 @@ export type Database = {
             referencedColumns: ["id"]
           },
           {
+            foreignKeyName: "project_files_project_id_fkey"
+            columns: ["project_id"]
+            isOneToOne: false
+            referencedRelation: "public_client_projects"
+            referencedColumns: ["id"]
+          },
+          {
             foreignKeyName: "project_files_uploaded_by_fkey"
             columns: ["uploaded_by"]
             isOneToOne: false
@@ -991,6 +1012,13 @@ export type Database = {
             referencedRelation: "client_projects"
             referencedColumns: ["id"]
           },
+          {
+            foreignKeyName: "tasks_project_id_fkey"
+            columns: ["project_id"]
+            isOneToOne: false
+            referencedRelation: "public_client_projects"
+            referencedColumns: ["id"]
+          },
         ]
       }
       team_members: {
@@ -1096,6 +1124,102 @@ export type Database = {
           testimonial?: string | null
         }
         Relationships: []
+      }
+      public_client_projects: {
+        Row: {
+          client_id: string | null
+          client_story: string | null
+          cover_image: string | null
+          created_at: string | null
+          description: string | null
+          end_date: string | null
+          how_we_helped: string | null
+          id: string | null
+          images: string[] | null
+          is_featured: boolean | null
+          is_public: boolean | null
+          priority: string | null
+          problem: string | null
+          progress: number | null
+          project_url: string | null
+          results: string | null
+          results_metrics: Json | null
+          service_type: string | null
+          solution: string | null
+          start_date: string | null
+          status: string | null
+          tags: string[] | null
+          title: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          client_id?: string | null
+          client_story?: string | null
+          cover_image?: string | null
+          created_at?: string | null
+          description?: string | null
+          end_date?: string | null
+          how_we_helped?: string | null
+          id?: string | null
+          images?: string[] | null
+          is_featured?: boolean | null
+          is_public?: boolean | null
+          priority?: string | null
+          problem?: string | null
+          progress?: number | null
+          project_url?: string | null
+          results?: string | null
+          results_metrics?: Json | null
+          service_type?: string | null
+          solution?: string | null
+          start_date?: string | null
+          status?: string | null
+          tags?: string[] | null
+          title?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          client_id?: string | null
+          client_story?: string | null
+          cover_image?: string | null
+          created_at?: string | null
+          description?: string | null
+          end_date?: string | null
+          how_we_helped?: string | null
+          id?: string | null
+          images?: string[] | null
+          is_featured?: boolean | null
+          is_public?: boolean | null
+          priority?: string | null
+          problem?: string | null
+          progress?: number | null
+          project_url?: string | null
+          results?: string | null
+          results_metrics?: Json | null
+          service_type?: string | null
+          solution?: string | null
+          start_date?: string | null
+          status?: string | null
+          tags?: string[] | null
+          title?: string | null
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "client_projects_client_id_fkey"
+            columns: ["client_id"]
+            isOneToOne: false
+            referencedRelation: "featured_profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "client_projects_client_id_fkey"
+            columns: ["client_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
       }
     }
     Functions: {
