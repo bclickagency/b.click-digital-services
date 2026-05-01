@@ -62,7 +62,7 @@ const ClientShowcase = () => {
       setLoading(true);
       const [profileRes, projectsRes] = await Promise.all([
         supabase.from('profiles').select('*').eq('id', clientId).eq('is_featured', true).single(),
-        supabase.from('client_projects').select('*').eq('client_id', clientId).eq('is_public', true).order('created_at', { ascending: false }),
+        supabase.from('client_projects').select('id,client_id,title,description,status,priority,service_type,start_date,end_date,progress,cover_image,images,problem,solution,results,client_story,how_we_helped,results_metrics,project_url,tags,is_featured,is_public,created_at,updated_at').eq('client_id', clientId).eq('is_public', true).order('created_at', { ascending: false }),
       ]);
       if (profileRes.data) setClient(profileRes.data as any);
       if (projectsRes.data) setProjects(projectsRes.data as any);

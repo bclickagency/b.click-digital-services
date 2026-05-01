@@ -66,7 +66,7 @@ const CaseStudy = () => {
     const load = async () => {
       setLoading(true);
       const [projectRes, clientRes] = await Promise.all([
-        supabase.from('client_projects').select('*').eq('id', projectId).eq('is_public', true).single(),
+        supabase.from('client_projects').select('id,client_id,title,description,status,priority,service_type,start_date,end_date,progress,cover_image,images,problem,solution,results,client_story,how_we_helped,results_metrics,project_url,tags,is_featured,is_public,created_at,updated_at').eq('id', projectId).eq('is_public', true).single(),
         supabase.from('profiles').select('*').eq('id', clientId).eq('is_featured', true).single(),
       ]);
       if (projectRes.data) setProject(projectRes.data as any);
